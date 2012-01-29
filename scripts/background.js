@@ -8,7 +8,7 @@
             popup: {
                 href: 'popup.html',
                 width: 300,
-                height:128
+                height:450
             }
         }
 
@@ -18,20 +18,26 @@
     }
 })()
 
-// function pulls the latest updated patches script from Github and puts its contents in widget.preferences.patches_js
+// function pulls the patches script from Github and puts its contents in widget.preferences.patches_js
 
 function update() {
+    // TODO: store the file's checksum in localStorage and only update the file when the checksum is new
+    
     var r = new XMLHttpRequest();
 	
     r.onreadystatechange = function() {
         if (this.readyState == 4) {
-            if (this.status == 200 || this.responseText != '') {
-                widget.preferences.patches_js = this.responseText
+            if (this.status == 200 || this.responseText != '') { 
+                // TODO if patches.js exceeds the storage quota of one widget.preferences variable, 
+                // then split the file's contents up between multiple widget.preferences variables (like the ad block lists in Opera AdBlock)
+                
+                // store the patches script in localStorage. Will turn it into a script element in 'includes/include.js'
+                widget.preferences.patches_js = this.responseText 
             }
         }	
     }
 
-    r.open('GET', 'http://localhost/patches.js', true)
+    r.open('GET', 'https://raw.github.com/cyberstream/Fix-the-Web-Patch-Script/master/patches.js', true)
 
     try {
         r.send()
@@ -40,3 +46,7 @@ function update() {
     }
 }
 
+function sendReport(report_details) {
+    // send report asynchronously to the server with ajax_request_handler.php on it 
+    // see the "Fix the Web Server Side" repo on Github for that file
+}
