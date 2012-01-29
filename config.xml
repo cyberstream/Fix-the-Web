@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" version="1.0b" defaultlocale="en">
+    <name short="Fix the Web">Fix the Web</name>
+    <description>A tool to help you and others who visit pages that don't work right in Opera.</description>
+    <author href="http://my.opera.com/cyberstream/about" email="dev@cyberstream.us">Eli Mitchell</author>
+    <icon src="icon-64.png"/> 
+    
+    <preference name="patches_js" value="" />
+    <preference name="update_interval" value="0" />
+
+    <feature name="opera:share-cookies" required="true"></feature>
+    <access origin="*" subdomains="true" />
+</widget>
