@@ -7,7 +7,6 @@
     
     <preference name="patches_js" value="" />
     <preference name="update_interval" value="0" />
-
-    <feature name="opera:share-cookies" required="true"></feature>
+    
     <access origin="*" subdomains="true" />
 </widget>
