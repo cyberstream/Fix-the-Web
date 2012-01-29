@@ -64,7 +64,10 @@
         </p>
         
         <div class="pad_bottom"><em title="Not functional yet...">Additional details...</em></div>
-        
+        <input type="hidden" id="opera-version" name="opera-version"/>
+        <input type="hidden" id="opera-build-number" name="opera-build-number"  />
+        <input type="hidden" id="additional-information" name="additional-information"/>
+        <input type="hidden" id="OS" name="OS"/>
         <!--additional details will be hidden until clicked. Details: (should be editable)
                - Browser plugins (See http://pastebin.com/60eQNd8C for code to get the information about browser plugins.) 
                - Browser version (opera.version)
@@ -95,6 +98,49 @@
             
             return false; // prevent the form from actually submitting
         }
+        window.addEventListener("DOMContentLoaded",function(){
+			
+			if ((window.opera) && (opera.buildNumber)){
+				// learn and write version of Opera into hidden element (#opera-version)
+				document.getElementById("opera-version").value		=	opera.version();
+			
+				// learn and write version of Opera into hidden element (#opera-build-number)
+				document.getElementById("opera-build-number").value	=	opera.buildNumber();
+				
+				// learn and write version of Opera into hidden element (#opera-build-number)
+				document.getElementById("opera-build-number").value	=	opera.buildNumber();
+			}
+			
+			// seperator will split additional information to different parts
+			var separator = "\n===========\n";
+			
+			// cache (#additional-information) element
+			var bug = document.getElementById('additional-information');
+			
+			// learn what plugins is installed and write them into hidden element (#additional-information)
+			bug.value += "\n\nPLUGINS:" + separator;
+			
+			// navigator.plugins stores what plugins is installed and which are activated
+			if (navigator.plugins) {
+				for (var i = 0; i < navigator.plugins.length; i++) {
+					// for each plugin obtain its name, description and file name. Then write them into hidden element (#additional-information)
+					var plugin = navigator.plugins[i];
+					bug.value += plugin.name + " ("+plugin.description+") "+plugin.filename+"\n";
+				}
+			}
+			
+			// learn screen resolution write them into hidden element (#additional-information)
+			bug.value += "\n\nSCREEN:" + separator;
+			if ((typeof(screen.width) != "undefined") && (screen.width && screen.height))
+				bug.value += "Resolution: " + screen.width + 'x' + screen.height + "\n";
+				
+			// learn color depth and write them into hidden element (#additional-information)
+			if ((typeof(screen.colorDepth) != "undefined") && (screen.colorDepth))
+				bug.value += "ColorDepth: " + screen.colorDepth + "\n";
+			
+			// TODO learn OS and write into (#OS)
+			
+        },false);
     </script>
 </body>
 </html>
