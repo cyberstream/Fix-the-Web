@@ -1,0 +1,3 @@
+The server-side files for the "Fix the Web" Opera extension project. 
+Includes the OAuth authentication libraries and the server-side file (ajax_request_handler.php) for processing AJAX GET/POST requests from the extension.
+the authentication.php file will handle the OAuth MyOpera user authentication
