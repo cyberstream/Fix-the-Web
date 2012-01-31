@@ -30,8 +30,18 @@
         
         a:hover {text-decoration:underline}
         
+        /* TODO fix the appearance to get perfect layout */
+        #opera-version,#opera-build-number{
+            float:left;
+            width:45px;
+        }
+
         #open-comment-panel {cursor: pointer}        
         #open-comment-panel:hover {text-decoration: underline}
+
+        #additional-information-details-panel{
+            display:none;
+        }
         
         div.pad_bottom {padding-bottom:10px}
     </style>
@@ -63,18 +73,14 @@
             <textarea rows="5" cols="30" id="error-report-description" name="description"></textarea>
         </p>
         
-        <div class="pad_bottom"><em title="Not functional yet...">Additional details...</em></div>
-        <input type="hidden" id="opera-version" name="opera-version"/>
-        <input type="hidden" id="opera-build-number" name="opera-build-number"  />
-        <input type="hidden" id="additional-information" name="additional-information"/>
-        <input type="hidden" id="OS" name="OS"/>
-        <!--additional details will be hidden until clicked. Details: (should be editable)
-               - Browser plugins (See http://pastebin.com/60eQNd8C for code to get the information about browser plugins.) 
-               - Browser version (opera.version)
-               - Browser build number (opera.buildNumber)
-               - Operating system
-            -->
-        
+        <div class="pad_bottom"><em id="additional-information-details-panel-opener" title="Not functional yet...">Additional details...</em>
+            <div id="additional-information-details-panel">
+                <input type="text" id="OS" name="OS"/>
+                <input type="text" id="opera-version" name="opera-version"/>
+                <input type="text" id="opera-build-number" name="opera-build-number"  />
+                <textarea id="additional-information" name="additional-information" cols="35" rows="4"></textarea>
+            </div>
+        </div>
         <input type="submit" value="Submit Report" />
     </form>
     
@@ -85,7 +91,7 @@
     
     <script src="scripts/jquery.js"></script>
     <script type="text/javascript">
-//        document.getElementById('report-site-form').value = // get the "location.href" via messaging from the injected script. If you do "location.href" here, then you'll just get the widget:// address
+        //document.getElementById('page-address').value = opera.extension["bgProcess"].url;// get the "location.href" via messaging from the injected script. If you do "location.href" here, then you'll just get the widget:// address
         
         document.getElementById('open-comment-panel').onclick = function() {
             // create and display a panel (like the panel in the YSlow addon: https://addons.opera.com/en/addons/extensions/details/yslow/3.0.5) 
@@ -99,6 +105,27 @@
             return false; // prevent the form from actually submitting
         }
         window.addEventListener("DOMContentLoaded",function(){
+
+            // Toggle additional information panel by clickin the text "Additional information"
+            document.getElementById("additional-information-details-panel-opener").addEventListener("click",function(){
+                
+                var state   =   document.getElementById("additional-information-details-panel").style.display;
+
+                switch(state){
+                    
+                    // if #additional-information-panel is hidden, it will be indicated
+                    case "block":
+                        document.getElementById("additional-information-details-panel").style.display="none";
+                    break;
+                    // if #additional-information-panel is visible, it will disappear
+                    case "none":
+                    case "":
+                        document.getElementById("additional-information-details-panel").style.display="block";
+                    break;
+
+                }
+
+            },false);
 			
 			if ((window.opera) && (opera.buildNumber)){
 				// learn and write version of Opera into hidden element (#opera-version)
@@ -112,20 +139,20 @@
 			}
 			
 			// seperator will split additional information to different parts
-			var separator = "\n===========\n";
+			var separator = "\r\n===========\r\n";
 			
 			// cache (#additional-information) element
 			var bug = document.getElementById('additional-information');
 			
 			// learn what plugins is installed and write them into hidden element (#additional-information)
-			bug.value += "\n\nPLUGINS:" + separator;
+			bug.value += "PLUGINS:" + separator;
 			
 			// navigator.plugins stores what plugins is installed and which are activated
 			if (navigator.plugins) {
 				for (var i = 0; i < navigator.plugins.length; i++) {
 					// for each plugin obtain its name, description and file name. Then write them into hidden element (#additional-information)
 					var plugin = navigator.plugins[i];
-					bug.value += plugin.name + " ("+plugin.description+") "+plugin.filename+"\n";
+					bug.value += "* " + plugin.name + " ("+plugin.description+") "+plugin.filename+"\r\n";
 				}
 			}
 			
@@ -136,10 +163,11 @@
 				
 			// learn color depth and write them into hidden element (#additional-information)
 			if ((typeof(screen.colorDepth) != "undefined") && (screen.colorDepth))
-				bug.value += "ColorDepth: " + screen.colorDepth + "\n";
+				bug.value += "ColorDepth: " + screen.colorDepth + "\r\n";
 			
-			// TODO learn OS and write into (#OS)
-			
+            // platform states whether the system is Win32, 64-bit build, mac or linux
+			document.getElementById("OS").value   =   navigator.platform;
+            
         },false);
     </script>
 </body>
