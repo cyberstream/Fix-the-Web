@@ -1,4 +1,6 @@
 window.addEventListener('DOMContentLoaded', function() {
+
+
     if (typeof widget.preferences.patches_js == 'undefined') widget.preferences.patches_js = '';
     
     var patches_js = widget.preferences.patches_js,    
