@@ -18,7 +18,17 @@
     }
 })()
 
-// function pulls the patches script from Github and puts its contents in widget.preferences.patches_js
+// initialize a connection with the popup and send its reference to the injected script so they can both communicate on their own
+
+opera.extension.onconnect = function (event) {
+    if(event.origin.indexOf ("popup.html") > -1 && event.origin.indexOf ('widget://') > -1){
+        var tab = opera.extension.tabs.getFocused();
+
+        if (tab) tab.postMessage( "send info", [event.source]);
+    } 
+}
+
+// the update() function pulls the patches script from Github and puts its contents in widget.preferences.patches_js
 
 function update() {
     // TODO: store the file's checksum in localStorage and only update the file when the checksum is new
@@ -33,6 +43,7 @@ function update() {
                 
                 // store the patches script in localStorage. Will turn it into a script element in 'includes/include.js'
                 widget.preferences.patches_js = this.responseText 
+                console.log('Fix the Web\'s patches.js file was just updated.')
             }
         }	
     }
@@ -43,6 +54,14 @@ function update() {
         r.send()
     } catch(error) {
         console.log('Error: ' + error)
+    }
+}
+
+setTimeout(update(), 1000 * 60 * 30); // TODO "update_interval" in widget.preferences will determine how often the patches.js file is updated
+
+function loadCommentsFrame() {
+    opera.extension.onconnect = function() {
+        
     }
 }
 

@@ -5,8 +5,10 @@
     <author href="http://my.opera.com/cyberstream/about" email="dev@cyberstream.us">Eli Mitchell</author>
     <icon src="icon-64.png"/> 
     
-    <preference name="patches_js" value="" />
+    <!--default values for preferences-->
+    <preference name="patches_js" value="/* patches file is empty */" />
     <preference name="update_interval" value="0" />
+    <preference name="display_reports_by" value="domain" /> <!--either "domain" or "page"-->
     
     <access origin="*" subdomains="true" />
 </widget>

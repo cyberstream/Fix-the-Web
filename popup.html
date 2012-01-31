@@ -36,8 +36,8 @@
             width:45px;
         }
 
-        #open-comment-panel {cursor: pointer}        
-        #open-comment-panel:hover {text-decoration: underline}
+        #additional-information-details-panel-opener, #open-comment-panel {cursor: pointer}        
+        #additional-information-details-panel-opener:hover, #open-comment-panel:hover {text-decoration: underline}
 
         #additional-information-details-panel{
             display:none;
@@ -57,6 +57,7 @@
         <p>
             <label for="page-address">Page Address</label>
             <input type="text" id="page-address" name="page-address" />
+            <input type="hidden" id="domain-name" name="domain-name" />
         </p>
         
         <p>
@@ -70,10 +71,10 @@
         
         <p>
             <label for="error-report-description">Error Details</label>
-            <textarea rows="5" cols="30" id="error-report-description" name="description"></textarea>
+            <textarea rows="5" cols="30" id="error-report-description" name="description" placeholder="What triggered the problem, what you were expecting, etc"></textarea>
         </p>
         
-        <div class="pad_bottom"><em id="additional-information-details-panel-opener" title="Not functional yet...">Additional details...</em>
+        <div class="pad_bottom"><em id="additional-information-details-panel-opener">Additional details...</em>
             <div id="additional-information-details-panel">
                 <input type="text" id="OS" name="OS"/>
                 <input type="text" id="opera-version" name="opera-version"/>
@@ -89,29 +90,34 @@
         <li><a href="index.html" target="_blank">View recent bug reports</a></li>
     </ul>
     
-    <script src="scripts/jquery.js"></script>
     <script type="text/javascript">
-        //document.getElementById('page-address').value = opera.extension["bgProcess"].url;// get the "location.href" via messaging from the injected script. If you do "location.href" here, then you'll just get the widget:// address
+        // get the the page's URL from the injected script. If you do "document.URL" here, then you'll just get the widget:// address
+        // you have to do a song and a dance just to get the current page URL here in the popup:
         
-        document.getElementById('open-comment-panel').onclick = function() {
-            // create and display a panel (like the panel in the YSlow addon: https://addons.opera.com/en/addons/extensions/details/yslow/3.0.5) 
-            // and place error reports and their comments inside it
+        opera.extension.onmessage = function(event) {
+            if (event.data['url']) document.getElementById('page-address').value = event.data['url']
+            if (event.data['domain']) document.getElementById('domain-name').value = event.data['domain']
         }
-        
-        document.getElementById('report-site-form').onsubmit = function() {
-            // serialize the contents of the form and send it via AJAX
-            // opera.extension.bgProcess.sendReport(params)
-            
-            return false; // prevent the form from actually submitting
-        }
-        window.addEventListener("DOMContentLoaded",function(){
 
-            // Toggle additional information panel by clickin the text "Additional information"
-            document.getElementById("additional-information-details-panel-opener").addEventListener("click",function(){
+        window.addEventListener("DOMContentLoaded",function() {        
+            document.getElementById('open-comment-panel').onclick = function() {
+                // create and display a panel (like the panel in the YSlow addon: https://addons.opera.com/en/addons/extensions/details/yslow/3.0.5) 
+                // and place error reports and their comments inside it
+            }
+
+            document.getElementById('report-site-form').onsubmit = function() {
+                // serialize the contents of the form and send it via AJAX
+                // opera.extension.bgProcess.sendReport(params)
+
+                return false; // prevent the form from actually submitting
+            }            
+
+            // Toggle additional information panel by clicking the text "Additional information"
+            document.getElementById("additional-information-details-panel-opener").addEventListener("click",function(){          
                 
                 var state   =   document.getElementById("additional-information-details-panel").style.display;
 
-                switch(state){
+                switch(state){                    
                     
                     // if #additional-information-panel is hidden, it will be indicated
                     case "block":
@@ -127,47 +133,46 @@
 
             },false);
 			
-			if ((window.opera) && (opera.buildNumber)){
-				// learn and write version of Opera into hidden element (#opera-version)
-				document.getElementById("opera-version").value		=	opera.version();
-			
-				// learn and write version of Opera into hidden element (#opera-build-number)
-				document.getElementById("opera-build-number").value	=	opera.buildNumber();
-				
-				// learn and write version of Opera into hidden element (#opera-build-number)
-				document.getElementById("opera-build-number").value	=	opera.buildNumber();
-			}
-			
-			// seperator will split additional information to different parts
-			var separator = "\r\n===========\r\n";
-			
-			// cache (#additional-information) element
-			var bug = document.getElementById('additional-information');
-			
-			// learn what plugins is installed and write them into hidden element (#additional-information)
-			bug.value += "PLUGINS:" + separator;
-			
-			// navigator.plugins stores what plugins is installed and which are activated
-			if (navigator.plugins) {
-				for (var i = 0; i < navigator.plugins.length; i++) {
-					// for each plugin obtain its name, description and file name. Then write them into hidden element (#additional-information)
-					var plugin = navigator.plugins[i];
-					bug.value += "* " + plugin.name + " ("+plugin.description+") "+plugin.filename+"\r\n";
-				}
-			}
-			
-			// learn screen resolution write them into hidden element (#additional-information)
-			bug.value += "\n\nSCREEN:" + separator;
-			if ((typeof(screen.width) != "undefined") && (screen.width && screen.height))
-				bug.value += "Resolution: " + screen.width + 'x' + screen.height + "\n";
-				
-			// learn color depth and write them into hidden element (#additional-information)
-			if ((typeof(screen.colorDepth) != "undefined") && (screen.colorDepth))
-				bug.value += "ColorDepth: " + screen.colorDepth + "\r\n";
-			
+            if ((window.opera) && (opera.buildNumber)){
+                    // learn and write version of Opera into hidden element (#opera-version)
+                    document.getElementById("opera-version").value		=	opera.version();
+
+                    // learn and write version of Opera into hidden element (#opera-build-number)
+                    document.getElementById("opera-build-number").value	=	opera.buildNumber();
+
+                    // learn and write version of Opera into hidden element (#opera-build-number)
+                    document.getElementById("opera-build-number").value	=	opera.buildNumber();
+            }
+
+            // seperator will split additional information to different parts
+            var separator = "\r\n===========\r\n";
+
+            // cache (#additional-information) element
+            var bug = document.getElementById('additional-information');
+
+            // learn what plugins is installed and write them into hidden element (#additional-information)
+            bug.value += "PLUGINS:" + separator;
+
+            // navigator.plugins stores what plugins is installed and which are activated
+            if (navigator.plugins) {
+                    for (var i = 0; i < navigator.plugins.length; i++) {
+                            // for each plugin obtain its name, description and file name. Then write them into hidden element (#additional-information)
+                            var plugin = navigator.plugins[i];
+                            bug.value += "* " + plugin.name + " ("+plugin.description+") "+plugin.filename+"\r\n";
+                    }
+            }
+
+            // learn screen resolution write them into hidden element (#additional-information)
+            bug.value += "\n\nSCREEN:" + separator;
+            if ((typeof(screen.width) != "undefined") && (screen.width && screen.height))
+                    bug.value += "Resolution: " + screen.width + 'x' + screen.height + "\n";
+
+            // learn color depth and write them into hidden element (#additional-information)
+            if ((typeof(screen.colorDepth) != "undefined") && (screen.colorDepth))
+                    bug.value += "ColorDepth: " + screen.colorDepth + "\r\n";
+
             // platform states whether the system is Win32, 64-bit build, mac or linux
-			document.getElementById("OS").value   =   navigator.platform;
-            
+            document.getElementById("OS").value   =   navigator.platform;            
         },false);
     </script>
 </body>
