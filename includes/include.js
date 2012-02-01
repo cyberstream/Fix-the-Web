@@ -12,7 +12,8 @@ opera.extension.onmessage = function(event){
                             }
     
     if (event.data == "load comments frame") {
-        if (!document.getElementById('fix-the-web-comment-frame')) {
+        // window.top provides showing comments frame only on top iframe, page. Otherwise every iframe will contain comments frame.
+        if (!window.top.document.getElementById('fix-the-web-comment-frame')) {
             var frame_element = document.createElement('div');
                   frame_element.id = 'fix-the-web-comment-frame';
             
