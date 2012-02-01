@@ -6,13 +6,19 @@ opera.extension.onmessage = function(event){
         event.ports[0].postMessage({'url' : document.URL, 'domain' : document.domain}, [channel.port2]); 
     }
     
-    resizeFrame = function(e) {                    
-                                if (window.innerHeight - e.pageY >= 10 && e.pageY > 10)
-                                    document.getElementById('fix-the-web-comment-frame').style.height = 100 - Math.floor((e.pageY / window.innerHeight) * 100) + '%'
-                            }
+    resizeFrame = function(e) {
+        var newHeight = 100 - Math.floor((e.clientY / window.innerHeight) * 100);
+        console.log("innerHeight:"+window.innerHeight+" pagey:"+e.clientY+ " %"+(100 - Math.floor((e.clientY / window.innerHeight) * 100) + '%'));
+        if(newHeight>0 && newHeight<96)
+            document.getElementById('fix-the-web-comment-frame').style.height =  newHeight + '%';
+        else // if mouse leave from window disconnect to follow the mouse
+            window.removeEventListener('mousemove', resizeFrame, false);
+    }
+    
     
     if (event.data == "load comments frame") {
         // window.top provides showing comments frame only on top iframe, page. Otherwise every iframe will contain comments frame.
+        // FIXME: This causes security errors in error console
         if (!window.top.document.getElementById('fix-the-web-comment-frame')) {
             var frame_element = document.createElement('div');
                   frame_element.id = 'fix-the-web-comment-frame';
@@ -36,15 +42,11 @@ opera.extension.onmessage = function(event){
             frame_element.appendChild(resize_frame); // append the resize/close frame bar to the main frame
             
             // trigger the drag function whenever the mouse button is pressed and the mouse is moved
-            
-            // FIXME: resizing the frame not working quite right...like it was before. :(
-            
             resize_frame.addEventListener('mousedown', function () {
                 window.addEventListener('mousemove', resizeFrame, false);
             }, false);
             
             // detach the drag function when the mouse button is released
-
             frame_element.addEventListener('mouseup', function() {
                 window.removeEventListener('mousemove', resizeFrame, false);
                 
@@ -56,7 +58,7 @@ opera.extension.onmessage = function(event){
             
             // create a styles element for the frame's styles            
             var frame_style_element = document.createElement('style'),
-                  frame_styles = '::selection {background: transparent !important;} #fix-the-web-comment-frame {position: fixed; z-index:123456789 !important; box-shadow:0 0 90px #eee; background: -o-linear-gradient(bottom, rgba(255,255,255,1) 30%, rgba(255,255,255,.75)); width: 100%; height: 30%; bottom: 0; left: 0; margin: 0; padding-bottom: 5px;} #resize-frame {width: 100%; position: relative; float: left; left:0; top: 0; height: 15px; background-image: -o-linear-gradient(bottom, #777, #aaa); cursor:n-resize} #resize-frame:active {background-image:-o-linear-gradient(top, #333, #555)} #close-frame {cursor:pointer; font:bold 16px sans-serif; color: #eee; float:right; top:-5px; margin: 2px 0px; padding: 0 4px; position:relative;} #close-frame:hover {background:rgba(255,255,255,.75); color:#444; border-left: 1px solid #fff}';
+                  frame_styles = '::selection {background: transparent !important;} #fix-the-web-comment-frame {position: fixed; z-index:123456789 !important; box-shadow:0 0 90px #eee; background: -o-linear-gradient(bottom, rgba(255,255,255,1) 30%, rgba(255,255,255,.75)); width: 100%; height: 30%; min-height:10px;max-height:95%; bottom: 0; left: 0; margin: 0; padding-bottom: 5px;} #resize-frame {width: 100%; position: relative; float: left; left:0; top: 0; height: 15px; background-image: -o-linear-gradient(bottom, #777, #aaa); cursor:n-resize} #resize-frame:active {background-image:-o-linear-gradient(top, #333, #555)} #close-frame {cursor:pointer; font:bold 16px sans-serif; color: #eee; float:right; top:-5px; margin: 2px 0px; padding: 0 4px; position:relative;} #close-frame:hover {background:rgba(255,255,255,.75); color:#444; border-left: 1px solid #fff}';
             
             frame_style_element.setAttribute('type', 'text/css');
             frame_style_element.appendChild(document.createTextNode(frame_styles));
