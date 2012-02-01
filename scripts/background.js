@@ -80,7 +80,8 @@ function update() {
     }
 }
 
-setTimeout(update(), 1000 * 60 * 30); // TODO "update_interval" in widget.preferences will determine how often the patches.js file is updated
+if(widget.preferences.getItem("update-interval"))
+    setTimeout(update(), widget.preferences.getItem("update-interval")); // TODO "update_interval" in widget.preferences will determine how often the patches.js file is updated
 
 function loadCommentsFrame() {
     opera.extension.broadcastMessage('load comments frame') // fire this message for the injected script to catch and open the comments frame
@@ -90,3 +91,4 @@ function sendReport(report_details) {
     // send report asynchronously to the server with ajax_request_handler.php on it 
     // see the "Fix the Web Server Side" repo on Github for that file
 }
+

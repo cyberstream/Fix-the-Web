@@ -5,16 +5,44 @@
     <title>Options | Opera Page Patcher</title>
     
     <style type="text/css">
-        
+
     </style>
 </head>
 <body>	
     
-    
+    <fieldset id="prefs-form">
+		<legend>Options | Fix The Web</legend>
+	  	<label>Page Patcher Update Interval  <input type="range" min="30" max="1440" step="15" name="update-interval" id="update-interval"/> (<span id="update-interval-in-minute"></span> in Minute)</label>
+
+	</fieldset>
     <script type="text/javascript" src="scripts/jquery.js"></script>
     <script type="text/javascript" src="scripts/background.js"></script>
     <script type="text/javascript">
-        
+var form   = document.getElementById("prefs-form");
+var fields = form.querySelectorAll("input[type='range']");
+
+// Set the preference values for each field
+function savePrefs (event) {
+        widget.preferences.setItem(event.target.name, event.target.value);
+}
+
+// Get the preference values from the widget object
+function loadPrefs() {
+    for (var i = 0; i < fields.length; i++) {
+        var field = fields[i];
+        if (typeof widget.preferences[field.name] !== "undefined") {
+        field.value = widget.preferences.getItem(field.name);
+        field.addEventListener("change",savePrefs,false);
+        }
+    }
+    updateIntervalValue();
+}
+
+function updateIntervalValue(){
+	document.getElementById("update-interval-in-minute").innerText=document.getElementById("update-interval").value;
+}
+window.addEventListener("load",loadPrefs,false);
+document.getElementById("update-interval").addEventListener("change",updateIntervalValue,false);
     </script>
 </body>
 </html>
