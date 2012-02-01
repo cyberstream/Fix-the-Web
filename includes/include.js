@@ -7,14 +7,15 @@ opera.extension.onmessage = function(event){
     }
     
     resizeFrame = function(e) {
+        // get new height of comments panel
         var newHeight = 100 - Math.floor((e.clientY / window.innerHeight) * 100);
-        console.log("innerHeight:"+window.innerHeight+" pagey:"+e.clientY+ " %"+(100 - Math.floor((e.clientY / window.innerHeight) * 100) + '%'));
+
+        // test the new height to be between satisfied interval
         if(newHeight>0 && newHeight<96)
             document.getElementById('fix-the-web-comment-frame').style.height =  newHeight + '%';
         else // if mouse leave from window disconnect to follow the mouse
             window.removeEventListener('mousemove', resizeFrame, false);
     }
-    
     
     if (event.data == "load comments frame") {
         // window.top provides showing comments frame only on top iframe, page. Otherwise every iframe will contain comments frame.

@@ -84,6 +84,7 @@ if(widget.preferences.getItem("update-interval"))
     setTimeout(update(), widget.preferences.getItem("update-interval")); // TODO "update_interval" in widget.preferences will determine how often the patches.js file is updated
 
 function loadCommentsFrame() {
+    // FIXME: boardcastMessage causes opening comments panel in every page.
     opera.extension.broadcastMessage('load comments frame') // fire this message for the injected script to catch and open the comments frame
 }
 
