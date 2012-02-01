@@ -31,24 +31,47 @@ opera.extension.onconnect = function (event) {
 // the update() function pulls the patches script from Github and puts its contents in widget.preferences.patches_js
 
 function update() {
-    // TODO: store the file's checksum in localStorage and only update the file when the checksum is new
+    var r = new XMLHttpRequest(),
+          xhr = new XMLHttpRequest();
     
-    var r = new XMLHttpRequest();
-	
+    if (typeof widget.preferences.update_js_checksum == 'undefined') widget.preferences.update_js_checksum = '0'
+    
     r.onreadystatechange = function() {
-        if (this.readyState == 4) {
-            if (this.status == 200 || this.responseText != '') { 
-                // TODO if patches.js exceeds the storage quota of one widget.preferences variable, 
-                // then split the file's contents up between multiple widget.preferences variables (like the ad block lists in Opera AdBlock)
-                
-                // store the patches script in localStorage. Will turn it into a script element in 'includes/include.js'
-                widget.preferences.patches_js = this.responseText 
-                console.log('Fix the Web\'s patches.js file was just updated.')
+        if (this.readyState == 4 && this.status == 200 || this.responseXML != '') {
+            // Pull the last checksum from localStorage and compare it to the checksum of the most recent commit on Github.
+            // If the file was updated, then update the local copy of it
+            
+            console.log(this.responseXML)
+            window.xhr = this.responseXML
+            
+            if (this.responseXML) var checksum = this.responseXML.getElementsByTagName("entry")[0].getElementsByTagName('id')[0].firstChild.nodeValue.match(/\/([\d\w]*)/)[1]
+           
+            if (typeof checksum != 'undefined' && checksum != widget.preferences.update_js_checksum) {
+                widget.preferences.update_js_checksum = checksum;
+
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200 && this.responseText != '') {
+                        // TODO if patches.js exceeds the storage quota of one widget.preferences variable, 
+                        // then split the file's contents up between multiple widget.preferences variables (like the ad block lists in Opera AdBlock)
+
+                        // store the patches script in localStorage. Will turn it into a script element in 'includes/include.js'
+                        widget.preferences.patches_js = this.responseText 
+                        console.log('Fix the Web\'s patches.js file was just updated.')
+                    }	
+                }
+
+                xhr.open('GET', 'https://raw.github.com/cyberstream/Fix-the-Web-Patch-Script/master/patches.js', true)
+
+                try {
+                    xhr.send()
+                } catch(error) {
+                    console.log('Error: ' + error)
+                }
             }
         }	
     }
-
-    r.open('GET', 'https://raw.github.com/cyberstream/Fix-the-Web-Patch-Script/master/patches.js', true)
+    
+    r.open('GET', 'https://github.com/cyberstream/Fix-the-Web-Patch-Script/commits/master.atom', true)
 
     try {
         r.send()
@@ -60,9 +83,7 @@ function update() {
 setTimeout(update(), 1000 * 60 * 30); // TODO "update_interval" in widget.preferences will determine how often the patches.js file is updated
 
 function loadCommentsFrame() {
-    opera.extension.onconnect = function() {
-        
-    }
+    opera.extension.broadcastMessage('load comments frame') // fire this message for the injected script to catch and open the comments frame
 }
 
 function sendReport(report_details) {

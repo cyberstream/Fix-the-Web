@@ -7,6 +7,7 @@
     
     <!--default values for preferences-->
     <preference name="patches_js" value="/* patches file is empty */" />
+    <preference name="patches_js_checksum" value="0" />
     <preference name="update_interval" value="0" />
     <preference name="display_reports_by" value="domain" /> <!--either "domain" or "page"-->
     

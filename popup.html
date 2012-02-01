@@ -56,8 +56,7 @@
     <form action="" method="post" id="report-site-form">
         <p>
             <label for="page-address">Page Address</label>
-            <input type="text" id="page-address" name="page-address" />
-            <input type="hidden" id="domain-name" name="domain-name" />
+            <input type="text" id="page-address" name="page-address" />            
         </p>
         
         <p>
@@ -76,6 +75,7 @@
         
         <div class="pad_bottom"><em id="additional-information-details-panel-opener">Additional details...</em>
             <div id="additional-information-details-panel">
+                <p>Domain name: <input type="text" id="domain-name" name="domain-name" /></p>
                 <input type="text" id="OS" name="OS"/>
                 <input type="text" id="opera-version" name="opera-version"/>
                 <input type="text" id="opera-build-number" name="opera-build-number"  />
@@ -91,19 +91,20 @@
     </ul>
     
     <script type="text/javascript">
-        // get the the page's URL from the injected script. If you do "document.URL" here, then you'll just get the widget:// address
-        // you have to do a song and a dance just to get the current page URL here in the popup:
-        
-        opera.extension.onmessage = function(event) {
-            if (event.data['url']) document.getElementById('page-address').value = event.data['url']
-            if (event.data['domain']) document.getElementById('domain-name').value = event.data['domain']
-        }
-
-        window.addEventListener("DOMContentLoaded",function() {        
-            document.getElementById('open-comment-panel').onclick = function() {
-                // create and display a panel (like the panel in the YSlow addon: https://addons.opera.com/en/addons/extensions/details/yslow/3.0.5) 
-                // and place error reports and their comments inside it
+        window.addEventListener("DOMContentLoaded",function() {    
+            // get the current tab's URL and hostname            
+            var tab = opera.extension.bgProcess.opera.extension.tabs.getFocused();
+            
+            if (tab) {
+                document.getElementById('page-address').value = tab.url
+                document.getElementById('domain-name').value = tab.url.match(/:\/\/([^\/]+)\/?/)[1] // get the second item in the result's array (the matched text in the parentheses)
             }
+            
+            // when "Vew problems reported on this site" is clicked, open the comments panel
+            document.getElementById('open-comment-panel').addEventListener("click", function() {
+                // TODO close the popup when the comments frame loads
+                opera.extension.bgProcess.loadCommentsFrame(); // call the loadCommentsFrame() function via the opera.extension.bgProcess object
+            }, false);
 
             document.getElementById('report-site-form').onsubmit = function() {
                 // serialize the contents of the form and send it via AJAX
