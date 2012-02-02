@@ -6,13 +6,21 @@ opera.extension.onmessage = function(event){
         event.ports[0].postMessage({'url' : document.URL, 'domain' : document.domain}, [channel.port2]); 
     }
     
-    resizeFrame = function(e) {                    
-                                if (window.innerHeight - e.pageY >= 10 && e.pageY > 10)
-                                    document.getElementById('fix-the-web-comment-frame').style.height = 100 - Math.floor((e.pageY / window.innerHeight) * 100) + '%'
-                            }
+    resizeFrame = function(e) {
+        // get new height of comments panel
+        var newHeight = 100 - Math.floor((e.clientY / window.innerHeight) * 100);
+
+        // test the new height to be between satisfied interval
+        if(newHeight>0 && newHeight<96)
+            document.getElementById('fix-the-web-comment-frame').style.height =  newHeight + '%';
+        else // if mouse leave from window disconnect to follow the mouse
+            window.removeEventListener('mousemove', resizeFrame, false);
+    }
     
     if (event.data == "load comments frame") {
-        if (!document.getElementById('fix-the-web-comment-frame')) {
+        // window.top provides showing comments frame only on top iframe, page. Otherwise every iframe will contain comments frame.
+        // FIXME: This causes security errors in error console
+        if (!window.top.document.getElementById('fix-the-web-comment-frame')) {
             var frame_element = document.createElement('div');
                   frame_element.id = 'fix-the-web-comment-frame';
                   frame_element.className = 'fadeout_state';
@@ -63,7 +71,6 @@ opera.extension.onmessage = function(event){
             }, false);
             
             // detach the drag function when the mouse button is released
-
             frame_element.addEventListener('mouseup', function() {
                 window.removeEventListener('mousemove', resizeFrame, false);
                 
