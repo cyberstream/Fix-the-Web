@@ -154,7 +154,7 @@
             // when "Vew problems reported on this site" is clicked, open the comments panel
             document.getElementById('open-comment-panel').addEventListener("click", function() {
                 // TODO close the popup when the comments frame loads
-                opera.extension.bgProcess.loadCommentsFrame(); // call the loadCommentsFrame() function via the opera.extension.bgProcess object
+               opera.extension.bgProcess.opera.extension.tabs.getFocused().postMessage('load comments frame'); // trigger the comments frame's creation
                 
                 return false; // keep link from following the default action
             }, false);
