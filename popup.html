@@ -50,14 +50,15 @@
             width:100%;    
         }
 
-        input[type=text],textarea,select{
+        input[type=text], textarea, select, input[type=url] {
             border:1px solid #dfdfdf;
             padding:3px 4px;
+            font-family: "arial", "lucida grande", "lucida sans unicode", "bitstream vera sans", "dejavu sans", "trebuchet ms", sans-serif;
         }
-        input[type="text"]:hover, textarea:hover, select:hover{
+        input[type="text"]:hover, input[type=url]:hover, textarea:hover, select:hover{
             border:1px solid rgb(51, 153, 255);
         }
-        input[type="text"]:focus,textarea:focus,select:focus{
+        input[type="text"]:focus, input[type=url]:focus, textarea:focus,select:focus{
             border:1px solid #999;
             box-shadow:inset 0 0 3px #999;
         }
@@ -73,6 +74,10 @@
             font-weight:bolder;
             float: right;
             margin:0 5px;
+        }
+        input[type="submit"]:hover {
+            cursor:pointer;
+            background:-o-linear-gradient(top,#54aaff,rgb(40, 140, 250));     
         }
         #opera-version,#opera-build-number,#OS{
             float:left;
@@ -105,7 +110,7 @@
     
     <form action="" method="post" id="report-site-form">
         <p> 
-            <input type="text" id="page-address" name="page-address" placeholder="You must enter page location" />
+            <input type="url" required="required" id="page-address" name="page-address" placeholder="You must enter page location" />
         </p>
         <p>
             <label for="report-category">Category</label>
@@ -119,12 +124,11 @@
         
         <p>
             <label for="error-report-description">Error Details</label>
-            <textarea rows="5" cols="30" id="error-report-description" name="description" placeholder="What triggered the problem, what you were expecting, etc"></textarea>
+            <textarea rows="5" cols="30" id="error-report-description" required="required" name="description" placeholder="What triggered the problem, what you were expecting, etc"></textarea>
         </p>
         
         <div class="pad_bottom"><em id="additional-information-details-panel-opener">Additional details...</em><input type="submit" value="Submit Report &gt;" />
             <p id="additional-information-details-panel">
-                Domain name: <input type="text" id="domain-name" name="domain-name" />
                 <input type="text" id="OS" name="OS"/>
                 <input type="text" id="opera-version" name="opera-version"/>
                 <input type="text" id="opera-build-number" name="opera-build-number"  />
@@ -134,7 +138,7 @@
     </form>
     
     <ul id="link-related-with-the-site">
-        <li><a href="javascript:return false" id="open-comment-panel">View problems reported on this site</a></li>
+        <li><a href="javascript:void(0)" id="open-comment-panel">View problems reported on this site</a></li>
         <li><a href="index.html" target="_blank">View recent bug reports</a></li>
     </ul>
     
@@ -144,8 +148,7 @@
             var tab = opera.extension.bgProcess.opera.extension.tabs.getFocused();
             
             if (tab) {
-                document.getElementById('page-address').value = tab.url
-                document.getElementById('domain-name').value = tab.url.match(/:\/\/([^\/]+)\/?/)[1] // get the second item in the result's array (the matched text in the parentheses)
+                document.getElementById('page-address').value = tab.url                
             }
             
             // when "Vew problems reported on this site" is clicked, open the comments panel
@@ -156,12 +159,14 @@
                 return false; // keep link from following the default action
             }, false);
 
-            document.getElementById('report-site-form').onsubmit = function() {
+            document.getElementById('report-site-form').addEventListener('submit', function() {
+                var domain_name = document.getElementById('page-address').value.match(/:\/\/([^\/]+)\/?/)[1]; // get the second item in the result's array (the matched text in the parentheses)
+                
                 // serialize the contents of the form and send it via AJAX
                 // opera.extension.bgProcess.sendReport(params)
 
                 return false; // prevent the form from actually submitting
-            }            
+            }, false);
 
             // Toggle additional information panel by clicking the text "Additional information"
             document.getElementById("additional-information-details-panel-opener").addEventListener("click",function(){          
