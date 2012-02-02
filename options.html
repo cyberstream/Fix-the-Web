@@ -5,16 +5,71 @@
     <title>Options | Opera Page Patcher</title>
     
     <style type="text/css">
-        
+    body{
+        padding:0;
+        margin:0;
+        background:rgb(245, 245, 245);
+        font-family: "arial", "lucida grande", "lucida sans unicode", "bitstream vera sans", "dejavu sans", "trebuchet ms", sans-serif;
+        color:#111;
+    }
+    a,a:link{
+        color:#111;
+        text-decoration:underline;
+
+    }
+    #prefs-form, footer{
+        margin:0 auto;
+        width:80%;
+        position: relative;
+    }
+    #prefs-form h1{
+        border-bottom:1px solid rgb(230,230,230 );
+        margin:2px 0;
+        padding:5px;
+        clear:both;
+    }
     </style>
 </head>
 <body>	
     
-    
+    <div id="prefs-form">
+        <h1>Options | Opera Page Patcher</h1>
+	  	<label>Page Patcher Update Interval  <input type="range" min="30" max="1440" step="15" name="update-interval" id="update-interval"/> (<span id="update-interval-in-minute"></span> in Minute)</label>
+
+	</div>
     <script type="text/javascript" src="scripts/jquery.js"></script>
     <script type="text/javascript" src="scripts/background.js"></script>
     <script type="text/javascript">
-        
+    var form   = document.getElementById("prefs-form");
+    var fields = form.querySelectorAll("input[type='range']");
+
+    // Set the preference values for each field
+    function savePrefs (event) {
+            widget.preferences.setItem(event.target.name, event.target.value);
+    }
+
+    // Get the preference values from the widget object
+    function loadPrefs() {
+        for (var i = 0; i < fields.length; i++) {
+            var field = fields[i];
+            if (typeof widget.preferences[field.name] !== "undefined") {
+            field.value = widget.preferences.getItem(field.name);
+            field.addEventListener("change",savePrefs,false);
+            }
+        }
+        updateIntervalValue();
+    }
+
+    // That function shows update-interval's value on a visible HTML element
+    function updateIntervalValue(){
+    	document.getElementById("update-interval-in-minute").innerText=document.getElementById("update-interval").value;
+    }
+
+    // when the page is loaded, get extension preferences and assign them into correct input elements
+    window.addEventListener("load",loadPrefs,false);
+
+    // when update interval is changed, update the value in the isible area
+    document.getElementById("update-interval").addEventListener("change",updateIntervalValue,false);
     </script>
 </body>
 </html>
