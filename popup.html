@@ -223,10 +223,10 @@
                     bug.value += "ColorDepth: " + screen.colorDepth + "\r\n";
 
             // platform states whether the system is Win32, 64-bit build, mac or linux
-            document.getElementById("OS").value = navigator.platform
+            document.getElementById("OS").value = navigator.platform // default system form field value, but it is overwritten if this next thing works....
             
             opera.extension.onmessage = function(e) {
-                if (e.data && e.data.system) document.getElementById("OS").value = e.data.system // if data arrives via messaging from the bgProcess, and it's the system info, then put it into the system field of the form.
+                if (e.data && e.data.system) document.getElementById("OS").value = e.data.system // ...if data arrives via messaging from the bgProcess, and it's the system info, then put it into the system field of the form.
             }
             
             var system = opera.extension.bgProcess.getOS(); // call the function
