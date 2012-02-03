@@ -143,13 +143,11 @@
     </ul>
     
     <script type="text/javascript">
-        window.addEventListener("DOMContentLoaded",function() {    
+        window.addEventListener("DOMContentLoaded",function() {                
             // get the current tab's URL and hostname            
             var tab = opera.extension.bgProcess.opera.extension.tabs.getFocused();
             
-            if (tab) {
-                document.getElementById('page-address').value = tab.url                
-            }
+            if (tab) document.getElementById('page-address').value = tab.url          
             
             // when "Vew problems reported on this site" is clicked, open the comments panel
             document.getElementById('open-comment-panel').addEventListener("click", function() {
@@ -190,11 +188,8 @@
             },false);
 			
             if ((window.opera) && (opera.buildNumber)){
-                    // learn and write version of Opera into hidden element (#opera-version)
+                    // learn and write version into hidden element (#opera-version)
                     document.getElementById("opera-version").value		=	opera.version();
-
-                    // learn and write version of Opera into hidden element (#opera-build-number)
-                    document.getElementById("opera-build-number").value	=	opera.buildNumber();
 
                     // learn and write version of Opera into hidden element (#opera-build-number)
                     document.getElementById("opera-build-number").value	=	opera.buildNumber();
@@ -228,7 +223,13 @@
                     bug.value += "ColorDepth: " + screen.colorDepth + "\r\n";
 
             // platform states whether the system is Win32, 64-bit build, mac or linux
-            document.getElementById("OS").value   =   navigator.platform;            
+            document.getElementById("OS").value = navigator.platform
+            
+            opera.extension.onmessage = function(e) {
+                if (e.data && e.data.system) document.getElementById("OS").value = e.data.system // if data arrives via messaging from the bgProcess, and it's the system info, then put it into the system field of the form.
+            }
+            
+            var system = opera.extension.bgProcess.getOS(); // call the function
         },false);
     </script>
 </body>

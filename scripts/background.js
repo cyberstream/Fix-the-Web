@@ -8,7 +8,7 @@
             popup: {
                 href: 'popup.html',
                 width: 300,
-                height:450
+                height: 450
             }
         }
 
@@ -83,9 +83,22 @@ function update() {
 if(widget.preferences.getItem("update-interval"))
     setTimeout(update(), widget.preferences.getItem("update-interval")); // TODO "update_interval" in widget.preferences will determine how often the patches.js file is updated
 
-function loadCommentsFrame() {
-    // FIXME: boardcastMessage causes opening comments panel in every page.
-    opera.extension.broadcastMessage('load comments frame') // fire this message for the injected script to catch and open the comments frame
+function getOS() {
+    var xhr = new XMLHttpRequest();
+   
+    xhr.onreadystatechange = function() {
+        if (this.status == 200) {
+            opera.extension.broadcastMessage({'system' : this.responseText})
+        }
+    }
+    
+    xhr.open('GET', 'http://localhost/system_detection.php', true); // TODO change request URL
+    
+    try {
+        xhr.send();
+    } catch(error) { 
+        console.log('Error: ' + error)
+    }
 }
 
 function sendReport(report_details) {
