@@ -102,7 +102,8 @@ function getOS() {
 }
 
 function sendReport(report_details) {
-    // send report asynchronously to the server with ajax_request_handler.php on it 
+    // send report asynchronously to the server with the ajax_request_handler.php file on it 
     // see the "Fix the Web Server Side" repo on Github for that file
+    // validate and process the form POST request on ajax_request_handler.php
 }
 

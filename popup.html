@@ -160,8 +160,8 @@
             document.getElementById('report-site-form').addEventListener('submit', function() {
                 var domain_name = document.getElementById('page-address').value.match(/:\/\/([^\/]+)\/?/)[1]; // get the second item in the result's array (the matched text in the parentheses)
                 
-                // serialize the contents of the form and send it via AJAX
-                // opera.extension.bgProcess.sendReport(params)
+                // serialize the contents of the form and submit it via the bgProcess
+                // opera.extension.bgProcess.sendReport(params = {'page_address' : page_address.value, 'report_category' : report_category.value, 'error_report_description' : report.value, ....(additional details)})
 
                 return false; // prevent the form from actually submitting
             }, false);
