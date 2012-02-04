@@ -1,8 +1,12 @@
 <?php 
-require_once 'config.php';
+require_once 'config.php'; // include the database configuration file
+
+exit;
 
 if (isset($_GET) && count($_GET)) {
-    // process HTTP GET requests
-} elseif (isset($_POST) && count($_POST)) {
-    // process HTTP POST requests
+    if ($_GET['mode'] == 'submit error') {
+        // process the error submission form
+        // if the data is processed and inserted into the database successfully then echo "true":
+        exit ('true');
+    } 
 } else echo 'Page not found!';
