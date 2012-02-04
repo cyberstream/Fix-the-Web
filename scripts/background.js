@@ -4,7 +4,7 @@
         var buttonProperties = {
             disabled: false,
             title: widget.name,
-            icon: 'icon-18.png',
+            icon: 'images/icon-18.png',
             popup: {
                 href: 'popup.html',
                 width: 300,
@@ -28,45 +28,75 @@ opera.extension.onconnect = function (event) {
     } 
 }
 
-// the update() function pulls the patches script from Github and puts its contents in widget.preferences.patches_js
+/* function sendRequest() makes sending AJAX requests easier and simpler
+ * method: GET
+ * url: the URL address to send the request to
+ * callback (optional): a callback function to be run when the request completes
+ * params (optional): the params in JSON e.g. {key: 'val', key2: 'val2', ...}
+ */
 
-function update() {
-    var r = new XMLHttpRequest(),
-          xhr = new XMLHttpRequest();
+function sendRequest (method, url, callback, params) {
+    var xhr = new XMLHttpRequest();
+   
+    xhr.onreadystatechange = function() {
+        if (this.status == 200 && this.readyState == 4) {
+            if (typeof callback == 'function') callback(this.responseText);
+        }
+    }
+         
+    // serialize the parameters passed into this function, if there are any. 
+    // For example, change {key: 'val', key2: 'val2'} to 'key=val&key2=val2'
+    if (typeof params == 'object') {
+        var serialized_data = '';
+        
+        for (i in params) {
+            if (typeof first_iteration == 'undefined') {
+                serialized_data += i + '=' + encodeURIComponent(params[i]);
+                var first_iteration = true;
+            } else // we need to add an ampersand (&) at the beginning if there are already parameters in the query string
+                serialized_data += '&' + i + '=' + encodeURIComponent(params[i]); 
+        }
+    } else serialized_data = false;
     
-    if (typeof widget.preferences.update_js_checksum == 'undefined') widget.preferences.update_js_checksum = '0'
+    console.log('data: ' + serialized_data)
+    
+    try {
+        if (method.toLowerCase() != 'get') throw 'Invalid method "' + method + '" was specified. AJAX request could not be completed.' ;
+        else {
+            xhr.open(method, url + (serialized_data && serialized_data.length ? '?' + serialized_data : ''), true)
+            xhr.send(null);
+        }
+    } catch(error) { 
+        console.log('Error: ' + error);
+        return false;
+    }
+} // end sendRequest() function
+
+// the update() function pulls the patches script from Github and puts its contents in widget.preferences.patches_js
+function update() {
+    var r = new XMLHttpRequest();    
+    if (typeof widget.preferences["patches-js-checksum"] == 'undefined') 
+        widget.preferences["patches-js-checksum"] = '0'
     
     r.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200 || this.responseXML != '') {
             // Pull the last checksum from localStorage and compare it to the checksum of the most recent commit on Github.
             // If the file was updated, then update the local copy of it
             
-            console.log(this.responseXML)
-            window.xhr = this.responseXML
-            
             if (this.responseXML) var checksum = this.responseXML.getElementsByTagName("entry")[0].getElementsByTagName('id')[0].firstChild.nodeValue.match(/\/([\d\w]*)/)[1]
-           
-            if (typeof checksum != 'undefined' && checksum != widget.preferences.update_js_checksum) {
-                widget.preferences.update_js_checksum = checksum;
+                      
+            if (typeof checksum != 'undefined' && checksum != widget.preferences["patches-js-checksum"]) {
+                widget.preferences["patches-js-checksum"] = checksum;
 
-                xhr.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200 && this.responseText != '') {
+                sendRequest('GET', 'https://raw.github.com/cyberstream/Fix-the-Web-Patch-Script/master/patches.js', 
+                    function(data) {
                         // TODO if patches.js exceeds the storage quota of one widget.preferences variable, 
                         // then split the file's contents up between multiple widget.preferences variables (like the ad block lists in Opera AdBlock)
-
                         // store the patches script in localStorage. Will turn it into a script element in 'includes/include.js'
-                        widget.preferences.patches_js = this.responseText 
+                        
+                        widget.preferences['patches-js'] = data
                         console.log('Fix the Web\'s patches.js file was just updated.')
-                    }	
-                }
-
-                xhr.open('GET', 'https://raw.github.com/cyberstream/Fix-the-Web-Patch-Script/master/patches.js', true)
-
-                try {
-                    xhr.send()
-                } catch(error) {
-                    console.log('Error: ' + error)
-                }
+                    });
             }
         }	
     }
@@ -81,29 +111,12 @@ function update() {
 }
 
 if(widget.preferences.getItem("update-interval"))
-    setTimeout(update(), widget.preferences.getItem("update-interval")); // TODO "update_interval" in widget.preferences will determine how often the patches.js file is updated
+    // "update-interval" in widget.preferences will determine how often the patches.js file is updated
+    // update-interval is in minutes, but setTimeout accepts milliseconds, so convert update-interval to seconds unit
+    setTimeout(update(), (widget.preferences.getItem("update-interval") * 1000 * 60)); 
 
-function getOS() {
-    var xhr = new XMLHttpRequest();
-   
-    xhr.onreadystatechange = function() {
-        if (this.status == 200) {
-            opera.extension.broadcastMessage({'system' : this.responseText})
-        }
-    }
-    
-    xhr.open('GET', 'http://localhost/system_detection.php', true); // TODO change request URL
-    
-    try {
-        xhr.send();
-    } catch(error) { 
-        console.log('Error: ' + error)
-    }
+function getOS () {    
+    sendRequest('GET', 'http://localhost/system_detection.php', function(data) {
+        opera.extension.broadcastMessage({'system' : data})
+    });
 }
-
-function sendReport(report_details) {
-    // send report asynchronously to the server with the ajax_request_handler.php file on it 
-    // see the "Fix the Web Server Side" repo on Github for that file
-    // validate and process the form POST request on ajax_request_handler.php
-}
-
