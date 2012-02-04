@@ -1,8 +1,6 @@
 <?php 
 require_once 'config.php'; // include the database configuration file
 
-exit;
-
 if (isset($_GET) && count($_GET)) {
     if ($_GET['mode'] == 'submit error') {
         // process the error submission form
