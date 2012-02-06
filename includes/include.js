@@ -2,8 +2,8 @@
 
 opera.extension.onmessage = function(event) {    
     resizeFrame = function(e) {                    
-                                if (window.innerHeight - e.pageY >= 10 && e.pageY > 10)
-                                    document.getElementById('fix-the-web-comment-frame').style.height = 100 - Math.floor((e.pageY / window.innerHeight) * 100) + '%'
+                                if (window.innerHeight - e.clientY >= 10 && e.clientY > 10)
+                                    document.getElementById('fix-the-web-comment-frame').style.height = 100 - Math.floor((e.clientY / window.innerHeight) * 100) + '%'
                             }
     
     if (event.data == "load comments frame") {
@@ -55,7 +55,7 @@ opera.extension.onmessage = function(event) {
             var frame_style_element = document.createElement('style'),
                   frame_styles = '::selection {background: transparent !important;}';
 
-            frame_styles += '#fix-the-web-comment-frame {position: fixed; z-index:123456789 !important; box-shadow:0 0 90px #eee; background: -o-linear-gradient(bottom, rgba(255,255,255,1) 30%, rgba(255,255,255,.75)); left: 0; margin: 0; padding-bottom: 5px; -o-transition:bottom 0.5s ease-in-out, opacity 0.5s ease-in-out, width 500ms ease-in-out, height 500ms ease-in-out;}'
+            frame_styles += '#fix-the-web-comment-frame {position: fixed; z-index:123456789 !important; box-shadow:0 0 90px #eee; background: -o-linear-gradient(bottom, rgba(255,255,255,1) 30%, rgba(255,255,255,.75)); left: 0; margin: 0; padding-bottom: 5px; -o-transition:bottom 0.5s ease-in-out, opacity 0.5s ease-in-out, width 500ms ease-in-out, height 100ms ease-in-out;}'
             frame_styles += '.normal_state{height:40%; width:100%; opacity:1; bottom:0px} .fadeout_state {opacity:0; bottom:-20px;} .minimized_state #resize-frame {cursor:pointer}' 
             frame_styles += 'div#fix-the-web-comment-frame.minimized_state {bottom:0; height:15px; width:40px; padding:0;} .minimized_state #resize-frame:before {background:none}'
             frame_styles += '#resize-frame {width: 100%; position: relative; float: left; left: 0; top: 0; height: 15px; background-image:-o-linear-gradient(bottom, #777, #aaa); cursor:n-resize} #resize-frame:active {background-image:-o-linear-gradient(top, #333, #555)}'
