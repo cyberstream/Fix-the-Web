@@ -81,8 +81,10 @@
         }
         #opera-version,#opera-build-number,#OS{
             float:left;
-            width:33%;
+            width:20%;
         }
+        
+        #OS { width:60%} /* make the OS field wider because it is longer than the version and build number*/
 
         #additional-information-details-panel-opener, #link-related-with-the-site li {
             cursor: pointer;
@@ -141,7 +143,7 @@
             <input type="url" required="required" id="page-address" name="page_address" placeholder="You must enter page location" />
         </p>
         <p>
-            <label for="report-category">Category</label>
+            <label for="report-category">Category: </label>
             <select id="report-category" name="category">
                 <option value="0">Minor Annoyance</option>
                 <option value="1">Major Problem</option>
@@ -150,16 +152,16 @@
         </p>            
         
         <p>
-            <label for="error-report-description">Error Details</label>
+            <label for="error-report-description">Error Details:</label>
             <textarea rows="5" cols="30" id="error-report-description" required="required" name="description" placeholder="What triggered the problem, what you were expecting, etc"></textarea>
         </p>
         
         <div class="pad_bottom"><em id="additional-information-details-panel-opener">Additional details...</em><input type="submit" value="Submit Report &gt;" />
             <p id="additional-information-details-panel">
-                <input type="text" id="OS" name="OS" />
-                <input type="text" id="opera-version" name="opera_version" />
-                <input type="text" id="opera-build-number" name="opera_build_number"  />
-                <textarea id="additional-information" name="additional_information" cols="35" rows="4"></textarea>
+                <input type="text" id="OS" name="OS" placeholder="operating system" />
+                <input type="text" id="opera-version" name="opera_version" placeholder="Opera's version" />
+                <input type="text" id="opera-build-number" name="opera_build_number" placeholder="Opera's build number"  />
+                <textarea id="additional-information" name="additional_information" cols="35" rows="4" placeholder="Other information about your system and browser, e.g. plugins, extensions, screen size, etc."></textarea>
             </p>
         </div>
     </form>
@@ -214,20 +216,25 @@
                           system : error_form.OS.value,
                           version : error_form.opera_version.value,
                           build : error_form.opera_build_number.value,
-                          misc : error_form.additional_information.value
+                          misc : error_form.additional_information.value,
+                          language : 'EN', // TODO change this to the actual language of the extension when localization is implemented
+                          username : 'fake_username' // TODO change this to the actual user's username when OAuth is implemented
                       };
                       
-                // TODO maybe...validate the params.url field with a regular expression (regex) to make sure it is a real URL???
-                
-                // send report asynchronously to the server with the ajax_request_handler.php file on it 
-                // see the "Fix the Web Server Side" repo on Github for that file
-                // validate and process the form POST request in ajax_request_handler.php
-                
-                opera.extension.bgProcess.sendRequest('GET', 'http://localhost/ajax_request_handler.php', function(data) { // TODO change form processing URL
-                    if (data == 'success') show_message ('Thanks for reporting this bug. It will be reviewed soon.', 'success');
-                    else if (data.length > 0) show_message (data, 'error');
-                    else show_message('The server form validation and processing needs to be finished.', 'error');
-                }, params);
+                if (!params.url.length) show_message('Please paste the current page\'s URL into the page location field.', 'error');
+                else if (!params.category.length) show_message('Please select a category for the error.', 'error');
+                else if (!params.description.length) show_message('Please fill out the error report\'s description field.', 'error');
+                else {
+                    // send report asynchronously to the server with the ajax_request_handler.php file on it 
+                    // see the "Fix the Web Server Side" repo on Github (http://github.com/cyberstream/Fix-the-Web-Server-Side) for that file
+                    // validate and process the form request in ajax_request_handler.php
+                    
+                    opera.extension.bgProcess.sendRequest('GET', 'http://localhost/ajax_request_handler.php', function(data) { // TODO change form processing URL
+                        if (data == 'true') show_message ('Thanks for reporting this bug. It will be reviewed soon.', 'success');
+                        else if (data.length > 0) show_message (data, 'error');
+                        else show_message ('The was a problem submitting your error report. Please try submitting it again.', 'error');
+                    }, params);
+                }
                 
                 return false; // prevent the form from actually submitting
             }
