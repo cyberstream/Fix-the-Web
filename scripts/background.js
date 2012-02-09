@@ -1,4 +1,4 @@
-(function() {
+createToolbarIcon = function(badgeProperties) {
     if (opera.contexts) {
         // Set the properties of the button
         var buttonProperties = {
@@ -9,27 +9,47 @@
                 href: 'popup.html',
                 width: 300,
                 height: 450
-            }
+            },
+            badge: {} // need to create an empty object now so it can be potentially modified later
         }
+        
+        var toolbarIcon = opera.contexts.toolbar[0];
 
-        // Create the button and add it to the toolbar
-        var button = opera.contexts.toolbar.createItem(buttonProperties);
-        opera.contexts.toolbar.addItem(button);
+        // if the button already was created and there is badge information passed to this function, then edit the icon's badge
+        if (typeof toolbarIcon != 'undefined' && toolbarIcon instanceof UIItem && typeof badgeProperties == 'object') {
+            if (parseInt(badgeProperties.textContent) > 0) {
+                toolbarIcon.title = parseInt(badgeProperties.textContent) == 1 ? 
+                    'A bug was reported on this ' + (widget.preferences['display-reports-by'] || 'website') : 
+                    badgeProperties.textContent+ ' bugs were reported on this ' + (widget.preferences['display-reports-by'] || 'domain');
+            }
+            
+            for (i in badgeProperties) { // loop through the badgeProperties object and assign each key: val to a key: val in the toolbar icon badge
+                toolbarIcon.badge[i] = badgeProperties[i]
+            }
+        } else {
+            // Create the button and add it to the toolbar
+            var button = opera.contexts.toolbar.createItem(buttonProperties);
+
+            initButton = function() {
+                var tab = opera.extension.tabs.getFocused();
+                if (tab) button.disabled = false;
+                else button.disabled = true;
+            }
+
+            opera.contexts.toolbar.addItem(button);
+
+            // button is enabled when tab is ready
+            opera.extension.addEventListener('connect', initButton, false);
+            opera.extension.addEventListener('focus', initButton, false);
+            opera.extension.addEventListener('blur', initButton, false);
+        }
     }
-})()
-
-// initialize a connection with the popup and send its reference to the injected script so they can both communicate on their own
-
-opera.extension.onconnect = function (event) {
-    if(event.origin.indexOf ("popup.html") > -1 && event.origin.indexOf ('widget://') > -1){
-        var tab = opera.extension.tabs.getFocused();
-
-        if (tab) tab.postMessage( "send info", [event.source]);
-    } 
 }
 
+window.addEventListener('DOMContentLoaded', createToolbarIcon, false);
+
 /* function sendRequest() makes sending AJAX requests easier and simpler
- * method: GET
+ * method: GET or POST (must use CORS for cross-domain POST requests, otherwise it won't work)
  * url: the URL address to send the request to
  * callback (optional): a callback function to be run when the request completes
  * params (optional): the params in JSON e.g. {key: 'val', key2: 'val2', ...}
@@ -118,10 +138,36 @@ function getOS () {
     });
 }
 
+opera.extension.onconnect = function(e) {
+    e.source.postMessage('reply');
+}
+
 opera.extension.onmessage = function(event) {
-    if (event.data != 'get_frame_content') return
+    var mode = widget.preferences['display-reports-by'] || 'domain',
+            tab = opera.extension.tabs.getFocused(),
+            page_address = tab.url.replace(/\/$/ig, ''),
+            domain_name = page_address.match(/:\/\/([^\/]+)\/?/) ? page_address.match(/:\/\/([^\/]+)\/?/)[1] : ''; // get the second item in the result's array (the matched text in the parentheses)
     
-    sendRequest ('GET', 'http://localhost/ajax_request_handler.php?mode=get_frame_content', function(data) {
-        event.source.postMessage({frame_content : data})
-    });
+    if (event.data == 'get_frame_content') {    
+        if (tab) {
+            sendRequest ('GET', 'http://localhost/ajax_request_handler.php?mode=get_frame_content&method=' + mode + '&page=' + encodeURIComponent(page_address) + '&domain=' + encodeURIComponent(domain_name), function(data) {
+                event.source.postMessage({frame_content : data})
+            });
+        }
+    } else if (event.data == 'initialize badge') {
+        if (tab) {
+            sendRequest ('GET', 'http://localhost/ajax_request_handler.php?mode=get_reports_count&method=' + mode + '&page=' + encodeURIComponent(page_address) + '&domain=' + encodeURIComponent(domain_name), function(data) {
+                if (data) {
+                    var badge = {
+                            display: 'block',
+                            textContent: data,
+                            color: 'white',
+                            backgroundColor: '#c12a2a'
+                        };
+                    
+                    createToolbarIcon(badge);
+                }
+            });
+        }
+    }
 }

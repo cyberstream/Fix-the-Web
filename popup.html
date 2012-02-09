@@ -171,11 +171,13 @@
     </ul>
     
     <script type="text/javascript">
-        window.addEventListener("DOMContentLoaded",function() {                
+        window.addEventListener("DOMContentLoaded", function() {       
+            document.getElementById('open-comment-panel').innerText = 'View problems reported on this ' 
+                    + (widget.preferences['display-reports-by'] && widget.preferences['display-reports-by'] == 'domain' ? 'site' : 'page')
             // get the current tab's URL       
             var tab = opera.extension.bgProcess.opera.extension.tabs.getFocused();
             
-            if (tab) document.getElementById('page-address').value = tab.url          
+            if (tab) document.getElementById('page-address').value = tab.url;
             
             // when "Vew problems reported on this site" is clicked, open the comments panel
             document.getElementById('open-comment-panel').addEventListener("click", function() {
@@ -190,7 +192,7 @@
                 var message = document.querySelector('#error, #success'), 
                       form_element = document.getElementById('report-site-form');
                       
-                if (message) error_message.parentNode.removeChild(message); // remove old messages before displaying a new one
+                if (message) message.parentNode.removeChild(message); // remove old messages before displaying a new one
                 
                 var element = document.createElement('div');
                 element.id = message_mode;

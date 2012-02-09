@@ -1,12 +1,14 @@
-// give the current page's URL and domain name to the popup when it's opened
-
 opera.extension.onmessage = function(event) {    
     resizeFrame = function(e) {                    
                                 if (window.innerHeight - e.clientY >= 10 && e.clientY > 10)
                                     document.getElementById('fix-the-web-comment-frame').style.height = 100 - Math.floor((e.clientY / window.innerHeight) * 100) + '%'
                             }
     
-    if (event.data.frame_content) {
+    if (event.data == 'reply') {
+        window.addEventListener('load', function () {
+            event.source.postMessage('initialize badge')
+        }, false)
+    } else if (event.data.frame_content) {
         document.getElementById('frame-content').innerHTML = event.data.frame_content;
     } else if (event.data == "load comments frame") {
         if (!document.getElementById('fix-the-web-comment-frame')) {
