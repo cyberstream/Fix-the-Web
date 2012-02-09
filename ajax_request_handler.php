@@ -33,10 +33,21 @@ if (isset($_GET) && count($_GET)) {
         exit;
     } elseif ($_GET['mode'] == 'get_frame_content') {
         $stmt = $db->stmt_init();
-
-        if ($stmt->prepare("SELECT 
+        
+        if ($_GET['method'] == 'domain' && isset($_GET['domain'])) {
+            $query = "SELECT 
             username, language, category, report, page, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
-            FROM reports WHERE post_type = 0")) {
+            FROM reports WHERE post_type = 0 AND domain = ?";
+            $bind_variable = $_GET['domain'];
+        } elseif ($_GET['method'] == 'page' && isset($_GET['page'])) {
+            $query = "SELECT 
+            username, language, category, report, page, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
+            FROM reports WHERE post_type = 0 AND page = ?";
+            $bind_variable = $_GET['page'];
+        } else exit ('There was an error fetching the bug reports for this website.');
+
+        if ($stmt->prepare($query)) {
+            $stmt->bind_param('s', $bind_variable);
             $q = $stmt->execute();
             $stmt->store_result();
             
@@ -60,5 +71,31 @@ _HERE;
                 exit ($return);
             } else exit ('There were no bugs reported on this website.');       
         }
+    } elseif ($_GET['mode'] == 'get_reports_count' && isset($_GET['method']) && (isset($_GET['page']) || isset($_GET['domain']))) {
+        if ($_GET['method'] == 'domain' || $_GET['method'] == 'page') {
+            $stmt = $db->stmt_init();
+            
+            if ($_GET['method'] == 'domain' && isset($_GET['domain'])) {
+                $query = "SELECT COUNT(DISTINCT id) FROM reports WHERE domain = ?";
+                $bind_variable = $_GET['domain'];
+            } elseif ($_GET['method'] == 'page' && isset($_GET['page'])) {
+                $query = "SELECT COUNT(DISTINCT id) FROM reports WHERE page = ?";
+                $bind_variable = $_GET['page'];
+            } else exit ('0');
+
+            if ($stmt->prepare($query)) {
+                $stmt->bind_param('s', $bind_variable);                
+                
+                $stmt->execute();
+                $stmt->bind_result($count);
+                $stmt->fetch();
+                
+                $count = (strlen($count) == 1 ? " $count " : $count); // put some padding around the badge if there is only one number
+                
+                exit ($count);
+            }
+        }
+        
+        exit ('0');
     }
 } else echo 'Page not found!';
