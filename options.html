@@ -5,70 +5,122 @@
     <title>Options | Fix the Web</title>
     
     <style type="text/css">
-    body{
+    body {
         padding:0;
         margin:0;
         background:rgb(245, 245, 245);
         font-family: "arial", "lucida grande", "lucida sans unicode", "bitstream vera sans", "dejavu sans", "trebuchet ms", sans-serif;
         color:#111;
     }
-    a,a:link{
+    
+    a, a:link {
         color:#111;
         text-decoration:underline;
-
     }
-    #prefs-form, footer{
+    
+    #prefs-form, footer {
         margin:0 auto;
         width:80%;
         position: relative;
     }
-    #prefs-form h1{
+    
+    #prefs-form h1 {
         border-bottom:1px solid rgb(230,230,230 );
         margin:2px 0;
         padding:5px;
         clear:both;
     }
+    
+    #prefs-form input[type=range] {
+        width:300px;
+    }
+    
+    #update {
+        margin:10px 0 0 0;
+        padding:3px;
+        background:#dbe4ff;
+        border:1px solid #416fe2;
+        display:inline-block;
+        border-radius:5px;
+        cursor:pointer;
+        font-weight:bold;
+        -o-transition:background-color 400ms ease-in-out;
+        text-shadow:0 0 12px #fff, 0 1px 1px #ddd;
+    }
+    
+    #update:hover {
+        background: #7298f7;
+    }
     </style>
 </head>
 <body>	
     
-    <div id="prefs-form">
-        <h1>Options | Fix the Web</h1>
-            <label>Patches script update interval  <input type="range" min="30" max="1440" step="15" name="update-interval" id="update-interval"/> (every <span id="update-interval-in-minute"></span> minutes)</label>
-    </div>
+    <form id="prefs-form">
+        <h1>Fix the Web's Options</h1>
+            <label>Patches script update interval  
+                <input type="range" min="30" max="720" step="15" name="update-interval" id="update-interval"/>
+                (every <span id="update-interval-in-minute"></span> minutes)
+            </label>
+        <div id="update">update patches script now</div>
+            
+            <p>
+                Show reports count in the toolbar icon badge
+                <label>
+                    <strong>by domain</strong>
+                    <input type="radio" id="display-reports-by-domain" name="display-reports-by" value="domain" />
+                </label>
+                <label>
+                    <strong>by page</strong>
+                    <input type="radio" id="display-reports-by-page" name="display-reports-by" value="page" />
+                </label>
+            </p>
+    </form>
     
     <script type="text/javascript" src="scripts/background.js"></script>
     <script type="text/javascript">
-    var form   = document.getElementById("prefs-form");
-    var fields = form.querySelectorAll("input[type='range']");
-
+    var form = document.getElementById("prefs-form"),
+          fields = form.querySelectorAll("input[type='range'], input[type='radio']");
+    
     // Set the preference values for each field
     function savePrefs (event) {
-            widget.preferences.setItem(event.target.name, event.target.value);
+        if (event.target.name == 'display-reports-by') widget.preferences.setItem(event.target.name, event.target.id.replace('display-reports-by-', ''));
+        else widget.preferences.setItem(event.target.name, event.target.value);
     }
-
+    
     // Get the preference values from the widget object
     function loadPrefs() {
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             if (typeof widget.preferences[field.name] !== "undefined") {
-            field.value = widget.preferences.getItem(field.name);
-            field.addEventListener("change",savePrefs,false);
+                if (field.name == 'display-reports-by') {
+                    if (widget.preferences.getItem(field.name) == field.value) field.checked = 'checked';
+                } else field.value = widget.preferences.getItem(field.name);
+                
+                field.addEventListener("change", savePrefs, false);
             }
         }
+        
         updateIntervalValue();
     }
-
+    
     // That function shows update-interval's value on a visible HTML element
     function updateIntervalValue(){
         document.getElementById("update-interval-in-minute").innerText = document.getElementById("update-interval").value;
     }
-
+    
     // when the page is loaded, get extension preferences and assign them into correct input elements
-    window.addEventListener("load",loadPrefs,false);
-
+    window.addEventListener("load", loadPrefs, false);
+    
     // when update interval is changed, update the value in the isible area
-    document.getElementById("update-interval").addEventListener("change",updateIntervalValue,false);
+    document.getElementById("update-interval").addEventListener("change", updateIntervalValue, false);
+    
+    document.getElementById('update').addEventListener('click', function() { // TODO put loading icon by the button?
+        var updated = update();
+        
+        if (updated) {
+            alert('Updated successfully!')
+        } else alert('Error: ' + updated)
+    }, false)
     </script>
 </body>
 </html>

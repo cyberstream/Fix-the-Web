@@ -46,7 +46,7 @@ function sendRequest (method, url, callback, params) {
          
     // serialize the parameters passed into this function, if there are any. 
     // For example, change {key: 'val', key2: 'val2'} to 'key=val&key2=val2'
-    if (typeof params == 'object') {
+    if (typeof params == 'object' && params) {
         var serialized_data = '';
         
         for (i in params) {
@@ -56,10 +56,7 @@ function sendRequest (method, url, callback, params) {
             } else // we need to add an ampersand (&) at the beginning if there are already parameters in the query string
                 serialized_data += '&' + i + '=' + encodeURIComponent(params[i]); 
         }
-    } else serialized_data = false;
-    
-    console.log('data: ' + serialized_data)
-    
+    } else serialized_data = false;    
     try {
         if (method.toLowerCase() != 'get') throw 'Invalid method "' + method + '" was specified. AJAX request could not be completed.' ;
         else {
@@ -95,7 +92,7 @@ function update() {
                         // store the patches script in localStorage. Will turn it into a script element in 'includes/include.js'
                         
                         widget.preferences['patches-js'] = data
-                        console.log('Fix the Web\'s patches.js file was just updated.')
+                        console.log('Fix the Web\'s patches.js file was just updated.');
                     });
             }
         }	
@@ -115,8 +112,16 @@ if(widget.preferences.getItem("update-interval"))
     // update-interval is in minutes, but setTimeout accepts milliseconds, so convert update-interval to seconds unit
     setTimeout(update(), (widget.preferences.getItem("update-interval") * 1000 * 60)); 
 
-function getOS () {    
+function getOS () {
     sendRequest('GET', 'http://localhost/system_detection.php', function(data) {
         opera.extension.broadcastMessage({'system' : data})
+    });
+}
+
+opera.extension.onmessage = function(event) {
+    if (event.data != 'get_frame_content') return
+    
+    sendRequest ('GET', 'http://localhost/ajax_request_handler.php?mode=get_frame_content', function(data) {
+        event.source.postMessage({frame_content : data})
     });
 }
