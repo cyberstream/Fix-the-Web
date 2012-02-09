@@ -31,5 +31,34 @@ if (isset($_GET) && count($_GET)) {
         
         // if the data is processed and inserted into the database successfully then echo "true":
         exit;
-    } 
+    } elseif ($_GET['mode'] == 'get_frame_content') {
+        $stmt = $db->stmt_init();
+
+        if ($stmt->prepare("SELECT 
+            username, language, category, report, page, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
+            FROM reports WHERE post_type = 0")) {
+            $q = $stmt->execute();
+            $stmt->store_result();
+            
+            if ($q && $stmt->num_rows) {
+                $stmt->bind_result($username, $language, $category, $report, $page, $version, $build, $OS, $misc, $date_time);
+                $return = '';
+                
+                while ($stmt->fetch()) { // TODO display the comments nicer
+                    $return .= <<<_HERE
+                    <p>
+                        <em>$username</em> said on $date_time:
+                        "$report"
+                            
+                        <div>Page: <em>$page</em></div>
+                        <div>Additional information &mdash; version: $version, build number: $build, operating system: $OS</div>
+                    </p>
+                    <hr />
+_HERE;
+                }
+                
+                exit ($return);
+            } else exit ('There were no bugs reported on this website.');       
+        }
+    }
 } else echo 'Page not found!';
