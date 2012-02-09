@@ -144,7 +144,7 @@ opera.extension.onconnect = function(e) {
 
 opera.extension.onmessage = function(event) {
     var mode = widget.preferences['display-reports-by'] || 'domain',
-            tab = opera.extension.tabs.getFocused(),
+            tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : '',
             page_address = tab.url.replace(/\/$/ig, ''),
             domain_name = page_address.match(/:\/\/([^\/]+)\/?/) ? page_address.match(/:\/\/([^\/]+)\/?/)[1] : ''; // get the second item in the result's array (the matched text in the parentheses)
     
