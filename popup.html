@@ -128,27 +128,62 @@
         
         #error:before {content:url(images/errors.png)}
         #success:before {content:url(images/success.png)}
+        
+        label[for^=category] {
+            width:85px; 
+            display:inline-block; 
+            color:#444; 
+            font-weight:bold; 
+            background:-o-linear-gradient(top, #fff, #ddd); 
+            border-radius:5px; 
+            box-shadow:0 0 2px #aaa; 
+            padding: 5px; 
+            text-align:center; 
+            margin: 0 2px; 
+            cursor:pointer;
+            text-shadow:0 1px 1px #fff;            
+            border:1px solid #bbb;
+            -o-transition:color 800ms ease-in-out;
+        }
+        
+        label[for^=category]:hover {
+            color:#111;
+            border:1px solid #888;
+        }        
+        
+        label[for='category-1'] {width:100px}
+        
+        input.category {z-index:-1; position:absolute; opacity:0; margin:40px 0 0 40px}        
+        input.category:checked + label {
+            border:1px solid rgb(51, 153, 255);
+        }
+        
+        input#category-1:checked + label {color:#ff7700}
+        input#category-2:checked + label {color:#ff4120}
+        input#category-3:checked + label {color:#3344fa}
     </style>
     <title>Fix the Web</title>
 </head>
 <body>
     <!-- TODO only display this form if the user is authenticated with MyOpera. 
-          Server-side verification should also be done to ensure that they are authenticated;
-    
-          TODO give this form nicer styles -->
+          Server-side verification should also be done to ensure that they are authenticated;-->
     
     <form action="" method="post" id="report-site-form">
         <p> 
             <input type="url" required="required" id="page-address" name="page_address" placeholder="You must enter page location" />
-        </p>
+        </p>        
+                
+        <label>Which category best describes the bug?</label>
         <p>
-            <label for="report-category">Category: </label>
-            <select id="report-category" name="category">
-                <option value="0">Minor Annoyance</option>
-                <option value="1">Major Problem</option>
-                <option value="2">Site Unusable</option>
-            </select>
-        </p>            
+                <input type="radio" checked="checked" name="category" id="category-1" value="1" class="category" />
+                <label for="category-1">Minor Annoyance</label>                    
+                    
+                <input required="required" type="radio" name="category" value="2" id="category-2" class="category" />
+                <label for="category-2">Major Problem</label>
+                    
+                <input type="radio" name="category" id="category-3" value="3" class="category" /> 
+                <label for="category-3">Site Unusable</label>
+        </p>
         
         <p>
             <label for="error-report-description">Error Details:</label>
@@ -170,10 +205,11 @@
         <li><a href="index.html" target="_blank">View recent bug reports</a></li>
     </ul>
     
-    <script type="text/javascript">
-        window.addEventListener("DOMContentLoaded", function() {       
+    <script type="text/javascript">        
+        window.addEventListener("DOMContentLoaded", function() {                
             document.getElementById('open-comment-panel').innerText = 'View problems reported on this ' 
                     + (widget.preferences['display-reports-by'] && widget.preferences['display-reports-by'] == 'domain' ? 'site' : 'page')
+                
             // get the current tab's URL       
             var tab = opera.extension.bgProcess.opera.extension.tabs.getFocused();
             
@@ -212,7 +248,7 @@
                           mode : 'submit error', // this is to select the correct form handler in ajax_request_handler.php
                           url : error_form.page_address.value,
                           domain : domain_name,
-                          category : error_form.category.value,
+                          category : (document.querySelector('input.category:checked') ? document.querySelector('input.category:checked').value : ''),
                           description : error_form.description.value,
                           system : error_form.OS.value,
                           version : error_form.opera_version.value,
