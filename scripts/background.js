@@ -133,7 +133,7 @@ if(widget.preferences.getItem("update-interval"))
     setTimeout(update(), (widget.preferences.getItem("update-interval") * 1000 * 60)); 
 
 function getOS () {
-    sendRequest('GET', 'http://localhost/system_detection.php', function(data) {
+    sendRequest('GET', 'http://localhost/ajax_request_handler.php?mode=get_OS', function(data) {
         opera.extension.broadcastMessage({'system' : data})
     });
 }

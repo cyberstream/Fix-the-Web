@@ -161,6 +161,10 @@
         input#category-1:checked + label {color:#ff7700}
         input#category-2:checked + label {color:#ff4120}
         input#category-3:checked + label {color:#3344fa}
+        
+        .category:invalid ~ label {
+            border:1px solid red;
+        }
     </style>
     <title>Fix the Web</title>
 </head>
@@ -175,10 +179,10 @@
                 
         <label>Which category best describes the bug?</label>
         <p>
-                <input type="radio" checked="checked" name="category" id="category-1" value="1" class="category" />
+                <input required="required" type="radio" name="category" id="category-1" value="1" class="category" />
                 <label for="category-1">Minor Annoyance</label>                    
                     
-                <input required="required" type="radio" name="category" value="2" id="category-2" class="category" />
+                <input type="radio" name="category" value="2" id="category-2" class="category" />
                 <label for="category-2">Major Problem</label>
                     
                 <input type="radio" name="category" id="category-3" value="3" class="category" /> 

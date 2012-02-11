@@ -13,11 +13,11 @@ opera.extension.onmessage = function(event) {
                                 }
                             }
                             
-    resetFrameBar = function() {
+    resetFrameBar = function() { // repositions the resize bar when the window is resized
                                     var ftw_frame = document.getElementById('fix-the-web-comment-frame'),
                                           resize_frame = document.getElementById('resize-frame');
                                           
-                                          if (ftw_frame && resize_frame) {                                              
+                                          if (ftw_frame && resize_frame) {
                                             ftw_resize_bar_height = parseInt(resize_frame.style.height) || 15
         
                                             var resize_frame_height = parseInt(resize_frame.style.height) || 15
