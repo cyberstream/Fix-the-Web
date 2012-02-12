@@ -200,7 +200,7 @@
         loading.src = 'images/loading.png';
         loading.id = 'loading_spinner';
         
-        if (document.getElementById('loading_spinner')) update_button.parentNode.insertBefore(loading, update_button.nextSibling);        
+        if (!document.getElementById('loading_spinner')) update_button.parentNode.insertBefore(loading, update_button.nextSibling);        
         
         var updated = update(function(u) {
             if (document.getElementById('loading_spinner')) loading.parentNode.removeChild(loading);
