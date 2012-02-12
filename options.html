@@ -18,12 +18,6 @@
         text-decoration:underline;
     }
     
-    #prefs-form, footer {
-        margin:0 auto;
-        width:80%;
-        position: relative;
-    }
-    
     #prefs-form h1 {
         border-bottom:1px solid rgb(230,230,230 );
         margin:2px 0;
@@ -51,30 +45,97 @@
     #update:hover {
         background: #7298f7;
     }
+    
+    #loading_spinner {
+        width:28px; 
+        height:28px; 
+        margin-left: 5px;
+        position:relative; 
+        top:8px;
+    }
+    
+    #nav {
+        background:-o-linear-gradient(top, #eee, #ccc); 
+        padding:10px 5px 3px 5px; 
+        z-index:10;
+        border-bottom:1px solid #aaa;
+    }
+    
+    #nav a:not(.active):hover {
+        background: #c1c1c1;
+        padding-bottom: 3px;
+    }
+    
+    #nav a {
+        padding:5px 7px; 
+        text-decoration:none; 
+        font-weight:bold; 
+        font-size:14px; 
+        text-transform:uppercase;
+        text-shadow: 0 1px 1px #fff;
+    }    
+    #nav a.active { background:#fff }
+    
+    section {
+        width:80%;
+        position:relative;
+        margin: 0 auto;
+        z-index:0;
+        opacity:0;
+        display:none;
+        -o-transition: opacity 0.6s ease;
+    }
+    
+    section.active {
+        display: block;
+        opacity: 1;        
+    }
+    
+    section.inactive {
+        display:block;
+        opacity: 0;
+    }
+    
+    .light {color: #888}
     </style>
 </head>
-<body>	
+<body>
+    <div id="nav"></div><!--This tab bar is automatically filled with JS.-->
     
-    <form id="prefs-form">
-        <h1>Fix the Web's Options</h1>
-            <label>Patches script update interval  
-                <input type="range" min="30" max="720" step="15" name="update-interval" id="update-interval"/>
-                (every <span id="update-interval-in-minute"></span> minutes)
-            </label>
-        <div id="update">update patches script now</div>
-            
-            <p>
-                Show reports count in the toolbar icon badge
-                <label>
-                    <strong>by domain</strong>
-                    <input type="radio" id="display-reports-by-domain" name="display-reports-by" value="domain" />
+    <!-- To create a new tab, simply create a new <section> element with an ID. The ID will be the title of the tab. -->
+    <section id="preferences">
+        <h1>Fix the Web <span class="light"> Options</span></h1>
+        
+        <form id="prefs-form">            
+                <label>Patches script update interval  
+                    <input type="range" min="30" max="720" step="15" name="update-interval" id="update-interval"/>
+                    (every <span id="update-interval-in-minute"></span> minutes)
                 </label>
-                <label>
-                    <strong>by page</strong>
-                    <input type="radio" id="display-reports-by-page" name="display-reports-by" value="page" />
-                </label>
-            </p>
-    </form>
+
+                <div id="update">update patches script now</div>
+
+                <p>
+                    Show reports count in the toolbar icon badge
+                    <label>
+                        <strong>by domain</strong>
+                        <input type="radio" id="display-reports-by-domain" name="display-reports-by" value="domain" />
+                    </label>
+                    <label>
+                        <strong>by page</strong>
+                        <input type="radio" id="display-reports-by-page" name="display-reports-by" value="page" />
+                    </label>
+                </p>
+        </form>
+    </section>
+
+    <section id="authenticate">
+        <h1>Fix the Web <span class="light"> Authentication</span></h1>
+        
+        <form id="auth">
+            <p>Still being developed...</p>
+            <button disabled="disabled">Connect to your Opera Account</button>
+        </form>
+    </section>
     
     <script type="text/javascript" src="scripts/background.js"></script>
     <script type="text/javascript">
@@ -109,18 +170,63 @@
     }
     
     // when the page is loaded, get extension preferences and assign them into correct input elements
-    window.addEventListener("load", loadPrefs, false);
+    window.addEventListener("load", function() {
+        loadPrefs()
+        
+        if (location.hash == '') location.hash = 'preferences'
+        else document.getElementById(location.hash.replace('#', '')).className = 'active';
+        
+        var sections = document.querySelectorAll("section"),
+              nav = document.getElementById('nav'),
+              currentSection = document.getElementById(location.hash.replace('#', ''));
+              
+        currentSection.className = 'active';
+        
+        for (i = 0; i < sections.length; i++) {
+            var thisID = sections[i].id;
+            activeClass = ('#' + thisID == location.hash ? ' class="active"' : '');
+            
+            nav.innerHTML += '<a href="#' +thisID + '" id="' +thisID + '-tab"' +activeClass+ '>' +thisID+ '</a>';
+        }
+    }, false);
     
     // when update interval is changed, update the value in the isible area
     document.getElementById("update-interval").addEventListener("change", updateIntervalValue, false);
     
-    document.getElementById('update').addEventListener('click', function() { // TODO put loading icon by the button?
-        var updated = update();
+    document.getElementById('update').addEventListener('click', function() { 
+        var loading = document.createElement('img'),
+              update_button = document.getElementById('update');
         
-        if (updated) {
-            alert('Updated successfully!')
-        } else alert('Error: ' + updated)
+        loading.src = 'images/loading.png';
+        loading.id = 'loading_spinner';
+        
+        if (document.getElementById('loading_spinner')) update_button.parentNode.insertBefore(loading, update_button.nextSibling);        
+        
+        var updated = update(function(u) {
+            if (document.getElementById('loading_spinner')) loading.parentNode.removeChild(loading);
+
+            if (u == 2) alert('The patches script was successfully updated!');
+            else if (u == 1) alert('No changes have been made to the patches script since you last updated it.');
+            else alert('There was an error updating the patches script' + (u != 0 ? ': \n\n' + u : '.'));            
+        });
     }, false)
+    
+    window.addEventListener('hashchange', function() {
+        var lastTab = document.querySelector('a.active'),
+              lastSection = document.querySelector('section.active'),
+              currentHash = location.hash.replace('#', ''),
+              currentTab = document.getElementById(currentHash + '-tab'),
+              currentSection = document.getElementById(currentHash);
+        
+        lastTab.className = '';
+        lastSection.className = 'inactive';
+        currentTab.className = 'active';
+        
+        setTimeout(function() {
+            lastSection.className = '';
+            currentSection.className = 'active';
+        }, 600)
+    }, false);
     </script>
 </body>
 </html>

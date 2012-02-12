@@ -90,8 +90,11 @@ function sendRequest (method, url, callback, params) {
 } // end sendRequest() function
 
 // the update() function pulls the patches script from Github and puts its contents in widget.preferences.patches_js
-function update() {
-    var r = new XMLHttpRequest();    
+function update(callback) {    
+    var r = new XMLHttpRequest();        
+    error = false,
+    updated = 0;
+    
     if (typeof widget.preferences["patches-js-checksum"] == 'undefined') 
         widget.preferences["patches-js-checksum"] = '0'
     
@@ -99,31 +102,42 @@ function update() {
         if (this.readyState == 4 && this.status == 200 || this.responseXML != '') {
             // Pull the last checksum from localStorage and compare it to the checksum of the most recent commit on Github.
             // If the file was updated, then update the local copy of it
-            
-            if (this.responseXML) var checksum = this.responseXML.getElementsByTagName("entry")[0].getElementsByTagName('id')[0].firstChild.nodeValue.match(/\/([\d\w]*)/)[1]
-                      
-            if (typeof checksum != 'undefined' && checksum != widget.preferences["patches-js-checksum"]) {
-                widget.preferences["patches-js-checksum"] = checksum;
+            this.onload = function() {
+                if (this.responseXML && this.responseXML.getElementsByTagName("entry")) var checksum = this.responseXML.getElementsByTagName("entry")[0].getElementsByTagName('id')[0].firstChild.nodeValue.match(/\/([\d\w]*)/)[1]
+                else error = true
 
-                sendRequest('GET', 'https://raw.github.com/cyberstream/Fix-the-Web-Patch-Script/master/patches.js', 
-                    function(data) {
-                        // TODO if patches.js exceeds the storage quota of one widget.preferences variable, 
-                        // then split the file's contents up between multiple widget.preferences variables (like the ad block lists in Opera AdBlock)
-                        // store the patches script in localStorage. Will turn it into a script element in 'includes/include.js'
-                        
-                        widget.preferences['patches-js'] = data
-                        console.log('Fix the Web\'s patches.js file was just updated.');
-                    });
+                updated = (checksum == widget.preferences["patches-js-checksum"] ? 1 : 0);
+
+                if (typeof checksum != 'undefined' && checksum != widget.preferences["patches-js-checksum"]) {
+                    widget.preferences["patches-js-checksum"] = checksum;
+
+                    sendRequest('GET', 'https://raw.github.com/cyberstream/Fix-the-Web-Patch-Script/master/patches.js', 
+                        function(data) {
+                            // TODO if patches.js exceeds the storage quota of one widget.preferences variable, 
+                            // then split the file's contents up between multiple widget.preferences variables (like the ad block lists in Opera AdBlock)
+                            // store the patches script in localStorage. Will turn it into a script element in 'includes/include.js'
+
+                            widget.preferences['patches-js'] = data
+                            console.log('Fix the Web\'s patches.js file was just updated.');
+                            updated = 2;
+                        });
+                } else if (checksum == 'undefined') error = true;
+                
+                if (typeof callback == 'function') {
+                    if (error) callback(0);
+                    else callback(updated);
+                }
             }
-        }	
+        }
     }
     
-    r.open('GET', 'https://github.com/cyberstream/Fix-the-Web-Patch-Script/commits/master.atom', true)
+    r.open('GET', 'https://github.com/cyberstream/Fix-the-Web-Patch-Script/commits/master.atom', true);
 
     try {
         r.send()
     } catch(error) {
         console.log('Error: ' + error)
+        if (typeof callback == 'function') callback(0);
     }
 }
 
@@ -145,7 +159,7 @@ opera.extension.onconnect = function(e) {
 opera.extension.onmessage = function(event) {
     var mode = widget.preferences['display-reports-by'] || 'domain',
             tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : '',
-            page_address = tab.url.replace(/\/$/ig, ''),
+            page_address = tab ? tab.url.replace(/\/$/ig, '') : '',
             domain_name = page_address.match(/:\/\/([^\/]+)\/?/) ? page_address.match(/:\/\/([^\/]+)\/?/)[1] : ''; // get the second item in the result's array (the matched text in the parentheses)
     
     if (event.data == 'get_frame_content') {    
