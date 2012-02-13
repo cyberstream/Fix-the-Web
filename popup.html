@@ -130,7 +130,7 @@
         #success:before {content:url(images/success.png)}
         
         label[for^=category] {
-            width:85px; 
+            width: 29%; 
             display:inline-block; 
             color:#444; 
             font-weight:bold; 
@@ -151,9 +151,14 @@
             border:1px solid #888;
         }        
         
-        label[for='category-1'] {width:100px}
+        label[for='category-1'] {width: 35%}
         
-        input.category {z-index:-1; position:absolute; opacity:0; margin:40px 0 0 40px}        
+        input.category {
+            z-index:-1; 
+            position:absolute; 
+            opacity:0; 
+            margin:40px 0 0 40px;
+        }        
         input.category:checked + label {
             border:1px solid rgb(51, 153, 255);
         }
@@ -180,9 +185,9 @@
         <label>Which category best describes the bug?</label>
         <p>
                 <input required="required" type="radio" name="category" id="category-1" value="1" class="category" />
-                <label for="category-1">Minor Annoyance</label>                    
+                <label for="category-1">Minor Annoyance</label>    
                     
-                <input type="radio" name="category" value="2" id="category-2" class="category" />
+                <input type="radio" name="category" id="category-2" value="2" class="category" />
                 <label for="category-2">Major Problem</label>
                     
                 <input type="radio" name="category" id="category-3" value="3" class="category" /> 
@@ -252,7 +257,7 @@
                           mode : 'submit error', // this is to select the correct form handler in ajax_request_handler.php
                           url : error_form.page_address.value,
                           domain : domain_name,
-                          category : (document.querySelector('input.category:checked') ? document.querySelector('input.category:checked').value : ''),
+                          category : (document.querySelector('input.category:checked') ? document.querySelector('input.category:checked').value : false),
                           description : error_form.description.value,
                           system : error_form.OS.value,
                           version : error_form.opera_version.value,
@@ -263,7 +268,7 @@
                       };
                       
                 if (!params.url.length) show_message('Please paste the current page\'s URL into the page location field.', 'error');
-                else if (!params.category.length) show_message('Please select a category for the error.', 'error');
+                else if (!params.category) show_message('Please select a category for the error.', 'error');
                 else if (!params.description.length) show_message('Please fill out the error report\'s description field.', 'error');
                 else {
                     // send report asynchronously to the server with the ajax_request_handler.php file on it 
