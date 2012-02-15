@@ -268,7 +268,7 @@
                       };
                       
                 if (!params.url.length) show_message('Please paste the current page\'s URL into the page location field.', 'error');
-                else if (!params.category) show_message('Please select a category for the error.', 'error');
+                else if (!params.category.match(/^(1|2|3)$/)) show_message('Please select a category for the error.', 'error');
                 else if (!params.description.length) show_message('Please fill out the error report\'s description field.', 'error');
                 else {
                     // send report asynchronously to the server with the ajax_request_handler.php file on it 
@@ -279,7 +279,7 @@
                         if (data == 'true') show_message ('Thanks for reporting this bug. It will be reviewed soon.', 'success');
                         else if (data.length > 0) show_message (data, 'error');
                         else show_message ('The was a problem submitting your error report. Please try submitting it again.', 'error');
-                    }, params, null, true);
+                    }, params, true);
                 }
                 
                 return false; // prevent the form from actually submitting

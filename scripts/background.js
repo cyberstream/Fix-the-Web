@@ -65,6 +65,8 @@ function sendRequest (method, url, callback, params, useDefaultHost) {
     
     // if useDefaultHost is undefined or true, then use the hostname specified in CONFIG
     if (typeof useDefaultHost == 'undefined' || useDefaultHost) url = CONFIG.defaultHost + url
+    
+    console.log(url)
    
     xhr.onreadystatechange = function() {
         if (this.status == 200 && this.readyState == 4) {
