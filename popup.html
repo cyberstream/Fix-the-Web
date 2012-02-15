@@ -275,11 +275,11 @@
                     // see the "Fix the Web Server Side" repo on Github (http://github.com/cyberstream/Fix-the-Web-Server-Side) for that file
                     // validate and process the form request in ajax_request_handler.php
                     
-                    opera.extension.bgProcess.sendRequest('GET', 'http://localhost/ajax_request_handler.php', function(data) { // TODO change form processing URL
+                    opera.extension.bgProcess.sendRequest('GET', 'ajax_request_handler.php', function(data) { // TODO change form processing URL
                         if (data == 'true') show_message ('Thanks for reporting this bug. It will be reviewed soon.', 'success');
                         else if (data.length > 0) show_message (data, 'error');
                         else show_message ('The was a problem submitting your error report. Please try submitting it again.', 'error');
-                    }, params);
+                    }, params, null, true);
                 }
                 
                 return false; // prevent the form from actually submitting

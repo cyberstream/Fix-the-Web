@@ -1,3 +1,7 @@
+CONFIG = {
+    defaultHost: 'http://localhost/' // the default domain to make AJAX post requests to; *must have* the trailing slash "/"
+}
+
 createToolbarIcon = function(badgeProperties) {
     if (opera.contexts) {
         // Set the properties of the button
@@ -7,7 +11,7 @@ createToolbarIcon = function(badgeProperties) {
             icon: 'images/icon-18.png',
             popup: {
                 href: 'popup.html',
-                width: 300,
+                width: 325,
                 height: 450
             },
             badge: {} // need to create an empty object now so it can be potentially modified later
@@ -53,10 +57,14 @@ window.addEventListener('DOMContentLoaded', createToolbarIcon, false);
  * url: the URL address to send the request to
  * callback (optional): a callback function to be run when the request completes
  * params (optional): the params in JSON e.g. {key: 'val', key2: 'val2', ...}
+ * useDefaultHost (optional boolean): whether to use the default domain (specified in the CONFIG section at the top of this file)
  */
 
-function sendRequest (method, url, callback, params) {
+function sendRequest (method, url, callback, params, useDefaultHost) {
     var xhr = new XMLHttpRequest();
+    
+    // if useDefaultHost is undefined or true, then use the hostname specified in CONFIG
+    if (typeof useDefaultHost == 'undefined' || useDefaultHost) url = CONFIG.defaultHost + url
    
     xhr.onreadystatechange = function() {
         if (this.status == 200 && this.readyState == 4) {
@@ -79,7 +87,7 @@ function sendRequest (method, url, callback, params) {
     } else serialized_data = false;    
     try {
         if (method.toLowerCase() != 'get') throw 'Invalid method "' + method + '" was specified. AJAX request could not be completed.' ;
-        else {
+        else {            
             xhr.open(method, url + (serialized_data && serialized_data.length ? '?' + serialized_data : ''), true)
             xhr.send(null);
         }
@@ -120,7 +128,7 @@ function update(callback) {
                             widget.preferences['patches-js'] = data
                             console.log('Fix the Web\'s patches.js file was just updated.');
                             updated = 2;
-                        });
+                        }, false);
                 } else if (checksum == 'undefined') error = true;
                 
                 if (typeof callback == 'function') {
@@ -147,9 +155,9 @@ if(widget.preferences.getItem("update-interval"))
     setTimeout(update(), (widget.preferences.getItem("update-interval") * 1000 * 60)); 
 
 function getOS () {
-    sendRequest('GET', 'http://localhost/ajax_request_handler.php?mode=get_OS', function(data) {
+    sendRequest('GET', 'ajax_request_handler.php?mode=get_OS', function(data) {
         opera.extension.broadcastMessage({'system' : data})
-    });
+    }, true);
 }
 
 opera.extension.onconnect = function(e) {
@@ -164,13 +172,13 @@ opera.extension.onmessage = function(event) {
     
     if (event.data == 'get_frame_content') {    
         if (tab) {
-            sendRequest ('GET', 'http://localhost/ajax_request_handler.php?mode=get_frame_content&method=' + mode + '&page=' + encodeURIComponent(page_address) + '&domain=' + encodeURIComponent(domain_name), function(data) {
+            sendRequest ('GET', 'ajax_request_handler.php?mode=get_frame_content&method=' + mode + '&page=' + encodeURIComponent(page_address) + '&domain=' + encodeURIComponent(domain_name), function(data) {
                 event.source.postMessage({frame_content : data})
-            });
+            }, true);
         }
     } else if (event.data == 'initialize badge') {
         if (tab) {
-            sendRequest ('GET', 'http://localhost/ajax_request_handler.php?mode=get_reports_count&method=' + mode + '&page=' + encodeURIComponent(page_address) + '&domain=' + encodeURIComponent(domain_name), function(data) {
+            sendRequest ('GET', 'ajax_request_handler.php?mode=get_reports_count&method=' + mode + '&page=' + encodeURIComponent(page_address) + '&domain=' + encodeURIComponent(domain_name), function(data) {
                 if (data) {
                     var badge = {
                             display: 'block',
@@ -181,7 +189,7 @@ opera.extension.onmessage = function(event) {
                     
                     createToolbarIcon(badge);
                 }
-            });
+            }, true);
         }
     }
 }
