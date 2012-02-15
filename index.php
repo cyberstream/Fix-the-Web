@@ -148,11 +148,26 @@
         <script type="text/javascript">
 var HOST="http://localhost/Fix-the-Web-Server-Side/"; // TODO edit this for your system
 
-function reportTemplate(id,username,date_time,report,operaVersion,operaBuildNumber,OS,domain,page){
+function reportTemplate(id,username,date_time,report,operaVersion,operaBuildNumber,OS,domain,page,isComment){
     var content='';
-    content="<article><h6><em><a href=''>"+username+"</a></em> said on "+date_time+":</h6><button data-id="+id+" class='go-button'> &gt; </button><p> \
-" +report+"</p><em>"+page+" on "+domain+"</em><span class='additional-information'>"+operaVersion+"."+operaBuildNumber+" on "+OS+"</span></article>";
+    content="<article><h6><em><a href=''>"+username+"</a></em> said on "+date_time+":</h6>";
+    if(!isComment)
+    content+="<button data-id="+id+" class='go-button'> &gt; </button><p>";
+    content+=report+"</p><em>"+page+" on "+domain+"</em><span class='additional-information'>"+operaVersion+"."+operaBuildNumber+" on "+OS+"</span></article>";
     return content;
+}
+
+
+function commentWriter(data){
+    if(!data) return false;
+    var result=JSON.parse(data);
+    var resultArea='';
+    for (i in result)
+    {
+        a=result[i];
+        resultArea+=reportTemplate(a.id,a.username,a.date_time,a.report,a.Opera,a.build,a.OS,a.domain,a.page,true);
+    }
+    document.getElementsByTagName("section")[0].innerHTML=resultArea;
 }
 
 // If xmlHTTPRequest is succesfull, then write the result into a suitable area
@@ -163,31 +178,40 @@ function resultWriter(data){
     for (i in result)
     {
         a=result[i];
-        resultArea+=reportTemplate(a.id,a.username,a.date_time,a.report,a.Opera,a.build,a.OS,a.domain,a.page);
+        resultArea+=reportTemplate(a.id,a.username,a.date_time,a.report,a.Opera,a.build,a.OS,a.domain,a.page,false);
     }
     document.getElementsByTagName("section")[0].innerHTML=resultArea;
+    
+    history.pushState({data: data}, "Report List", HOST+"?Report-List");
 
     var buttons = document.querySelectorAll(".go-button");
 
     for (c=0;c<buttons.length;c++){
         
         buttons[c].addEventListener("click",function(event){
-            sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_comment_list&id="+event.target.dataset.id,resultWriter,null);
-            //history.pushState({foo: 'bar2'}, 'Comments', "ajax_request_handler.php?mode=get_comment_list&id="+event.target.dataset.id);
-
+            sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_comment_list&id="+event.target.dataset.id,commentWriter,null);
+            history.pushState({data: data}, 'Comments', HOST+"?Comment-List&id="+event.target.dataset.id);
         },false);
     }
 }
+window.addEventListener('popstate', function (event) {
+  
+  resultWriter(event.state.data || { url: "unknown", name: "undefined", location: "undefined" });
+},false);
 
+function goHomePage(){
+    sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list",resultWriter,null);    
+}
 
 window.addEventListener("DOMContentLoaded",function(){
     // index page operations
-    sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list",resultWriter,null);
+    goHomePage();
 
     document.getElementById("form").addEventListener("submit",function(){
-        // TODO Prevent default action
+
         event.preventDefault();
         event.stopPropagation();
+
         var query='&';
         if(document.getElementById("domain").value)
             query+="domain="+document.getElementById("domain").value+"&";
