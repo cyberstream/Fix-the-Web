@@ -57,16 +57,16 @@ if (isset($_GET) && count($_GET)) {
                 $JSON = array();
                 
                 while ($stmt->fetch()) {
-                    $JSON[] = array("username" => $username,
-                                            "language" => $language,
-                                            "category" => $category,
-                                            "report" => $report,                                            
-                                            "date_time" => $date_time,
-                                            "Opera" => $version,
-                                            "build" => $build,
-                                            "page" => $page,
-                                            "misc" => $misc,
-                                            "OS" => $OS                                            
+                    $JSON[] = array(    "username" => $username,
+                                        "language" => $language,
+                                        "category" => $category,
+                                        "report" => $report,                                            
+                                        "date_time" => $date_time,
+                                        "Opera" => $version,
+                                        "build" => $build,
+                                        "page" => $page,
+                                        "misc" => $misc,
+                                        "OS" => $OS                                            
                                     );
                 }
                 
@@ -106,7 +106,7 @@ if (isset($_GET) && count($_GET)) {
         
         // TODO check DATE_FORMAT when multilangualizing
         $query = "SELECT 
-        id,username, language, category, report, page, domain, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
+        id, username, language, category, report, page, domain, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
         FROM reports WHERE post_type = 0";
 
         if(isset($_GET['domain'])){
@@ -169,8 +169,8 @@ if (isset($_GET) && count($_GET)) {
 
                 $JSON = array();
                 while ($stmt->fetch()) {
-                    $JSON = array_push($JSON,
-                                   array("id" => $id,
+                    $JSON[] = 
+                                   array(   "id" => $id,
                                             "username" => $username,
                                             "language" => $language,
                                             "category" => $category,
@@ -182,7 +182,7 @@ if (isset($_GET) && count($_GET)) {
                                             "build" => $build,
                                             "OS" => $OS,
                                             "misc" =>$misc
-                                    ));
+                                    );
                 }
                 
                 exit (json_encode($JSON));            
@@ -230,23 +230,22 @@ if (isset($_GET) && count($_GET)) {
 
                 $JSON = array();
                 while ($stmt->fetch()) { // TODO display the comments nicer
-                    $JSON = array_push($JSON,
-                         array("id"=>$id,
-                                "username"=>$username,
-                                "language"=>$language,
-                                "category"=>$category,
-                                "report"=>$report,
-                                "page"=>$page,
-                                "domain"=>$domain_db,
-                                "date_time"=>$date_time,
-                                "Opera" => $version,
-                                "build" => $build,
-                                "OS" => $OS,
-                                "misc"=>$misc
-                        ));
+                    $JSON[]=array(  "id"=>$id,
+                                    "username"=>$username,
+                                    "language"=>$language,
+                                    "category"=>$category,
+                                    "report"=>$report,
+                                    "page"=>$page,
+                                    "domain"=>$domain_db,
+                                    "date_time"=>$date_time,
+                                    "Opera" => $version,
+                                    "build" => $build,
+                                    "OS" => $OS,
+                                    "misc"=>$misc
+                        );
                 }
                 
-                echo json_encode($JSON);
+                exit(json_encode($JSON));
                     
             }
         }
