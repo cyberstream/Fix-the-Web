@@ -1,52 +1,11 @@
 <?php 
 header("Cache-Control: no-cache, must-revalidate");
 require_once 'db.php'; // include the database configuration file
-
 error_reporting(E_ALL);
-
 if (isset($_GET) && count($_GET)) {
-    if ($_GET['mode'] == 'get_OS') {
-        // detects the OS by reading the HTTP_USER_AGENT string and extracting details about the OS from it. 
-
-        $OSList = array (
-                // Match user agent string with operating systems
-                'Windows 3.11' => 'Win16',
-                'Windows 95' => '(Windows 95)|(Win95)|(Windows_95)',
-                'Windows 98' => '(Windows 98)|(Win98)',
-                'Windows 2000' => '(Windows NT 5.0)|(Windows 2000)',
-                'Windows XP' => '(Windows NT 5.1)|(Windows XP)',
-                'Windows Server 2003' => '(Windows NT 5.2)',
-                'Windows Vista' => '(Windows NT 6.0)',
-                'Windows 7' => '(Windows NT 7.0)',
-                'Windows NT 4.0' => '(Windows NT 4.0)|(WinNT4.0)|(WinNT)|(Windows NT)',
-                'Windows ME' => 'Windows ME',
-                'Open BSD' => 'OpenBSD',
-                'Sun OS' => 'SunOS',
-                'Linux' => '(Linux)|(X11)',
-                'Mac OS' => '(Mac_PowerPC)|(Macintosh)',
-                'QNX' => 'QNX',
-                'BeOS' => 'BeOS',
-                'OS/2' => 'OS/2',
-                'Search Bot'=>'(nuhk)|(Googlebot)|(Yammybot)|(Openbot)|(Slurp)|(MSNBot)|(Ask Jeeves/Teoma)|(ia_archiver)'
-        );
-
-        $OS = '';
-        
-        // Loop through the array of user agents and matching operating systems
-        foreach($OSList as $current_OS => $match) {
-            // Find a match
-            if (preg_match ('~' . $match . '~i', $_SERVER['HTTP_USER_AGENT'])) {
-                // exit the loop because we found the correct match
-
-                $OS = $current_OS;
-                break;
-            }
-        }
-
-        exit ($OS); // echo this for the AJAX request to get
-    } elseif ($_GET['mode'] == 'submit error') { 
+    if ($_GET['mode'] == 'submit error') { 
         // validate the form fields
-        if (!isset($_GET['category']) || !preg_match('/(1|2|3)/', $_GET['category']))
+        if (!isset($_GET['category']) || !($_GET['category'] != 1 && $_GET['category'] != 2 && $_GET['category'] != 3)) 
             exit ('Please select a valid category for the error report.');
         elseif (!isset($_GET['description']) || strlen($_GET['description']) < 5) 
             exit ('Please fill out the description field with a description of the problem you encountered.');
@@ -237,7 +196,7 @@ if (isset($_GET) && count($_GET)) {
         // TODO check DATE_FORMAT when multilangualizing
         $query = "SELECT 
         id,username, language, category, report, page, domain, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
-        FROM reports WHERE 1=1";
+        FROM reports WHERE 1=1 ";
 
         if(isset($_GET['domain'])){
             $query.=" AND domain = ?";
@@ -267,27 +226,28 @@ if (isset($_GET) && count($_GET)) {
             $stmt->store_result();
         
             if ($q && $stmt->num_rows) {
-                $stmt->bind_result($id, $username, $language, $category, $report, $page, $domain_db, $version, $build, $OS, $misc, $date_time);
+                $stmt->bind_result($id,$username, $language, $category, $report, $page, $domain_db, $version, $build, $OS, $misc, $date_time);
 
                 $JSON = array();
-                while ($stmt->fetch()) {
-                    $JSON= array_push($JSON,
-                                   array("id"=>$id,
-                                            "username"=>$username,
-                                            "language"=>$language,
-                                            "category"=>$category,
-                                            "report"=>$report,
-                                            "page"=>$page,
-                                            "domain"=>$domain_db,
-                                            "date_time"=>$date_time,
-                                            "Opera" => $version,
-                                            "build" => $build,
-                                            "OS" => $OS,
-                                            "misc"=>$misc
-                                    ));
+                while ($stmt->fetch()) { // TODO display the comments nicer
+                    array_push(&$JSON,
+                         array(  "id"=>$id,
+                                "username"=>$username,
+                                "language"=>$language,
+                                "category"=>$category,
+                                "report"=>$report,
+                                "page"=>$page,
+                                "domain"=>$domain_db,
+                                "date_time"=>$date_time,
+                                "Opera" => $version,
+                                "build" => $build,
+                                "OS" => $OS,
+                                "misc"=>$misc
+                        ));
                 }
                 
-                exit (json_encode($JSON));                    
+                echo json_encode($JSON);
+                    
             }
         }
     }
