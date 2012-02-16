@@ -5,113 +5,113 @@
         <title>Fix the Web Front Panel</title> <!-- // TODO: Change title with suitable one-->
 
     <style type="text/css">
-    body {
-        font-size:1em;
-        padding:0;
-        margin: 0;        
-        font-family: "arial", "lucida grande", "lucida sans unicode", "bitstream vera sans", "dejavu sans", "trebuchet ms", sans-serif;
-    }
-    
-    header {
-        border-bottom:1px solid #dfdfdf;
-        width:100%;
-        padding:0.33em 1em;
-        box-sizing:border-box;
-        position: relative;
-    }
+        body {
+            font-family:arial, "lucida grande", "lucida sans unicode", "bitstream vera sans", "dejavu sans", "trebuchet ms", sans-serif;
+            font-size:1em;
+            margin:0;
+            padding:0
+        }
 
-    header h1 {
-        color:yellowgreen;
-        float:left;
-        text-align:center;
-        text-shadow:0 0 2px #000;
-        min-width:100px;
-        width:20%;
-    }
+        header {
+            border-bottom:1px solid #dfdfdf;
+            box-sizing:border-box;
+            padding:.33em 1em;
+            position:relative;
+            width:100%
+        }
 
-    header div {
-        border-left:1px solid #dfdfdf;        
-        float:left;
-        padding:0.33em 1em;
-        box-sizing:border-box;
-        width:80%;
-        position: absolute;
-        top:0px;
-        bottom:0px;
-        right:0px;
-    }
+        header h1 {
+            color:#9ACD32;
+            float:left;
+            min-width:100px;
+            text-align:center;
+            text-shadow:0 0 2px #000;
+            width:20%
+        }
 
-    footer{}
+        header div {
+            border-left:1px solid #dfdfdf;
+            box-sizing:border-box;
+            float:right;
+            padding:.33em 1em;
+            position:relative;
+            width:80%
+        }
 
-    section{
-        width:75%;
-        padding:0.33em 1em;
-        box-sizing:border-box;
-        float:left;
-    }
+        section {
+            box-sizing:border-box;
+            float:left;
+            padding:.33em 1em;
+            width:75%
+        }
 
-    article {
-        padding:0.33em;
-        position:relative;
-        margin:0.33em;
-    }
-    
-    h6 {
-        padding:0;
-        border-bottom:1px solid #999;
-        width:100%;
-        position: relative;
-        margin:0;
-        font-size:1em;
-    }
-    .go-button {
-        position:absolute;
-        top:3em;
-        right:1em;
-        padding:0.33em 1em;
-        border:1px solid #555;
-        box-shadow:0px 0px 2px #000;
-        border-radius:5px;
-        background-color:yellowgreen;
-        color:#fff;
-        font-weight:bold;        
-    }
-    .additional-information{
-        position: absolute;
-        bottom:0;
-        right:0;
-        padding:0.11em;
-        font-size:0.8em;
-    }
-    .report-text{
+        article {
+            margin:.33em;
+            padding:.33em;
+            position:relative
+        }
 
-    }
-    aside{
-        width:25%;   
-        padding:0.33em 1em;
-        box-sizing:border-box;
-        float:left;
-    }
-    form label{
-        float:right;
-        clear: both;
-        position: relative;
-    }
-    input[type=number]{
-        width:50px;
-    }
+        h6 {
+            border-bottom:1px solid #999;
+            font-size:1em;
+            margin:0;
+            padding:0;
+            position:relative;
+            width:100%
+        }
+
+        .go-button {
+            background-color:#9ACD32;
+            border:1px solid #555;
+            border-radius:5px;
+            box-shadow:0 0 2px #000;
+            color:#fff;
+            font-weight:700;
+            padding:.33em 1em;
+            position:absolute;
+            right:1em;
+            top:3em
+        }
+
+        .additional-information {
+            bottom:0;
+            font-size:.8em;
+            padding:.11em;
+            position:absolute;
+            right:0
+        }
+
+        aside {
+            box-sizing:border-box;
+            float:left;
+            padding:.33em 1em;
+            width:25%
+        }
+
+        form label {
+            clear:both;
+            float:right;
+            position:relative
+        }
+
+        input[type=number] {
+            width:50px
+        }
     </style>
 </head>
 <body>
     <header>
-    <h1>Fix the Web</h1>
-    <div>
-        <h2>
-            What is Fix the Web?
-        </h2>
-        <p>Fix the web is bla bla bla.</p>
-        </header>
-    </div>
+        <h1>Fix the Web</h1>
+        <div>
+            <h2>
+                What is Fix the Web?
+            </h2>
+            <p>
+                Fix the web is bla bla bla.
+            </p>
+        </div>
+        <p style="clear:both;"></p>
+    </header>
     <section>
 
     </section>
