@@ -142,7 +142,7 @@ var HOST="http://localhost/Fix-the-Web-Server-Side/"; // TODO edit this for your
 
 function reportTemplate(id,username,date_time,report,operaVersion,operaBuildNumber,OS,domain,page,isComment){
     var content='';
-    content="<article><h6><em><a href=''>"+username+"</a></em> said on "+date_time+":</h6>";
+    content="<article><h6><em><a href='?Username="+username+"'>"+username+"</a></em> said on "+date_time+":</h6>";
     if(!isComment)
     content+="<button data-id="+id+" class='go-button'> &gt; </button><p>";
     content+=report+"</p><em>"+page+" on "+domain+"</em><span class='additional-information'>"+operaVersion+"."+operaBuildNumber+" on "+OS+"</span></article>";
@@ -174,7 +174,7 @@ function resultWriter(data){
     }
     document.getElementsByTagName("section")[0].innerHTML=resultArea;
     
-    history.pushState({data: data}, "Report List", HOST+"?Report-List");
+    history.pushState({data: data}, "Report List", HOST+"?Report-List=1");
 
     var buttons = document.querySelectorAll(".go-button");
 
