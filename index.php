@@ -1,40 +1,36 @@
-<DOCTYPE! html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-	<title>Fix the Web Front Panel</title> <!-- // TODO: Change title with suitable one-->
+        <title>Fix the Web Front Panel</title> <!-- // TODO: Change title with suitable one-->
 
-	<style type="text/css">
-    body{
+    <style type="text/css">
+    body {
         font-size:1em;
         padding:0;
-        margin: 0;
-        
+        margin: 0;        
         font-family: "arial", "lucida grande", "lucida sans unicode", "bitstream vera sans", "dejavu sans", "trebuchet ms", sans-serif;
     }
-	header{
+    
+    header {
         border-bottom:1px solid #dfdfdf;
         width:100%;
         padding:0.33em 1em;
         box-sizing:border-box;
         position: relative;
-
     }
 
-    header h1{
-
+    header h1 {
         color:yellowgreen;
         float:left;
         text-align:center;
         text-shadow:0 0 2px #000;
         min-width:100px;
         width:20%;
-
     }
 
     header div {
-        border-left:1px solid #dfdfdf;
-        
+        border-left:1px solid #dfdfdf;        
         float:left;
         padding:0.33em 1em;
         box-sizing:border-box;
@@ -45,7 +41,7 @@
         right:0px;
     }
 
-	footer{}
+    footer{}
 
     section{
         width:75%;
@@ -54,14 +50,13 @@
         float:left;
     }
 
-	article{
-
+    article {
         padding:0.33em;
         position:relative;
         margin:0.33em;
     }
     
-    h6{
+    h6 {
         padding:0;
         border-bottom:1px solid #999;
         width:100%;
@@ -69,7 +64,7 @@
         margin:0;
         font-size:1em;
     }
-    .go-button{
+    .go-button {
         position:absolute;
         top:3em;
         right:1em;
@@ -79,8 +74,7 @@
         border-radius:5px;
         background-color:yellowgreen;
         color:#fff;
-        font-weight:bold;
-        
+        font-weight:bold;        
     }
     .additional-information{
         position: absolute;
@@ -92,7 +86,7 @@
     .report-text{
 
     }
-	aside{
+    aside{
         width:25%;   
         padding:0.33em 1em;
         box-sizing:border-box;
@@ -105,10 +99,8 @@
     }
     input[type=number]{
         width:50px;
-       
-
     }
-	</style>
+    </style>
 </head>
 <body>
     <header>
