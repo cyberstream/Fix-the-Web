@@ -46,30 +46,32 @@ if (isset($_GET) && count($_GET)) {
             $bind_variable = $_GET['page'];
         } else exit ('There was an error fetching the bug reports for this website.');
 
-        if ($stmt->prepare($query)) {
+        if ($stmt->prepare($query . ' ORDER BY id DESC')) {
             $stmt->bind_param('s', $bind_variable);
             $q = $stmt->execute();
             $stmt->store_result();
             
-            if ($q && $stmt->num_rows) {
+            if (!$stmt->errno && $stmt->num_rows) {
                 $stmt->bind_result($username, $language, $category, $report, $page, $version, $build, $OS, $misc, $date_time);
-                $return = '';
                 
-                while ($stmt->fetch()) { // TODO display the comments nicer
-                    $return .= <<<_HERE
-                    <p>
-                        <em>$username</em> said on $date_time:
-                        "$report"
-                            
-                        <div>Page: <em>$page</em></div>
-                        <div>Additional information &mdash; version: $version, build number: $build, operating system: $OS</div>
-                    </p>
-                    <hr />
-_HERE;
+                $JSON = array();
+                
+                while ($stmt->fetch()) {
+                    $JSON[] = array("username" => $username,
+                                            "language" => $language,
+                                            "category" => $category,
+                                            "report" => $report,                                            
+                                            "date_time" => $date_time,
+                                            "Opera" => $version,
+                                            "build" => $build,
+                                            "page" => $page,
+                                            "misc" => $misc,
+                                            "OS" => $OS                                            
+                                    );
                 }
                 
-                exit ($return);
-            } else exit ('There were no bugs reported on this website.');       
+                exit (json_encode($JSON));
+            } else exit ('{}');
         }
     } elseif ($_GET['mode'] == 'get_reports_count' && isset($_GET['method']) && (isset($_GET['page']) || isset($_GET['domain']))) {
         if ($_GET['method'] == 'domain' || $_GET['method'] == 'page') {
@@ -166,28 +168,27 @@ _HERE;
                 $stmt->bind_result($id,$username, $language, $category, $report, $page, $domain_db, $version, $build, $OS, $misc, $date_time);
 
                 $JSON = array();
-                while ($stmt->fetch()) { // TODO display the comments nicer
-                    array_push(&$JSON,
-                        array(  "id"=>$id,
-                                "username"=>$username,
-                                "language"=>$language,
-                                "category"=>$category,
-                                "report"=>$report,
-                                "page"=>$page,
-                                "domain"=>$domain_db,
-                                "date_time"=>$date_time,
-                                "Opera" => $version,
-                                "build" => $build,
-                                "OS" => $OS,
-                                "misc"=>$misc
-                        ));
+                while ($stmt->fetch()) {
+                    $JSON = array_push($JSON,
+                                   array("id" => $id,
+                                            "username" => $username,
+                                            "language" => $language,
+                                            "category" => $category,
+                                            "report" => $report,
+                                            "page" => $page,
+                                            "domain" => $domain_db,
+                                            "date_time" => $date_time,
+                                            "Opera" => $version,
+                                            "build" => $build,
+                                            "OS" => $OS,
+                                            "misc" =>$misc
+                                    ));
                 }
                 
-                exit(json_encode($JSON));
-                    
+                exit (json_encode($JSON));            
             }
         }
-    }elseif(($_GET['mode'] == 'get_comment_list')){
+    } elseif (($_GET['mode'] == 'get_comment_list')) {
          // TODO control $_GET variable health
         
         $stmt = $db->stmt_init();
