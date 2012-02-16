@@ -65,15 +65,13 @@ function sendRequest (method, url, callback, params, useDefaultHost) {
     
     // if useDefaultHost is undefined or true, then use the hostname specified in CONFIG
     if (typeof useDefaultHost == 'undefined' || useDefaultHost) url = CONFIG.defaultHost + url
-    
-    console.log(url)
    
     xhr.onreadystatechange = function() {
         if (this.status == 200 && this.readyState == 4) {
             if (typeof callback == 'function') callback(this.responseText);
         }
     }
-         
+     
     // serialize the parameters passed into this function, if there are any. 
     // For example, change {key: 'val', key2: 'val2'} to 'key=val&key2=val2'
     if (typeof params == 'object' && params) {

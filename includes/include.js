@@ -25,16 +25,48 @@ opera.extension.onmessage = function(event) {
                                             resize_frame.style.bottom = (40 + bar_height_percentage) + '%'; // place the resize bar right above the comment frame
                                         }
                                 }
+                                
+    // @param "JSON" array of JSON objects, e.g. [ {/* report #1*/}, {/* report #2 */}, ... ]
+    // @param "language" string, default is 'all'. The language filter for the reports.
     
+    // TODO show reports in threaded view, and fetch comments for the report when "[view thread]" is clicked.
+    // TODO add a select menu to filter reports by languages
+    populateCommentFrame = function(json, language) {
+        var commentFrameHTML = '',
+              commentFrame = document.getElementById('fix-the-web-comment-frame'),
+              language = language || 'all';
+        
+        if (typeof json == 'object' && json.length) {
+            for (i = 0; i < json.length; i++) {
+                var current = json[i];
+                
+                if (language == 'all' || language.toLowerCase() == current.language.toLowerCase()) {
+                    var page_url = '<a href="' +current.page+ '" title="Page: ' +current.page+ '" target="_blank">' 
+                        +(current.page.length > 40 ? current.page.substr(0, 40) + '...' : current.page) + '</a>';
+                    
+                    commentFrameHTML += '<p class="thread"><div class="title">Posted by <span class="username">' +current.username+ '</span> on ' +current.date_time+ ' from page ' +page_url+ '</div><div>"' +current.report+ '"</div> Opera version: ' +current.Opera+ ' Opera build: ' +current.build+ ' OS: ' +current.OS+ ' <a href="data:text/plain;charset=utf-8,' +encodeURIComponent(current.misc)+ '" target="_blank">miscellaneous information</a></p><hr />';
+                }
+            }
+        }
+        
+        commentFrameHTML = commentFrameHTML || 
+            (language != 'all' ? 'No reports were found. Try viewing reports in all languages.' : 'No reports were found.')
+        
+        commentFrame.innerHTML = commentFrameHTML; // insert the HTML into the comment frame
+    } // end populateCommentFrame() function
+    
+    // process incoming messages and trigger the specified command
     if (event.data == 'reply') {
         window.addEventListener('load', function () {
             event.source.postMessage('initialize badge')
         }, false)
     } else if (event.data.frame_content) {
-        document.getElementById('fix-the-web-comment-frame').innerHTML = event.data.frame_content;
+        window.content = JSON.parse(event.data.frame_content); // make the frame_content variable globally available
         
+        populateCommentFrame(window.content) // fill the comment frame with the comment frame data
+
         window.addEventListener('resize', resetFrameBar, false); // readjust the positioning of the resize bar whenever the window is resized
-    } else if (event.data == "load comments frame") {
+    } else if (event.data.load_comments_frame) {
         if (!document.getElementById('fix-the-web-comment-frame')) {
             var frame_element = document.createElement('div');
                   frame_element.id = 'fix-the-web-comment-frame';
@@ -89,7 +121,8 @@ opera.extension.onmessage = function(event) {
                   bar_height_percentage = ((resize_frame_height / window.innerHeight).toFixed(3)) * 100 // round to the nearest tenth place
                   resize_frame.style.bottom = (40 + bar_height_percentage) + '%'; // place the resize bar right above the comment frame
             
-            // insert the resize bar, the frame element and the style element into the HTML page             
+            // insert the resize bar, the frame element and the style element into the HTML page
+            frame_element.innerText = 'Loading...';
             document.body.appendChild(frame_element);
             document.body.appendChild(resize_frame);
             document.head.appendChild(frame_style_element);
