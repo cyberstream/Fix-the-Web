@@ -222,7 +222,7 @@ window.addEventListener("DOMContentLoaded",function(){
         query+="a=1";
         
         sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list"+query,resultWriter,null);
-       // history.pushState({foo: 'bar'}, 'Search Results', "ajax_request_handler.php?mode=get_report_list"+query);
+        history.pushState({data: data}, 'Search Results', HOST+"?report_list&"+query);
         return false;
     },false);
 
