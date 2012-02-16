@@ -1,6 +1,6 @@
 #Server Side Files for "Fix the Web"
 
-This repository contrains the server-side files for the [Fix the Web](http://github.com/cyberstream/Fix-the-Web) Opera extension project.
+This repository contains the server-side files for the [Fix the Web](http://github.com/cyberstream/Fix-the-Web) Opera extension project.
 
 *ajax_request_handler.php* handles for AJAX requests from the extension. All exported data is printed instead of returned because it is used by AJAX.
 *index.php* is the home page of this extension.

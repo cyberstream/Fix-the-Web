@@ -230,8 +230,8 @@ if (isset($_GET) && count($_GET)) {
 
                 $JSON = array();
                 while ($stmt->fetch()) { // TODO display the comments nicer
-                    array_push(&$JSON,
-                         array(  "id"=>$id,
+                    $JSON = array_push($JSON,
+                         array("id"=>$id,
                                 "username"=>$username,
                                 "language"=>$language,
                                 "category"=>$category,
