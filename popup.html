@@ -253,7 +253,7 @@
                 if (error_message) error_message.parentNode.removeChild(error_message);
                 
                 var error_form = document.getElementById('report-site-form'),
-                      domain_name = error_form.page_address.value.match(/:\/\/([^\/]+)\/?/) ? error_form.page_address.value.match(/:\/\/([^\/]+)\/?/)[1] : '', // get the second item in the result's array (the matched text in the parentheses)
+                      domain_name = /:\/\/([^\/]+)\/?/.test(error_form.page_address.value) ? error_form.page_address.value.match(/:\/\/([^\/]+)\/?/)[1] : '', // get the second item in the result's array which is the matched text in the parentheses
                       params = {
                           mode : 'submit error', // this is to select the correct form handler in ajax_request_handler.php
                           url : error_form.page_address.value,
@@ -269,7 +269,7 @@
                       };
                       
                 if (!params.url.length) show_message('Please paste the current page\'s URL into the page location field.', 'error');
-                else if (!params.category.match(/^(1|2|3)$/)) show_message('Please select a category for the error.', 'error');
+                else if (!(/^(1|2|3)$/).test(params.category)) show_message('Please select a category for the error.', 'error');
                 else if (!params.description.length) show_message('Please fill out the error report\'s description field.', 'error');
                 else {
                     // send report asynchronously to the server with the ajax_request_handler.php file on it 

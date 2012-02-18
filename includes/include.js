@@ -22,7 +22,7 @@ opera.extension.onmessage = function(event) {
         
                                             var resize_frame_height = parseInt(resize_frame.style.height) || 15
                                             bar_height_percentage = ((resize_frame_height / window.innerHeight).toFixed(3)) * 100 // round to the nearest tenth place
-                                            resize_frame.style.bottom = (40 + bar_height_percentage) + '%'; // place the resize bar right above the comment frame
+                                            resize_frame.style.bottom = parseInt(ftw_frame.style.height) + bar_height_percentage + '%'; // place the resize bar right above the comment frame
                                         }
                                 }
                                 
@@ -57,13 +57,11 @@ opera.extension.onmessage = function(event) {
     
     // process incoming messages and trigger the specified command
     if (event.data == 'reply') {
-        window.addEventListener('load', function () {
-            event.source.postMessage('initialize badge')
-        }, false)
+        event.source.postMessage('initialize badge');
     } else if (event.data.frame_content) {
-        window.content = JSON.parse(event.data.frame_content); // make the frame_content variable globally available
+        window.ftw_content = JSON.parse(event.data.frame_content); // make the frame_content variable globally available
         
-        populateCommentFrame(window.content) // fill the comment frame with the comment frame data
+        populateCommentFrame(window.ftw_content) // fill the comment frame with the comment frame data
 
         window.addEventListener('resize', resetFrameBar, false); // readjust the positioning of the resize bar whenever the window is resized
     } else if (event.data.load_comments_frame) {

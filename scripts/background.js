@@ -132,7 +132,10 @@ function update(callback) {
                 } else if (checksum == 'undefined') error = true;
                 
                 if (typeof callback == 'function') {
-                    if (error) callback(0);
+                    if (error) {
+                        console.log ('Fix the Web Error:' + error);
+                        callback(0);
+                    }
                     else callback(updated);
                 }
             }
