@@ -141,13 +141,23 @@ opera.extension.onmessage = function(event) {
 // get the patches.js script from localStorage and create a script element on the page with its contents
 
 window.addEventListener('DOMContentLoaded', function() {    
-    if (typeof widget.preferences.patches_js == 'undefined') widget.preferences.patches_js = '';
+    if (typeof widget.preferences['patches-js'] == 'undefined') widget.preferences['patches-js'] = '';
     
-    var patches_js = widget.preferences.patches_js,    
+    var patches_js = widget.preferences['patches-js'],    
           script_tag = document.createElement('script');
-          
+    
     script_tag.appendChild(document.createTextNode(patches_js))
     script_tag.setAttribute('type', 'text/javascript')
     
-    document.body ? document.body.appendChild(script_tag) : document.getElementsByTagName('html')[0].appendChild(document.createElement('body'))
+    var body_tag = document.getElementsByTagName('body'),
+          root_html_element = document.getElementsByTagName('html')[0];
+    
+    if (body_tag.length) {
+        body_tag[0].appendChild(script_tag)
+    } else {
+        var new_body_element = document.createElement('body');
+        
+        new_body_element.appendChild(script_tag)
+        root_html_element.appendChild(new_body_element)
+    }
 }, false);
