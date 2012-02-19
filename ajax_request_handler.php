@@ -156,10 +156,10 @@ if (isset($_GET) && count($_GET)) {
         if(isset($_GET['order'])){
             switch ($_GET['order']) {
                 case 'most_followed':
-                    
+                    $query="SELECT reports.id, reports.username, reports.language, reports.category, reports.report, reports.page, reports.domain, reports.opera_version, reports.opera_build, reports.operating_system, reports.additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p') FROM reports LEFT JOIN ratings ON reports.id = ratings.id_foreign_key WHERE ratings.rating = 0 GROUP BY reports.id ORDER BY COUNT(ratings.rating) DESC ";
                 break;
                 case 'popularity':
-                    
+                    $query="SELECT reports.id, reports.username, reports.language, reports.category, reports.report, reports.page, reports.domain, reports.opera_version, reports.opera_build, reports.operating_system, reports.additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p') FROM reports LEFT JOIN ratings ON reports.id = ratings.id_foreign_key GROUP BY reports.id ORDER BY SUM(ratings.rating) DESC ";
                 break;
                 case 'time_asc':
                     $query.=" ORDER BY time ASC";

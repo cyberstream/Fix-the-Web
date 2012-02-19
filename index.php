@@ -9,7 +9,13 @@
             font-family:arial, "lucida grande", "lucida sans unicode", "bitstream vera sans", "dejavu sans", "trebuchet ms", sans-serif;
             font-size:1em;
             margin:0;
-            padding:0
+            padding:0;
+            color:#222;
+            
+        }
+        a,a:link{
+            color:rgb(51, 153, 255);
+            text-decoration:none;
         }
 
         header {
@@ -20,7 +26,7 @@
             width:100%
         }
 
-        header h1 {
+        h1 {
             color:#9ACD32;
             float:left;
             min-width:100px;
@@ -29,13 +35,15 @@
             width:20%
         }
 
-        header div {
+        #explanation-about-the-extension {
             border-left:1px solid #dfdfdf;
             box-sizing:border-box;
             float:right;
             padding:.33em 1em;
             position:relative;
-            width:80%
+            width:80%;
+            overflow: hidden;
+            height:100px;
         }
 
         section {
@@ -48,11 +56,14 @@
         article {
             margin:.33em;
             padding:.33em;
-            position:relative
+            position:relative;
+            border-bottom:2px solid #d0d0d0
         }
 
+        h2{
+            margin: 5px 0
+        }
         h6 {
-            border-bottom:1px solid #999;
             font-size:1em;
             margin:0;
             padding:0;
@@ -62,15 +73,16 @@
 
         .go-button {
             background-color:#9ACD32;
-            border:1px solid #555;
-            border-radius:5px;
-            box-shadow:0 0 2px #000;
+            border:0px;
             color:#fff;
             font-weight:700;
             padding:.33em 1em;
             position:absolute;
-            right:1em;
-            top:3em
+            right:5px;
+            top:0px
+        }
+        .small{
+            font-size:0.9em;
         }
 
         .additional-information {
@@ -81,6 +93,32 @@
             right:0
         }
 
+        #more-detail-about-project{
+            position: absolute;
+            bottom:5px;
+            border:0;
+            padding:2px;
+            width:90px;
+            height:20px;
+            right:10px;
+        }
+        #comment-form{
+            padding:0.33em;
+        }
+        #comment-form textarea{
+            width:100%;
+            padding:4px 6px;
+            border-radius:3px;
+            box-sizing:border-box;
+        }
+        #comment-form textarea:hover{
+            border:1px solid rgb(51, 153, 255);
+        }
+        #comment-form textarea:focus{
+            border:1px solid #999;
+            box-shadow:inset 0 0 1px #000;
+            
+        }
         aside {
             box-sizing:border-box;
             float:left;
@@ -90,7 +128,7 @@
 
         form label {
             clear:both;
-            float:right;
+            float:left;
             position:relative
         }
 
@@ -102,14 +140,16 @@
 <body>
     <header>
         <h1>Fix the Web</h1>
-        <div>
+        <div id="explanation-about-the-extension">
             <h2>
                 What is Fix the Web?
             </h2>
             <p>
                 <strong>Fix the Web</strong> is an Opera Web Browser extension. As hinted by its name, its goal is to promote a
-                <em>World Wide Web</em> built on solid, standards-conforming web development practices. 
-            </p><p>
+                <em>World Wide Web</em> built on solid, standards-conforming web development practices.  
+            </p>
+            <div id="more-detail-about-project">More</div>
+            <p>
                 Many web sites contain malformed HTML and archaic or poorly-designed Javascript. Some websites use bad web development 
                 practices such as browser-sniffing. Consequently, these pages could produce visual flaws, functional glitches, or even worse, 
                 be completely nonfunctional in Opera, a standards-conforming web browser. 
@@ -127,17 +167,17 @@
             
             <h2>Listing Options</h2>
         
-            <form action="" id="form">
+            <form action="?" id="form">
 
                 <label for="domain">Domain
                     <input type="text" name="domain" id="domain" placeholder="Enter a domain name" <?php if(isset($_GET['domain'])) echo "value=".$_GET['domain'];?>>
                 </label>
-                <label for="page">Page
+                <!-- <label for="page">Page
                     <input type="number" name="page" id="page" <?php if(isset($_GET["page"])) echo "value=".$_GET["page"];?>>
                 </label>
                 <label for="count">Report count
                     <input type="number" name="count" id="count" <?php if(isset($_GET["count"])) echo "value=".$_GET["count"];?>>
-                </label>
+                </label> -->
                 <button type="submit">Submit</button>
             
             </form>
@@ -150,10 +190,10 @@ var HOST="http://localhost/Fix-the-Web-Server-Side/"; // TODO edit this for your
 
 function reportTemplate(id,username,date_time,report,operaVersion,operaBuildNumber,OS,domain,page,isComment){
     var content='';
-    content="<article><h6><em><a href='?Username="+username+"'>"+username+"</a></em> said on "+date_time+":</h6>";
+    content="<article><h6><a href='?Username="+username+"'>"+username+"</a> said on "+date_time+":</h6>";
     if(!isComment)
     content+="<button data-id="+id+" class='go-button'> &gt; </button><p>";
-    content+=report+"</p><em>"+page+" on "+domain+"</em><span class='additional-information'>"+operaVersion+"."+operaBuildNumber+" on "+OS+"</span></article>";
+    content+=report+"</p><span class='small'><a href="+page+">"+page+"</a> on "+domain+"</a><span class='additional-information'>"+operaVersion+"."+operaBuildNumber+" on "+OS+"</span></article>";
     return content;
 }
 
@@ -167,7 +207,9 @@ function commentWriter(data){
         a=result[i];
         resultArea+=reportTemplate(a.id,a.username,a.date_time,a.report,a.Opera,a.build,a.OS,a.domain,a.page,true);
     }
-    document.getElementsByTagName("section")[0].innerHTML=resultArea;
+    var form="<form action='' id='comment-form'><textarea name='d'>dd</textarea></form>";
+    document.getElementsByTagName("section")[0].innerHTML=resultArea+form;
+    history.pushState({data: data,type:"comment"}, 'Comments ', HOST+"#!/Comment-List&id="+a.id);
 }
 
 // If xmlHTTPRequest is succesfull, then write the result into a suitable area
@@ -182,7 +224,7 @@ function resultWriter(data){
     }
     document.getElementsByTagName("section")[0].innerHTML=resultArea;
     
-    history.pushState({data: data}, "Report List", HOST+"?Report-List=1");
+    history.pushState({data: data,type:"report"}, "Report List", HOST+"#!/Report-List=1");
 
     var buttons = document.querySelectorAll(".go-button");
 
@@ -190,13 +232,21 @@ function resultWriter(data){
         
         buttons[c].addEventListener("click",function(event){
             sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_comment_list&id="+event.target.dataset.id,commentWriter,null);
-            history.pushState({data: data}, 'Comments', HOST+"?Comment-List&id="+event.target.dataset.id);
+            
         },false);
     }
 }
 window.addEventListener('popstate', function (event) {
+  if(event.state==null) return false;
+  switch(event.state.type){
+      case "comment":
+      commentWriter(event.state.data);
+      break;
+      case "report":
+      resultWriter(event.state.data);
+      break;
+  }
   
-  resultWriter(event.state.data || { url: "unknown", name: "undefined", location: "undefined" });
 },false);
 
 function goHomePage(){
@@ -210,7 +260,6 @@ window.addEventListener("DOMContentLoaded",function(){
     document.getElementById("form").addEventListener("submit",function(){
 
         event.preventDefault();
-        event.stopPropagation();
 
         var query='&';
         if(document.getElementById("domain").value)
@@ -222,8 +271,13 @@ window.addEventListener("DOMContentLoaded",function(){
         query+="a=1";
         
         sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list"+query,resultWriter,null);
-        history.pushState({data: data}, 'Search Results', HOST+"?report_list&"+query);
+        history.pushState({data: data,type:"search"}, 'Search Results', HOST+"#!/report_list&"+query);
         return false;
+        document.getElementById("more-detail-about-project").addEventListener("click",function(){
+            
+            document.getElementById("more-detail-about-project").
+
+        },false);
     },false);
 
     
