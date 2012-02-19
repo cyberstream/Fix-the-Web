@@ -46,7 +46,7 @@
         a:hover {text-decoration:underline}
 
         #page-address{
-            width:100%;    
+            width:83%;    
         }
 
         input[type=text], textarea, select, input[type=url] {
@@ -170,6 +170,17 @@
         .category:invalid ~ label {
             border:1px solid red;
         }
+        
+        form > h1 {
+            margin:0; 
+            padding-left:5px; 
+            padding-bottom: 5px;
+            font-size:1.6em; 
+            color:#444;
+            text-shadow: 1px 0 0 #fff, 2px 1px 0 #bbb; 
+            font-weight:100;
+            border-bottom:1px solid #ccc;
+        }
     </style>
     <title>Fix the Web</title>
 </head>
@@ -178,8 +189,9 @@
           Server-side verification should also be done to ensure that they are authenticated;-->
     
     <form action="" method="post" id="report-site-form">
+        <h1>Report a Site Problem</h1>
         <p> 
-            <input type="url" required="required" id="page-address" name="page_address" placeholder="You must enter page location" />
+            <label for="page-address" style="font-weight:bold;">Page: </label><input type="url" required="required" id="page-address" name="page_address" placeholder="You must enter page location" />
         </p>        
                 
         <label>Which category best describes the bug?</label>
