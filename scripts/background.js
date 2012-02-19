@@ -118,7 +118,8 @@ function update(callback) {
                 updated = (checksum == widget.preferences["patches-js-checksum"] ? 1 : 0);
 
                 if (typeof checksum != 'undefined' && checksum != widget.preferences["patches-js-checksum"]) {
-                    widget.preferences["patches-js-checksum"] = checksum;                    
+                    widget.preferences["patches-js-checksum"] = checksum;    
+                    updated = 2;
                     
                     sendRequest('GET', 'https://raw.github.com/cyberstream/Fix-the-Web-Patch-Script/master/patches.js', 
                         function(data) {
@@ -128,7 +129,6 @@ function update(callback) {
 
                             widget.preferences['patches-js'] = data
                             console.log('Fix the Web\'s patches.js file was just updated.');
-                            updated = 2;
                         }, null, false);
                 } else if (checksum == 'undefined') error = true;
                 
