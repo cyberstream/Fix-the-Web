@@ -96,6 +96,7 @@
         #more-detail-about-project{
             position: absolute;
             bottom:5px;
+            cursor:pointer;
             border:0;
             padding:2px;
             width:90px;
@@ -148,7 +149,7 @@
                 <strong>Fix the Web</strong> is an Opera Web Browser extension. As hinted by its name, its goal is to promote a
                 <em>World Wide Web</em> built on solid, standards-conforming web development practices.  
             </p>
-            <div id="more-detail-about-project">More</div>
+            
             <p>
                 Many web sites contain malformed HTML and archaic or poorly-designed Javascript. Some websites use bad web development 
                 practices such as browser-sniffing. Consequently, these pages could produce visual flaws, functional glitches, or even worse, 
@@ -158,6 +159,7 @@
                 reply to others' bug reports, and, most importantly, apply patches to broken web pages.
             </p>
         </div>
+        <div id="more-detail-about-project">More</div>
         <p style="clear:both;"></p>
     </header>
     <section>
@@ -273,13 +275,27 @@ window.addEventListener("DOMContentLoaded",function(){
         sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list"+query,resultWriter,null);
         history.pushState({data: data,type:"search"}, 'Search Results', HOST+"#!/report_list&"+query);
         return false;
-        document.getElementById("more-detail-about-project").addEventListener("click",function(){
-            
-            document.getElementById("more-detail-about-project").
-
-        },false);
+        
     },false);
 
+    document.getElementById("more-detail-about-project").addEventListener("click",function(){
+            console.log("sd");
+            var explanation=document.getElementById("explanation-about-the-extension");
+            switch(explanation.style.height)
+            {
+                case "":
+                case "100px":
+                    explanation.style.height="auto";
+                    this.innerText="Less";
+                break;
+                case "auto":
+                    explanation.style.height="100px";
+                    this.innerText="More";
+                break;
+
+            }
+
+        },false);
     
 
 },false);
