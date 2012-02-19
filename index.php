@@ -25,7 +25,7 @@
             float:left;
             min-width:100px;
             text-align:center;
-            text-shadow:0 0 2px #000;
+            text-shadow: 1px 0px 0px #666666, 2px 1px 0px #666666;
             width:20%
         }
 
@@ -107,7 +107,15 @@
                 What is Fix the Web?
             </h2>
             <p>
-                Fix the web is bla bla bla.
+                <strong>Fix the Web</strong> is an Opera Web Browser extension. As hinted by its name, its goal is to promote a
+                <em>World Wide Web</em> built on solid, standards-conforming web development practices. 
+            </p><p>
+                Many web sites contain malformed HTML and archaic or poorly-designed Javascript. Some websites use bad web development 
+                practices such as browser-sniffing. Consequently, these pages could produce visual flaws, functional glitches, or even worse, 
+                be completely nonfunctional in Opera, a standards-conforming web browser. 
+            </p><p>
+                The goal of Fix the Web is to provide a solution to these problems by allowing users to report site problems they encounter, 
+                reply to others' bug reports, and, most importantly, apply patches to broken web pages.
             </p>
         </div>
         <p style="clear:both;"></p>
