@@ -97,7 +97,7 @@ function sendRequest (method, url, callback, params, useDefaultHost) {
     }
 } // end sendRequest() function
 
-// the update() function pulls the patches script from Github and puts its contents in widget.preferences.patches_js
+// the update() function pulls the patches script from Github and puts its contents in widget.preferences['patches-js']
 function update(callback) {    
     var r = new XMLHttpRequest();        
     error = false,
@@ -111,14 +111,16 @@ function update(callback) {
             // Pull the last checksum from localStorage and compare it to the checksum of the most recent commit on Github.
             // If the file was updated, then update the local copy of it
             this.onload = function() {
-                if (this.responseXML && this.responseXML.getElementsByTagName("entry")) var checksum = this.responseXML.getElementsByTagName("entry")[0].getElementsByTagName('id')[0].firstChild.nodeValue.match(/\/([\d\w]*)/)[1]
+                if (this.responseXML && this.responseXML.getElementsByTagName("entry")) 
+                    var checksum = this.responseXML.getElementsByTagName("entry")[0].getElementsByTagName('id')[0].firstChild.nodeValue.match(/\/([\d\w]*)/)[1]
                 else error = true
 
                 updated = (checksum == widget.preferences["patches-js-checksum"] ? 1 : 0);
 
                 if (typeof checksum != 'undefined' && checksum != widget.preferences["patches-js-checksum"]) {
                     widget.preferences["patches-js-checksum"] = checksum;
-
+                    updated = 2;
+                    
                     sendRequest('GET', 'https://raw.github.com/cyberstream/Fix-the-Web-Patch-Script/master/patches.js', 
                         function(data) {
                             // TODO if patches.js exceeds the storage quota of one widget.preferences variable, 
@@ -127,7 +129,6 @@ function update(callback) {
 
                             widget.preferences['patches-js'] = data
                             console.log('Fix the Web\'s patches.js file was just updated.');
-                            updated = 2;
                         }, false);
                 } else if (checksum == 'undefined') error = true;
                 
