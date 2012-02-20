@@ -43,6 +43,7 @@
             position:relative;
             width:80%;
             overflow: hidden;
+            height:100px;
         }
 
         section {
@@ -255,14 +256,6 @@ function goHomePage(){
 }
 
 window.addEventListener("DOMContentLoaded",function(){
-    document.getElementById("more-detail-about-project").addEventListener("click", function() {
-        var about = document.getElementById('about'),
-                currentState = about.className;
-
-        if (currentState == 'less') about.className = ''
-        else about.className = 'less';
-    }, false);
-    
     // index page operations
     goHomePage();
 
