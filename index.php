@@ -93,17 +93,15 @@
         }
 
         #more-detail-about-project{
-            border: 0;
-            padding:2px 5px;
+            position: absolute;
+            bottom:5px;
             cursor:pointer;
-            float:right;
-            font-weight:bold;
-            text-decoration:underline;
-        }        
-        #about p.hidable {display:block;}
-        #about.less p.hidable {display:none;}        
-        #about #more-detail-about-project {content:'Hide extra'}
-        #about.less #more-detail-about-project {content:'Read more...';}
+            border:0;
+            padding:2px;
+            width:90px;
+            height:20px;
+            right:10px;
+        }
         #comment-form{
             padding:0.33em;
         }
@@ -146,22 +144,21 @@
             <h2>
                 What is Fix the Web?
             </h2>
-            <div id="about" class="less">
-                <p>
-                    <strong>Fix the Web</strong> is an Opera Web Browser extension. As hinted by its name, its goal is to promote a
-                    <em>World Wide Web</em> built on solid, standards-conforming web development practices. 
-                    <span id="more-detail-about-project"></span><!--filled dynamically with CSS-->
-                </p>                
-                <p class="hidable">
-                    Many web sites contain malformed HTML and archaic or poorly-designed Javascript. Some websites use bad web development 
-                    practices such as browser-sniffing. Consequently, these pages could produce visual flaws, functional glitches, or even worse, 
-                    be completely nonfunctional in Opera, a standards-conforming web browser. 
-                </p><p class="hidable">
-                    The goal of Fix the Web is to provide a solution to these problems by allowing users to report site problems they encounter, 
-                    reply to others' bug reports, and, most importantly, apply patches to broken web pages.
-                </p>                
-            </div>            
+            <p>
+                <strong>Fix the Web</strong> is an Opera Web Browser extension. As hinted by its name, its goal is to promote a
+                <em>World Wide Web</em> built on solid, standards-conforming web development practices.  
+            </p>
+            
+            <p>
+                Many web sites contain malformed HTML and archaic or poorly-designed Javascript. Some websites use bad web development 
+                practices such as browser-sniffing. Consequently, these pages could produce visual flaws, functional glitches, or even worse, 
+                be completely nonfunctional in Opera, a standards-conforming web browser. 
+            </p><p>
+                The goal of Fix the Web is to provide a solution to these problems by allowing users to report site problems they encounter, 
+                reply to others' bug reports, and, most importantly, apply patches to broken web pages.
+            </p>
         </div>
+        <div id="more-detail-about-project">More</div>
         <p style="clear:both;"></p>
     </header>
     <section>
@@ -285,8 +282,27 @@ window.addEventListener("DOMContentLoaded",function(){
         sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list"+query,resultWriter,null);
         history.pushState({data: data,type:"search"}, 'Search Results', HOST+"#!/report_list&"+query);
         return false;
+        
     },false);
 
+    document.getElementById("more-detail-about-project").addEventListener("click",function(){
+            console.log("sd");
+            var explanation=document.getElementById("explanation-about-the-extension");
+            switch(explanation.style.height)
+            {
+                case "":
+                case "100px":
+                    explanation.style.height="auto";
+                    this.innerText="Less";
+                break;
+                case "auto":
+                    explanation.style.height="100px";
+                    this.innerText="More";
+                break;
+
+            }
+
+        },false);
     
 
 },false);
