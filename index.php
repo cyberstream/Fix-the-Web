@@ -43,7 +43,6 @@
             position:relative;
             width:80%;
             overflow: hidden;
-            height:100px;
         }
 
         section {
@@ -94,14 +93,17 @@
         }
 
         #more-detail-about-project{
-            position: absolute;
-            bottom:5px;
-            border:0;
-            padding:2px;
-            width:90px;
-            height:20px;
-            right:10px;
-        }
+            border: 0;
+            padding:2px 5px;
+            cursor:pointer;
+            float:right;
+            font-weight:bold;
+            text-decoration:underline;
+        }        
+        #about p.hidable {display:block;}
+        #about.less p.hidable {display:none;}        
+        #about #more-detail-about-project {content:'Hide extra'}
+        #about.less #more-detail-about-project {content:'Read more...';}
         #comment-form{
             padding:0.33em;
         }
@@ -144,19 +146,21 @@
             <h2>
                 What is Fix the Web?
             </h2>
-            <p>
-                <strong>Fix the Web</strong> is an Opera Web Browser extension. As hinted by its name, its goal is to promote a
-                <em>World Wide Web</em> built on solid, standards-conforming web development practices.  
-            </p>
-            <div id="more-detail-about-project">More</div>
-            <p>
-                Many web sites contain malformed HTML and archaic or poorly-designed Javascript. Some websites use bad web development 
-                practices such as browser-sniffing. Consequently, these pages could produce visual flaws, functional glitches, or even worse, 
-                be completely nonfunctional in Opera, a standards-conforming web browser. 
-            </p><p>
-                The goal of Fix the Web is to provide a solution to these problems by allowing users to report site problems they encounter, 
-                reply to others' bug reports, and, most importantly, apply patches to broken web pages.
-            </p>
+            <div id="about" class="less">
+                <p>
+                    <strong>Fix the Web</strong> is an Opera Web Browser extension. As hinted by its name, its goal is to promote a
+                    <em>World Wide Web</em> built on solid, standards-conforming web development practices. 
+                    <span id="more-detail-about-project"></span><!--filled dynamically with CSS-->
+                </p>                
+                <p class="hidable">
+                    Many web sites contain malformed HTML and archaic or poorly-designed Javascript. Some websites use bad web development 
+                    practices such as browser-sniffing. Consequently, these pages could produce visual flaws, functional glitches, or even worse, 
+                    be completely nonfunctional in Opera, a standards-conforming web browser. 
+                </p><p class="hidable">
+                    The goal of Fix the Web is to provide a solution to these problems by allowing users to report site problems they encounter, 
+                    reply to others' bug reports, and, most importantly, apply patches to broken web pages.
+                </p>                
+            </div>            
         </div>
         <p style="clear:both;"></p>
     </header>
@@ -254,6 +258,14 @@ function goHomePage(){
 }
 
 window.addEventListener("DOMContentLoaded",function(){
+    document.getElementById("more-detail-about-project").addEventListener("click", function() {
+        var about = document.getElementById('about'),
+                currentState = about.className;
+
+        if (currentState == 'less') about.className = ''
+        else about.className = 'less';
+    }, false);
+    
     // index page operations
     goHomePage();
 
@@ -273,11 +285,6 @@ window.addEventListener("DOMContentLoaded",function(){
         sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list"+query,resultWriter,null);
         history.pushState({data: data,type:"search"}, 'Search Results', HOST+"#!/report_list&"+query);
         return false;
-        document.getElementById("more-detail-about-project").addEventListener("click",function(){
-            
-            document.getElementById("more-detail-about-project").
-
-        },false);
     },false);
 
     
