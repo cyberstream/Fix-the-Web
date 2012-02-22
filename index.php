@@ -34,6 +34,9 @@
             text-shadow: 1px 0px 0px #666666, 2px 1px 0px #666666;
             width:20%
         }
+        h1:hover{
+        cursor:pointer;
+        }
 
         #explanation-about-the-extension {
             border-left:1px solid #dfdfdf;
@@ -70,21 +73,42 @@
             position:relative;
             width:100%
         }
-
-        .go-button {
-            background-color:#9ACD32;
-            border:0px;
-            color:#fff;
-            font-weight:700;
-            padding:.33em 1em;
+        .tools{
             position:absolute;
             right:5px;
             top:0px
         }
+
+        .go-button,.follow-button,.like-button {
+            background: -o-linear-gradient(top, #9ACD32, #74a412) transparent;
+            box-shadow: 0px 0px 1px #000;
+            border-radius:2px;
+            text-align:center;
+            border: 1px solid #999;
+            color: #FFFFFF;
+            font-weight: 700;
+            border:0px;
+            color:#fff;
+            font-weight:700;
+            padding:.33em 1em;
+            float:right;
+            position:relative;
+        }
+        .go-button{
+
+        }
+        .like-button{
+
+        }
+        .follow-button{
+ 
+        }
         .small{
             font-size:0.9em;
         }
-
+        article p{
+            column-width:700px;
+        }
         .additional-information {
             bottom:0;
             font-size:.8em;
@@ -132,9 +156,35 @@
             float:left;
             position:relative
         }
-
+        aside ul{
+            list-style:none;
+            padding:0;
+            margin:0;
+        }
+        #most-popular-reports,#most-followed-reports,#prev,#forw{
+            
+            background: -o-linear-gradient(top, #3CA0FF, #288CFA) transparent;
+            box-shadow: 0px 0px 1px #000;
+            border-radius:2px;
+            text-align:center;
+            border: 1px solid #3399FF;
+            color: #FFFFFF;
+            float:left;
+            display: block;
+            font-weight: 700;
+            margin: 2px;
+            padding: 4px 7px;
+            position: relative;
+            text-decoration:none;
+        }
         input[type=number] {
-            width:50px
+            width:60px;
+            border-radius:2px;
+            border:1px solid #999;
+            float:left;
+            padding:1px;
+            margin:1px;
+            font-size:1.4em;
         }
     </style>
 </head>
@@ -181,10 +231,12 @@
                     <input type="number" name="count" id="count" <?php if(isset($_GET["count"])) echo "value=".$_GET["count"];?>>
                 </label> -->
                 <button type="submit">Submit</button>
-            
             </form>
             <div>
-
+                <ul>
+                    <li><a href="?order=popularity" id="most-popular-reports">Most Popular Reports</a></li>
+                    <li><a href="?order=most_followed" id="most-followed-reports">Most Followed Reports</a></li>
+                </ul>
             </div>
         </aside>
         <script type="text/javascript">
@@ -192,9 +244,12 @@ var HOST="http://localhost/Fix-the-Web-Server-Side/"; // TODO edit this for your
 
 function reportTemplate(id,username,date_time,report,operaVersion,operaBuildNumber,OS,domain,page,isComment){
     var content='';
-    content="<article><h6><a href='?Username="+username+"'>"+username+"</a> said on "+date_time+":</h6>";
+    content="<article><h6><a href='?Username="+username+"'>"+username+"</a> said on "+date_time+":</h6><div class='tools'>";
     if(!isComment)
-    content+="<button data-id="+id+" class='go-button'> &gt; </button><p>";
+    content+="<button data-id="+id+" class='like-button'> &gt; </button>";
+    content+="<button data-id="+id+" class='follow-button'> follow </button>";
+    content+="<button data-id="+id+" class='go-button'> like </button></div><p>";
+
     content+=report+"</p><span class='small'><a href="+page+">"+page+"</a> on "+domain+"</a><span class='additional-information'>"+operaVersion+"."+operaBuildNumber+" on "+OS+"</span></article>";
     return content;
 }
@@ -224,9 +279,10 @@ function resultWriter(data){
         a=result[i];
         resultArea+=reportTemplate(a.id,a.username,a.date_time,a.report,a.Opera,a.build,a.OS,a.domain,a.page,false);
     }
-    document.getElementsByTagName("section")[0].innerHTML=resultArea;
+    resultArea+="<a href='' id='prev'>&lt;</a> <input type='number' id='page' value='0'><a href='' id='forw'>&gt;</a>";
+    document.querySelector("section").innerHTML=resultArea;
     
-    history.pushState({data: data,type:"report"}, "Report List", HOST+"#!/Report-List=1");
+    history.pushState({data: data,type:"report"}, "Report List");
 
     var buttons = document.querySelectorAll(".go-button");
 
@@ -237,6 +293,8 @@ function resultWriter(data){
             
         },false);
     }
+
+
 }
 window.addEventListener('popstate', function (event) {
   if(event.state==null) return false;
@@ -272,25 +330,39 @@ window.addEventListener("DOMContentLoaded",function(){
             query+="count="+document.getElementById("count").value+"&";
         query+="a=1";
         
-        sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list"+query,resultWriter,null);
-        history.pushState({data: data,type:"search"}, 'Search Results', HOST+"#!/report_list&"+query);
+        sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list&search=1"+query,resultWriter,null);
+        //history.pushState({data: data,type:"search"}, 'Search Results', HOST+"#!/report_list&"+query);
         return false;
         
     },false);
 
-    document.getElementById("more-detail-about-project").addEventListener("click",function(){
-            console.log("sd");
+    document.querySelector("header h1").addEventListener("click",goHomePage,false);
+
+    document.getElementById("most-popular-reports").addEventListener("click",function(event){
+        event.preventDefault();
+        sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list&order=popularity",resultWriter,null);
+        //history.pushState({data: data,type:"search"}, 'Search Results', HOST+"#!/report_list&");
+    },false);
+
+    document.getElementById("most-followed-reports").addEventListener("click",function(event){
+        event.preventDefault();
+        sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list&order=most_followed",resultWriter,null);
+       // history.pushState({data: data,type:"search"}, 'Search Results', HOST+"#!/report_list&");
+    },false);
+
+    document.getElementById("more-detail-about-project").addEventListener("click",function(event){
+            
             var explanation=document.getElementById("explanation-about-the-extension");
             switch(explanation.style.height)
             {
                 case "":
                 case "100px":
                     explanation.style.height="auto";
-                    this.innerText="Less";
+                    event.target.innerText="Less";
                 break;
                 case "auto":
                     explanation.style.height="100px";
-                    this.innerText="More";
+                    event.target.innerText="More";
                 break;
 
             }
