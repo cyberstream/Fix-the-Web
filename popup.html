@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <style type="text/css">
-
         body {
             padding:0;
             margin: 0;
@@ -190,10 +189,10 @@
     
     <form action="" method="post" id="report-site-form">
         <h1>Report a Site Problem</h1>
-        <p> 
+        <p id="form-begins"> 
             <label for="page-address" style="font-weight:bold;">Page: </label><input type="url" required="required" id="page-address" name="page_address" placeholder="You must enter page location" />
-        </p>        
-                
+        </p>
+        
         <label>Which category best describes the bug?</label>
         <p>
                 <input required="required" type="radio" name="category" id="category-1" value="1" class="category" />
@@ -248,7 +247,7 @@
             // function show_message() shows an error or success message above the form            
             function show_message (text, message_mode) { // message_mode: 'error' or 'success'
                 var message = document.querySelector('#error, #success'), 
-                      form_element = document.getElementById('report-site-form');
+                      first_form_element = document.getElementById('form-begins');
                       
                 if (message) message.parentNode.removeChild(message); // remove old messages before displaying a new one
                 
@@ -256,7 +255,7 @@
                 element.id = message_mode;
                 element.innerHTML = text;
                 
-                form_element.parentNode.insertBefore(element, form_element);
+                first_form_element.parentNode.insertBefore(element, first_form_element);
             }
 
             // process the form when it is submitted            
