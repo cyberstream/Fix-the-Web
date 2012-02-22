@@ -31,7 +31,7 @@
             float:left;
             min-width:100px;
             text-align:center;
-            text-shadow: 1px 0px 0px #666666, 2px 1px 0px #666666;
+            text-shadow: 1px 0px 0px #FFFFFF, 2px 2px 2px #393939;
             width:20%
         }
         h1:hover{
@@ -93,6 +93,7 @@
             padding:.33em 1em;
             float:right;
             position:relative;
+            text-shadow:1px 1px 0px #666;
         }
         .go-button{
 
@@ -234,17 +235,25 @@
             </form>
             <div>
                 <ul>
-                    <li><a href="?order=popularity" id="most-popular-reports">Most Popular Reports</a></li>
-                    <li><a href="?order=most_followed" id="most-followed-reports">Most Followed Reports</a></li>
+                    <li><a href="?mode=get_report_list&order=popularity" id="most-popular-reports">Most Popular Reports</a></li>
+                    <li><a href="?mode=get_report_list&order=most_followed" id="most-followed-reports">Most Followed Reports</a></li>
                 </ul>
             </div>
         </aside>
         <script type="text/javascript">
 var HOST="http://localhost/Fix-the-Web-Server-Side/"; // TODO edit this for your system
+var PAGE={
+            query:"report-list=1", //
+            id:0,
+            domain:"",
+            user:"",
+            page:1,
+            type:"report"
+        };
 
 function reportTemplate(id,username,date_time,report,operaVersion,operaBuildNumber,OS,domain,page,isComment){
     var content='';
-    content="<article><h6><a href='?username="+username+"'>"+username+"</a> said on "+date_time+":</h6><div class='tools'>";
+    content="<article><h6><a href='?mode=get_comment_list&user="+username+"'>"+username+"</a> said on "+date_time+":</h6><div class='tools'>";
     if(!isComment)
     content+="<button data-id="+id+" class='go-button'> &gt; </button>";
     content+="<button data-id="+id+" class='follow-button'> follow </button>";
@@ -294,9 +303,16 @@ function resultWriter(data,hist){
             
         },false);
     }
-
-
 }
+
+function labeler(data){
+    var variables = document.location.search.slice(1).split("&");
+    var c=Array();
+    for(var b=0;b<a.length;b++){
+        c.push(a[b].split("="));
+    }
+}
+
 window.addEventListener('popstate', function (event) {
   if(event.state==null) return false;
   switch(event.state.type){
@@ -311,7 +327,8 @@ window.addEventListener('popstate', function (event) {
 },false);
 
 function goHomePage(){
-    sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list",resultWriter,null);    
+    sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list",resultWriter,null);
+    var PAGE={query:"report-list",page:1,type:"Reports"};
 }
 
 window.addEventListener("DOMContentLoaded",function(){
@@ -325,14 +342,14 @@ window.addEventListener("DOMContentLoaded",function(){
         var query='&';
         if(document.getElementById("domain").value)
             query+="domain="+document.getElementById("domain").value+"&";
-        if(document.getElementById("page").value)
+        /*if(document.getElementById("page").value)
             query+="page="+document.getElementById("page").value+"&";
         if(document.getElementById("count").value)
-            query+="count="+document.getElementById("count").value+"&";
+            query+="count="+document.getElementById("count").value+"&";/*/
         query+="a=1";
         
         sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list&search=1"+query,resultWriter,null);
-        //history.pushState({data: data,type:"search"}, 'Search Results', HOST+"#!/report_list&"+query);
+        
         return false;
         
     },false);
@@ -342,13 +359,11 @@ window.addEventListener("DOMContentLoaded",function(){
     document.getElementById("most-popular-reports").addEventListener("click",function(event){
         event.preventDefault();
         sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list&order=popularity",resultWriter,null);
-        //history.pushState({data: data,type:"search"}, 'Search Results', HOST+"#!/report_list&");
     },false);
 
     document.getElementById("most-followed-reports").addEventListener("click",function(event){
         event.preventDefault();
         sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list&order=most_followed",resultWriter,null);
-       // history.pushState({data: data,type:"search"}, 'Search Results', HOST+"#!/report_list&");
     },false);
 
     document.getElementById("more-detail-about-project").addEventListener("click",function(event){

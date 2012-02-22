@@ -236,27 +236,43 @@ if (isset($_GET) && count($_GET)) {
         id,username, language, category, report, page, domain, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
         FROM reports WHERE 1=1 ";
 
-        if(isset($_GET['domain'])){
+        if(isset($_GET['domain'])) {
             $query.=" AND domain = ?";
             $bind_domain = $_GET['domain'];
         }
-        if(isset($_GET['id']) && settype($_GET['id'], "int")){
+        if(isset($_GET['id']) && settype($_GET['id'], "int")) {
 
             $query.=" AND (id = ? OR report_id = ?)";
             $bind_report_id=$_GET["id"];
+        }
+         if(isset($_GET['user'])) {
+
+            $query.=" AND username = ?";
+            $bind_user=$_GET["user"];
         }
         
         if ($stmt->prepare($query)) {
 
             if(isset($bind_domain)){
                 if(isset($bind_report_id))
-                    $stmt->bind_param('sii', $bind_domain,$bind_report_id,$bind_report_id);
+                    if(isset($bind_user))
+                        $stmt->bind_param('siis', $bind_domain,$bind_report_id,$bind_report_id,$bind_user);
+                    else
+                        $stmt->bind_param('sii', $bind_domain,$bind_report_id,$bind_report_id);
                 else
-                    $stmt->bind_param('s', $bind_domain);
+                    if(isset($bind_user))
+                        $stmt->bind_param('ss', $bind_domain,$bind_user);
+                    else
+                        $stmt->bind_param('s', $bind_domain);
             }
             else{
                 if(isset($bind_report_id))
-                    $stmt->bind_param('ii',$bind_report_id,$bind_report_id);
+                    if(isset($bind_user))
+                        $stmt->bind_param('iis',$bind_report_id,$bind_report_id,$bind_user);
+                    else
+                        $stmt->bind_param('ii',$bind_report_id,$bind_report_id);
+                else
+                    $stmt->bind_param('s',$bind_user);
             }
                 
 
