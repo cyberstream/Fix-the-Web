@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" version="1.0b" defaultlocale="en">
     <name short="Fix the Web">Fix the Web</name>
-    <description>A tool to fix web pages that have aesthetic or functional problems due to poor coding practices</description>
+    <description>A tool to report and fix web pages that have aesthetic or functional problems due to poor coding practices</description>
     <author href="http://my.opera.com/cyberstream/about" email="dev@cyberstream.us">cyberstream</author>
     <icon src="images/icon-64.png" /> 
     
