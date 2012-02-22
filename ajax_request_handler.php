@@ -178,17 +178,17 @@ if (isset($_GET) && count($_GET)) {
 
         // What page that you want to look at
         if(isset($_GET['page']) && settype($_GET['page'],"int")){
-            $bind_page_number=--$_GET['page'];
+            $bind_page_number = --$_GET['page'];
         }
         else{
-            $bind_page_number="0";
+            $bind_page_number = "0";
         }
 
 
         if(isset($_GET['count']) && settype($_GET['count'],"int")){
             $bind_count=$_GET['count'];
         }
-        else{
+        else {
             $bind_count="5"; // TODO: Default limit
         }
 
@@ -208,8 +208,7 @@ if (isset($_GET) && count($_GET)) {
 
                 $JSON = array();
                 while ($stmt->fetch()) {
-                    $JSON[] = 
-                                   array(   "id" => $id,
+                    $JSON[] = array("id" => $id,
                                             "username" => $username,
                                             "language" => $language,
                                             "category" => $category,
@@ -224,7 +223,7 @@ if (isset($_GET) && count($_GET)) {
                                     );
                 }
                 
-                exit (json_encode($JSON));            
+                exit (json_encode($JSON));
             }
         }
     } elseif (($_GET['mode'] == 'get_comment_list')) {
