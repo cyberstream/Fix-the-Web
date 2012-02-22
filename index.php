@@ -244,18 +244,18 @@ var HOST="http://localhost/Fix-the-Web-Server-Side/"; // TODO edit this for your
 
 function reportTemplate(id,username,date_time,report,operaVersion,operaBuildNumber,OS,domain,page,isComment){
     var content='';
-    content="<article><h6><a href='?Username="+username+"'>"+username+"</a> said on "+date_time+":</h6><div class='tools'>";
+    content="<article><h6><a href='?username="+username+"'>"+username+"</a> said on "+date_time+":</h6><div class='tools'>";
     if(!isComment)
-    content+="<button data-id="+id+" class='like-button'> &gt; </button>";
+    content+="<button data-id="+id+" class='go-button'> &gt; </button>";
     content+="<button data-id="+id+" class='follow-button'> follow </button>";
-    content+="<button data-id="+id+" class='go-button'> like </button></div><p>";
+    content+="<button data-id="+id+" class='like-button'> like </button></div><p>";
 
     content+=report+"</p><span class='small'><a href="+page+">"+page+"</a> on "+domain+"</a><span class='additional-information'>"+operaVersion+"."+operaBuildNumber+" on "+OS+"</span></article>";
     return content;
 }
 
 
-function commentWriter(data){
+function commentWriter(data,hist){
     if(!data) return false;
     var result=JSON.parse(data);
     var resultArea='';
@@ -266,11 +266,12 @@ function commentWriter(data){
     }
     var form="<form action='' id='comment-form'><textarea name='d'>dd</textarea></form>";
     document.getElementsByTagName("section")[0].innerHTML=resultArea+form;
-    history.pushState({data: data,type:"comment"}, 'Comments ', HOST+"#!/Comment-List&id="+a.id);
+    if(!hist)
+        history.pushState({data: data,type:"comment"}, 'Comments ', HOST+"#!/Comment-List&id="+a.id);
 }
 
 // If xmlHTTPRequest is succesfull, then write the result into a suitable area
-function resultWriter(data){
+function resultWriter(data,hist){
     if(!data) return false;
     var result=JSON.parse(data);
     var resultArea='';
@@ -281,8 +282,8 @@ function resultWriter(data){
     }
     resultArea+="<a href='' id='prev'>&lt;</a> <input type='number' id='page' value='0'><a href='' id='forw'>&gt;</a>";
     document.querySelector("section").innerHTML=resultArea;
-    
-    history.pushState({data: data,type:"report"}, "Report List");
+    if(!hist)
+        history.pushState({data: data,type:"report"}, "Report List");
 
     var buttons = document.querySelectorAll(".go-button");
 
@@ -300,10 +301,10 @@ window.addEventListener('popstate', function (event) {
   if(event.state==null) return false;
   switch(event.state.type){
       case "comment":
-      commentWriter(event.state.data);
+      commentWriter(event.state.data,1);
       break;
       case "report":
-      resultWriter(event.state.data);
+      resultWriter(event.state.data,1);
       break;
   }
   
