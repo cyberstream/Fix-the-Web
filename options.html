@@ -97,6 +97,30 @@
     }
     
     .light {color: #888}
+    
+    #display-reports-by-domain, #display-reports-by-page {
+        position: absolute; 
+        opacity: 0;
+    }
+    
+    #display-reports-by-domain + label,#display-reports-by-page + label {
+        cursor: pointer; 
+        padding: 2px 5px; 
+        padding-right:0; 
+        margin: 0 2px; 
+        border-radius:5px; 
+        border: 1px solid transparent; 
+        text-transform:uppercase; 
+        font-size:.8em;
+    }
+    
+    #display-reports-by-domain:checked + label, #display-reports-by-page:checked + label {
+        background:-o-linear-gradient(top, #fff, #ccc); 
+        border: 1px solid #aaa; 
+        text-shadow: 0 1px 1px #fff; 
+        box-shadow: 0 0 3px #bbb; 
+        color:#0000cc;
+    }
     </style>
 </head>
 <body>
@@ -107,22 +131,22 @@
         <h1>Fix the Web <span class="light"> Options</span></h1>
         
         <form id="prefs-form">            
-                <label>Patches script update interval  
+                <label>Check for updates to the patches script every 
                     <input type="range" min="30" max="720" step="15" name="update-interval" id="update-interval"/>
-                    (every <span id="update-interval-in-minute"></span> minutes)
+                    <span id="update-interval-in-minute"></span> minutes
                 </label>
 
                 <div id="update">update patches script now</div>
 
                 <p>
-                    Show reports count in the toolbar icon badge
-                    <label>
-                        <strong>by domain</strong>
-                        <input type="radio" id="display-reports-by-domain" name="display-reports-by" value="domain" />
+                    Show reports count in the toolbar icon badge by
+                    <input type="radio" id="display-reports-by-domain" name="display-reports-by" value="domain" />
+                    <label for="display-reports-by-domain">
+                        <strong>domain</strong>
                     </label>
-                    <label>
-                        <strong>by page</strong>
-                        <input type="radio" id="display-reports-by-page" name="display-reports-by" value="page" />
+                    <input type="radio" id="display-reports-by-page" name="display-reports-by" value="page" />
+                    <label for="display-reports-by-page">
+                        <strong>page</strong>
                     </label>
                 </p>
         </form>
