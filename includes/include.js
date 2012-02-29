@@ -1,5 +1,14 @@
 opera.extension.onmessage = function(event) {    
-    resizeFrame = function(e) {                    
+    // use the base64 representation of the image for each icon; change each to Github URL?
+    var icons = {
+             loading: 'http://github.com/cyberstream.png',
+             windows: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAAAAAAAA+UO7fwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9wCCxUjGcTGHK8AAAKlSURBVDjLlZPNa1xlFMZ/5733Zu7MZMZ8tGMzGlOGloibdqEtiBZBkIKKuLCi0CBdRVroSvAfUNz5gYsuxEVa2lIt3bgVCgqiFqVFCU4gStVJnVonTTIz9973vO/rIk7FXXxWZ3GeH5xzniMAq6urZyYnJ0+ISMIOFEKwvV7v41artSjtdvuVZrN5PkkSvPc78WOMwVpLp9N5NS6KYj6KoqCqAhC04PcrZ+nfvo0xhtZrpzClMiJyD+C9J4qiUBTFfKyqQVUlhADArQ/fxlx4n/srCUTw609fcef0GxyYfYxyUsMHyy9/LvPA5D5R1WCcc3jvcc4R4gSuXyWtjUHFYNLAQy8vcuXHd3j+gybPvTfHgTdTvr/5zT2PUVWcczjnyId9zPI1DANikxEnBcP5w6zpdzTmKsQTfcYbhiP7j+KcQ1WJVRXvPd577NrPzL17EfPoU7jhgMFnZ1jur1CfFoabBrWe/c15ask0hc/+BTjnIHjOtwPnvk3pfX6Nh5tl3nrmdfaMOw5OH+Umq4xVGzw5e5x+voUx8l9AORHOfj3AVfawayrlr/tSTDROfmORF/aeojQ9weZvX2LMLpxTQjDbgNH8P3S36HY9EzMOl1mkHzFDh5nKp2ysXEY3A7NAp/UHTjNCCNtLtNbiveeLGz0mqhFP7KuSWM+hWkDvXIV+Qp0SU0mJYupp9J9+7z3WWuLROY4deZCTz46xNSioVca4vuYpty9CIQQfkCwn330Qr9koznjviVVVrLUBrNzKhwBsDYbsjgPZ4cvknY8wmjOsP0Kv+jguzwFwzgVVlVhEVtbX16VerzNK40ibd3vcLb8IgCDIYLBdi7CxsSEisiIAS0tLlxqNxktpmu7ombIso9vtfrKwsHBMgBQoAX3+n6pA/jch8XQyBDYaRwAAAABJRU5ErkJggg==",
+             mac: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wCCxQ7EUnEZvMAAAKSSURBVDjLjZNLiM1hGIef7/993/92bjMY6swoZRYWJOWajhmKWZDcamg2ipJSsiCRjEhWSlE2rGwssKGYBVEuNY1CajDmkjmDaS7HzJkz5/b9P4uxMSnzbp/3/b311A/mNnuBA/8ky5qz/zuOAT8BMRus3mMRhJcbzpxtedmQjtXNXnA9n9Mndnjtl65XvCBtwP4JEWR/FMbaz3c0qU0ty463ta5YPDxa+vuDhU/db8lkVrJ7X5NXrUAEWAuRtaTiIv26a/CUiic98fFLQUxOGYSAvp5+GpakSSRTXLl4nAePX/IrbxkfH+Nd1xsyW7ZTMYJiBRHElHYiR9E7WKZ3sER2xNLx+BX9Q3l6Br5TX1+H8kKmy4K+vgGuX71A2UChBPkiWK1QkVD0DZWpRuAVK6zbvpeqq3nacYM9bceYLlkqRjCvfiVnrr3gQz8UK+A44CgXpxhJ3n8tMzIFowXBRFWTtwHvOx/SvG0npaogNwUVI3E9HyVBOX80SYVCasbzMD0asUAI4q6DcUJyg10c2d9E1Vjar94jTNYhHZBiRrCxgNQ4VirChCKe8pjKDaFDF+0bjt6NyJx9zrecoXFpHbUp8F3Lp3fPCHxwFaAUyihN4GpiSc3kr0m6n9zH2gg/9InV1lLKjXOodSvD37PEEjW07DqMpzdjIxBao4TUhKEkHpPUb1xDan6GIARpQUaG3s5F3L7ziCDhkpuEibylUAIlAaVRbiBNY4MmVqNI1ijCOHgKkj7UBJL169fS093F8lUb8CQkAoGSMw6mjS0JtWD54uaDN++lEn6t1g6OFEhnJsRTkP3cqb596Fi4ufVc1kSRMBFEEQyNFice3jq5b45lZAQI/wXkHAO+AmmgZzb4DUrJ9owQDloEAAAAAElFTkSuQmCC",
+             linux: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAAAAAAAA+UO7fwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wCCxUAL7XV/lcAAAK9SURBVDjLjZFdaFsFHMV/N7l29qZpFmxladqudU1Xu04rZdGxCjrthxPEgSC0IIKgoqBP6h72MHwSfZgw++QHInNQR4cgCHPDyWDZRMR1G8iyrlvJ1vQrH71pltzc9B4frD6Uznke/5xzOOf8/axDc3Mztm0zOjraNzIy8t3w8PCHmUymJZ1O/wx46/n+9Qfbttm8OVTv8/kTjuPsSCQS9ZZl7Z6ZmXGBs/xPdErSlqaol7x+Q7FYTMAvgHHPBGsIdfqS776+d6dx6fT3lOpjXL5ycR74cj3Rt5E6TMB7IHiOPa+ZvPJOisaVowD3AQwODt7bIEdx95XsANMTY0qegZ3PjwloAxps2/7v8kNDwyEgdW36pje3KGVyJa06ywLU3b3jN8uqNTcUxuNxAPr795zo7e2VJO9OqaQ7xaIk6cAH73vBYEgDAwPf3nW7eDz+dE9Pj84lzst1qyo7FTnliqrVqlKplAKBgBeJRApdXV2dG21geJ7eaGuN8tDWqPK5LMhDquK6FYLW/WxrbzfS6XTdrVTqmX8N9MML6FAdgO/q5d/DkZYYrDpGPjtLfmmO5VyGxfnb5AsFaqw6+nbFcauYALrwMj6y8xiHVqj8OPTi1M2fHn+p/RqHx76mY3sHbmEBtzCH66slOvUFNcVZ4i0W5z96dDuA8cT43zE03n/AO/m2vD+OyU0eUVstOvLZYbn5GyotTmml7Kh04lVp8qCUOiid7ZaO7d8GrEXZ4q83vFOwVJZph40znzyL+dSTmKE2TEBAqXgRliaRU8ToWEAd5pvAewaArj7yudqnn/NumZZ/uTFMYBNHP80v/rq6z64xysb4RNKfOH57a2uLC8HKgoLBt3y1MxNKNqxVWOmrqS40hZdOtkaLfz44VrrefHzyq8ZdgAXUAZaykY+92YZvvFzTw/98QJXH+AvKt0mo5JFpDwAAAABJRU5ErkJggg==",
+             unidentified: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAMAAwADAGp0HVAAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9wCHQYJDdplEZAAAAIMSURBVDjLrZM/TxtBEMV/c3JyBqHYcvDyTwF3pDENqVyELknPV6AzKJTwPfB3iCxRoVBYoXBE78KJkKidWAT5MArYR273JoXPh4EmRV6z0uzM7Jv3ZoUE/X7/AKjyb6jl8/ltAAEIguAAtIpKEhlDeRS4jym1wsvCtgBc/rpUBUQgshFnZ2ecnp7y80cX33/O6utVPrx7z4tcDk2bas8UzawAdLtdHffvdDrU63UqlQpLS0tcXFxQr9cxxrCzs4Pv+ymXhYUFyQBY65CE6WyxyNbWFoVCAU88SqUSjUaDVquVFjrr0CQ/AxA7y5iCiJDNZgnDkFiVky8nnJ+fs7i4yPT0NJGNsM6mzUYMnEUVhIciNhoNDg8PMcawv7/P1NQUw2CIsy7NywA4F6M6ZqCg0P72naOjI0qlEnt7exhjuLrqc/fnDlVN30k0sE+Mvr7uE4Yhm5ubFItFer0eYRiiqg/yBKDdbuukywA2ishknjE/P8dgMODm901SrCO/FcprZfFGqlqstVhncc7irKXZbLK7+5Hj48/c3g6IknvrXHLaxyMkU8loUcTzAMjl8mR9n+FwcE9PNNUscSF+tLbKnDGsv1lnZWWZmJg4dqiSjDHaxAkXbA2opmuuyvLyK8rlMjMzMwRBQBQ9EfoTkz+l+bV5gEpVJj+MByIesXOIyMg+AZTa242Nbf4H/gLTcAQh/UxdRgAAAABJRU5ErkJggg=="
+         }
+    
+    resizeFrame = function(e) {              
                                 if (e.clientY > 0 && window.innerHeight - e.clientY >= 10 && e.clientY > 30) {
                                     var ftw_frame = document.getElementById('fix-the-web-comment-frame'),
                                           ftw_resize_bar = document.getElementById('resize-frame'),
@@ -44,7 +53,16 @@ opera.extension.onmessage = function(event) {
                     var page_url = '<a href="' +current.page+ '" title="Page: ' +current.page+ '" target="_blank">' 
                         +(current.page.length > 35 ? current.page.substr(0, 35) + '...' : current.page) + '</a>';
                     
-                    commentFrameHTML += '<div class="thread collapsed"><div class="title">Posted by <span class="username">' +current.username+ '</span> on ' +current.date_time+ ' from page ' +page_url+ ' <span class="change_state"></span></div><div class="toggle"><div class="report_body">"' +current.report+ '"</div> ' +current.Opera+ '.' +current.build+ ' on ' +current.OS+ ' <a href="data:text/plain;charset=utf-8,' +encodeURIComponent(current.misc)+ '" target="_blank">miscellaneous information</a></div></div>'
+                    if (current.OS.length) {
+                        var os_image;
+                        
+                        if ( /windows/i.test(current.OS) ) os_image = '<img class="os_icon" src="' +icons.windows+ '" alt="' +current.OS+ '" title="' +current.OS+ '" />'
+                        else if ( /mac/i.test(current.OS) ) os_image = '<img class="os_icon" src="' +icons.mac+ '" alt="' +current.OS+ '" title="' +current.OS+ '" />';
+                        else if ( /linux/i.test(current.OS) ) os_image = '<img class="os_icon" src="' +icons.linux+ '" alt="' +current.OS+ '" title="' +current.OS+ '" />'
+                        else os_image = '<img class="os_icon" src="' +icons.unidentified+ '" alt="' +current.OS+ '" title="' +current.OS+ '" />'
+                    }
+                    
+                    commentFrameHTML += '<div class="thread collapsed"><div class="title">Posted by <span class="username">' +current.username+ '</span> on ' +current.date_time+ ' from page ' +page_url+ ' <span class="change_state"></span></div><div class="toggle"><div class="report_body">"' +current.report+ '"</div> ' +(os_image || '')+ ' ' +current.Opera+ '.' +current.build+ ' <a href="data:text/plain;charset=utf-8,' +encodeURIComponent(current.misc)+ '" target="_blank">miscellaneous information</a></div></div>'
                 }
             }
         }
@@ -133,6 +151,7 @@ opera.extension.onmessage = function(event) {
             + '#fix-the-web-comment-frame .collapsed .toggle {display:none} #fix-the-web-comment-frame .expanded .toggle {display:block}'
             + '#fix-the-web-comment-frame .collapsed .change_state {content:\'expand thread\';} #fix-the-web-comment-frame .expanded .change_state {content:\'collapse thread\';}'
             + '#fix-the-web-comment-frame .change_state {padding: 0 5px; color:#3399FF; font-weight:100} #fix-the-web-comment-frame .change_state:hover {cursor:pointer; text-decoration:underline}'
+            + '#fix-the-web-comment-frame .os_icon {position:relative; top: 3px}'
             
             frame_style_element.setAttribute('type', 'text/css');
             frame_style_element.appendChild(document.createTextNode(frame_styles));
@@ -143,7 +162,7 @@ opera.extension.onmessage = function(event) {
                   resize_frame.style.bottom = (40 + bar_height_percentage) + '%'; // place the resize bar right above the comment frame
             
             // insert the resize bar, the frame element and the style element into the HTML page
-            frame_element.innerText = 'Loading...';
+            frame_element.innerHTML = '<img src="' +icons.loading+ '" alt="loading" title="Loading reports..." style="text-align:center" />';
             document.body.appendChild(frame_element);
             document.body.appendChild(resize_frame);
             document.head.appendChild(frame_style_element);
