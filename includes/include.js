@@ -7,6 +7,14 @@ opera.extension.onmessage = function(event) {
              linux: 'https://github.com/cyberstream/Fix-the-Web/raw/master/images/linux.png', // "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAAAAAAAA+UO7fwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wCCxUAL7XV/lcAAAK9SURBVDjLjZFdaFsFHMV/N7l29qZpFmxladqudU1Xu04rZdGxCjrthxPEgSC0IIKgoqBP6h72MHwSfZgw++QHInNQR4cgCHPDyWDZRMR1G8iyrlvJ1vQrH71pltzc9B4frD6Uznke/5xzOOf8/axDc3Mztm0zOjraNzIy8t3w8PCHmUymJZ1O/wx46/n+9Qfbttm8OVTv8/kTjuPsSCQS9ZZl7Z6ZmXGBs/xPdErSlqaol7x+Q7FYTMAvgHHPBGsIdfqS776+d6dx6fT3lOpjXL5ycR74cj3Rt5E6TMB7IHiOPa+ZvPJOisaVowD3AQwODt7bIEdx95XsANMTY0qegZ3PjwloAxps2/7v8kNDwyEgdW36pje3KGVyJa06ywLU3b3jN8uqNTcUxuNxAPr795zo7e2VJO9OqaQ7xaIk6cAH73vBYEgDAwPf3nW7eDz+dE9Pj84lzst1qyo7FTnliqrVqlKplAKBgBeJRApdXV2dG21geJ7eaGuN8tDWqPK5LMhDquK6FYLW/WxrbzfS6XTdrVTqmX8N9MML6FAdgO/q5d/DkZYYrDpGPjtLfmmO5VyGxfnb5AsFaqw6+nbFcauYALrwMj6y8xiHVqj8OPTi1M2fHn+p/RqHx76mY3sHbmEBtzCH66slOvUFNcVZ4i0W5z96dDuA8cT43zE03n/AO/m2vD+OyU0eUVstOvLZYbn5GyotTmml7Kh04lVp8qCUOiid7ZaO7d8GrEXZ4q83vFOwVJZph40znzyL+dSTmKE2TEBAqXgRliaRU8ToWEAd5pvAewaArj7yudqnn/NumZZ/uTFMYBNHP80v/rq6z64xysb4RNKfOH57a2uLC8HKgoLBt3y1MxNKNqxVWOmrqS40hZdOtkaLfz44VrrefHzyq8ZdgAXUAZaykY+92YZvvFzTw/98QJXH+AvKt0mo5JFpDwAAAABJRU5ErkJggg==",
              unidentified: 'https://github.com/cyberstream/Fix-the-Web/raw/bf4442f300c869fde4659cf29256dcdd62980b54/images/unidentified.png' // "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAMAAwADAGp0HVAAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9wCHQYJDdplEZAAAAIMSURBVDjLrZM/TxtBEMV/c3JyBqHYcvDyTwF3pDENqVyELknPV6AzKJTwPfB3iCxRoVBYoXBE78KJkKidWAT5MArYR273JoXPh4EmRV6z0uzM7Jv3ZoUE/X7/AKjyb6jl8/ltAAEIguAAtIpKEhlDeRS4jym1wsvCtgBc/rpUBUQgshFnZ2ecnp7y80cX33/O6utVPrx7z4tcDk2bas8UzawAdLtdHffvdDrU63UqlQpLS0tcXFxQr9cxxrCzs4Pv+ymXhYUFyQBY65CE6WyxyNbWFoVCAU88SqUSjUaDVquVFjrr0CQ/AxA7y5iCiJDNZgnDkFiVky8nnJ+fs7i4yPT0NJGNsM6mzUYMnEUVhIciNhoNDg8PMcawv7/P1NQUw2CIsy7NywA4F6M6ZqCg0P72naOjI0qlEnt7exhjuLrqc/fnDlVN30k0sE+Mvr7uE4Yhm5ubFItFer0eYRiiqg/yBKDdbuukywA2ishknjE/P8dgMODm901SrCO/FcprZfFGqlqstVhncc7irKXZbLK7+5Hj48/c3g6IknvrXHLaxyMkU8loUcTzAMjl8mR9n+FwcE9PNNUscSF+tLbKnDGsv1lnZWWZmJg4dqiSjDHaxAkXbA2opmuuyvLyK8rlMjMzMwRBQBQ9EfoTkz+l+bV5gEpVJj+MByIesXOIyMg+AZTa242Nbf4H/gLTcAQh/UxdRgAAAABJRU5ErkJggg=="
          }
+         
+    // preload icons
+    if (icons && icons.length) {
+        for (i in icons) {
+            var img = new Image;
+            img.src = icons[i];
+        }
+    }
     
     resizeFrame = function(e) {              
                                 if (e.clientY > 0 && window.innerHeight - e.clientY >= 10 && e.clientY > 30) {
@@ -182,15 +190,7 @@ opera.extension.onmessage = function(event) {
 
 // get the patches.js script from localStorage and create a script element on the page with its contents
 
-window.addEventListener('DOMContentLoaded', function() {    
-    // preload icons
-    if (icons && icons.length) {
-        for (i in icons) {
-            var img = new Image;
-            img.src = icons[i];
-        }
-    }
-    
+window.addEventListener('DOMContentLoaded', function() {        
     if (typeof widget.preferences['patches-js'] == 'undefined') widget.preferences['patches-js'] = '';
     
     var patches_js = widget.preferences['patches-js'],    
