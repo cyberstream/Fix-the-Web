@@ -91,21 +91,21 @@ if (isset($_GET) && count($_GET)) {
             $stmt->store_result();
             
             if (!$stmt->errno && $stmt->num_rows) {
-                $stmt->bind_result($username, $language, $category, $report, $page, $version, $build, $OS, $misc, $date_time);
+                $stmt->bind_result ($username, $language, $category, $report, $page, $version, $build, $OS, $misc, $date_time);
                 
                 $JSON = array();
                 
                 while ($stmt->fetch()) {
-                    $JSON[] = array("username" => $username,
-                                        "language" => $language,
+                    $JSON[] = array("username" => htmlentities ($username),
+                                        "language" => htmlentities ($language),
                                         "category" => $category,
-                                        "report" => $report,                                            
-                                        "date_time" => $date_time,
-                                        "Opera" => $version,
-                                        "build" => $build,
-                                        "page" => $page,
-                                        "misc" => $misc,
-                                        "OS" => $OS                                            
+                                        "report" => htmlentities ($report),                                            
+                                        "date_time" => htmlentities ($date_time),
+                                        "Opera" => htmlentities ($version),
+                                        "build" => htmlentities ($build),
+                                        "page" => htmlentities ($page),
+                                        "misc" => htmlentities ($misc),
+                                        "OS" => htmlentities ($OS)
                                     );
                 }
                 
@@ -209,17 +209,17 @@ if (isset($_GET) && count($_GET)) {
                 $JSON = array();
                 while ($stmt->fetch()) {
                     $JSON[] = array("id" => $id,
-                                            "username" => $username,
-                                            "language" => $language,
+                                            "username" => htmlentities ( $username ),
+                                            "language" => htmlentities ( $language ),
                                             "category" => $category,
-                                            "report" => $report,
-                                            "page" => $page,
-                                            "domain" => $domain_db,
-                                            "date_time" => $date_time,
-                                            "Opera" => $version,
-                                            "build" => $build,
-                                            "OS" => $OS,
-                                            "misc" =>$misc
+                                            "report" => htmlentities ( $report ),
+                                            "page" => htmlentities ( $page ),
+                                            "domain" => htmlentities ( $domain_db ),
+                                            "date_time" => htmlentities ( $date_time ),
+                                            "Opera" => htmlentities ( $version ),
+                                            "build" => htmlentities ( $build ),
+                                            "OS" => htmlentities ( $OS ),
+                                            "misc" =>htmlentities ( $misc )
                                     );
                 }
                 
@@ -284,19 +284,19 @@ if (isset($_GET) && count($_GET)) {
 
                 $JSON = array();
                 while ($stmt->fetch()) {
-                    $JSON[]=array("id"=>$id,
-                                    "username"=>$username,
-                                    "language"=>$language,
-                                    "category"=>$category,
-                                    "report"=>$report,
-                                    "page"=>$page,
-                                    "domain"=>$domain_db,
-                                    "date_time"=>$date_time,
-                                    "Opera" => $version,
-                                    "build" => $build,
-                                    "OS" => $OS,
-                                    "misc"=>$misc
-                        );
+                    $JSON[] = array("id" => $id,
+                                            "username" => htmlentities ( $username ),
+                                            "language" => htmlentities ( $language ),
+                                            "category" => $category,
+                                            "report" => htmlentities ( $report ),
+                                            "page" => htmlentities ( $page ),
+                                            "domain" => htmlentities ( $domain_db ),
+                                            "date_time" => htmlentities ( $date_time ),
+                                            "Opera" => htmlentities ( $version ),
+                                            "build" => htmlentities ( $build ),
+                                            "OS" => htmlentities ( $OS ),
+                                            "misc" =>htmlentities ( $misc )
+                                    );
                 }
                 
                 exit(json_encode($JSON));
