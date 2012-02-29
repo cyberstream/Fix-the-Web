@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <link rel="shortcut icon" href="images/icon-18.png" />
     <title>Options | Fix the Web</title>
     
     <style type="text/css">
+        @import 'modal_styles.css';
+        
     body {
         padding:0;
         margin:0;
@@ -14,9 +17,12 @@
     }
     
     a, a:link {
-        color:#111;
-        text-decoration:underline;
+        color: #111;
+        text-decoration: none;
     }
+    
+    section a, section a:link { color: #389CFE }    
+    a:hover { text-decoration: underline }
     
     #prefs-form h1 {
         border-bottom:1px solid rgb(230,230,230 );
@@ -121,6 +127,19 @@
         box-shadow: 0 0 3px #bbb; 
         color:#0000cc;
     }
+    
+    #twitter-login {background-image: url('images/signin_twitter.png')}
+    #facebook-login {background-image: url('images/signin_facebook.png')}
+    
+    #facebook-login, #twitter-login {
+        width: 150px; 
+        height: 22px; 
+        display: inline-block; 
+        background-position: 0 0;
+    }
+    
+    #facebook-login:hover, #twitter-login:hover {background-position:0 -24px}
+    #facebook-login:active, #twitter-login:active {background-position: 0 -48px;}
     </style>
 </head>
 <body>
@@ -157,17 +176,45 @@
         
         <form id="auth">
             <p>            
-                <a href="#" id="twitter-login">
-                    <img src="images/sign-in-with-twitter.png" alt="Sign in with Twitter" title="Login with Twitter" />
-                </a>
+                <a href="#" id="twitter-login"></a>
+                <a href="#" id="facebook-login"></a>
+            </p>
+            
+            <p>
+                <input type="text" placeholder="PIN number" size="30" id="pin-number" required="required" />
+                <button type="submit">Connect</button>
             </p>
             
             <button disabled="disabled">Connect with your Opera Account</button> 
-            <em>(Opera's API is not capable of doing this yet. In the meanwhile, login with Twitter.)</em>
+            <em>(Opera's API is not capable of doing this yet. Login with Twitter or Facebook.)</em>
         </form>
+    </section>
+    <section id="about">
+        <h1>Fix the Web <span class="light"> About</span></h1>
+        
+        Fix the Web is open source. You can contribute to the project on Github:
+        
+        <ul>
+            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web">Main extension files repository</a></strong></li>
+            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-Server-Side">Server-side files</a></strong></li>
+            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web">Patches script</a></strong> (If you want to patch a bug on a website, add the fix to the <em>patches.js</em> file in this repo)</li>
+        </ul>
+        
+        <h2>Contributors</h2>
+        
+        <ul>
+            <li><strong><a href="http://my.opera.com/cyberstream">cyberstream</a></strong></li>
+            <li><strong><a href="http://my.opera.com/greench">greench</a></strong></li>
+            <li><strong><a href="http://my.opera.com/inbuster">inbuster</a></strong></li>
+            <li><strong><a href="http://my.opera.com/metude">metude</a></strong></li>           
+            <li><strong><a href="http://my.opera.com/zahek">zahek</a></strong></li>
+        </ul>
     </section>
     
     <script type="text/javascript" src="scripts/background.js"></script>
+    <script type="text/javascript" src="scripts/jsOAuth-1.3.3.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery-1.6.4.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery.simplemodal.1.4.2.min.js"></script>
     <script type="text/javascript">
     var form = document.getElementById("prefs-form"),
           fields = form.querySelectorAll("input[type='range'], input[type='radio']");
@@ -262,6 +309,57 @@
             currentSection.className = 'active';
         }, 600)
     }, false);
+    
+    // OAuth authentication
+    
+    var twitterConfig = {
+        consumerKey: "frKRutacGx6VUkMhwQeJ6Q",
+        consumerSecret: "aUEFth57HGgRQC0pYjkCwrIZUpROLCVvPBZsM4dg",
+
+        requestTokenUrl: "https://api.twitter.com/oauth/request_token",
+        authorizationUrl: "https://api.twitter.com/oauth/authorize",
+        accessTokenUrl: "https://api.twitter.com/oauth/access_token"
+    };
+    
+    $('#twitter-login').click(function() { // Twitter OAuth
+        oauth = new OAuth(twitterConfig);
+        oauth.fetchRequestToken(openAuthoriseWindow, failureHandler);
+        
+        return false;
+    });
+    
+    $('#auth').submit(function() {
+        var pin = $('#pin-number', this).val();
+        
+        if (!pin || !pin.length) $.modal('Please enter a PIN number.')
+        else {
+            $.modal('Got this: ' + pin)
+        }
+        
+        return false;
+    });
+
+    function openAuthoriseWindow(url) {
+        var wnd = window.open(url, 'authorise', 'width=700,height=400,resizable=no');
+
+        function waitForPin() {
+            if ( wnd.closed ) {
+                var pin = prompt( "Please enter your PIN", "" );
+                oauth.setVerifier( pin );
+                oauth.fetchAccessToken( getSomeData, failureHandler );
+            } else {
+                setTimeout( waitForPin, 100 );
+            }
+        }
+    }
+
+    function getSomeData() {
+        oauth.get("https://api.twitter.com/oauth/something/?format=json", function (data) {
+            console.log(data.text);
+        }, failureHandler);
+    }
+
+    function failureHandler(data) { console.error(data); }
     </script>
 </body>
 </html>

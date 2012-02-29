@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <style type="text/css">
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <style type="text/css">
         body {
             font-family: "arial", "lucida grande", "lucida sans unicode", "bitstream vera sans", "dejavu sans", "trebuchet ms", sans-serif;
+        }
+        
+        #container {
+            width: 95%;
+            margin: 0 auto;
+            position: relative;
         }
         
         h1 {
@@ -30,7 +36,7 @@
             cursor:pointer;
         }
 
-        #simplemodal-overlay {background-color:#000;}
+        #simplemodal-overlay {background-color: #000}
         #simplemodal-container {
             background-color:#333; 
             border:8px solid #444; 
@@ -77,6 +83,7 @@
             padding:8px; 
             border-radius:7px; 
             margin: 8px 0;
+            font-size: 1.2em;
         }
         
         span[class^=severity] {
@@ -94,32 +101,37 @@
         
         span.severity_2 {
             background: #ff0000;
-            background: -o-linear-gradient(bottom, #ff0000, rgba(255, 0, 0, .4));
+            background: -o-linear-gradient(bottom, #ff0000, #FF7575);
         }
         
         span.severity_3 {
             background: #3344fa;
-            background: -o-linear-gradient(bottom, #0000ff, rgba(0, 0, 255, .4));
+            background: -o-linear-gradient(bottom, #0000ff, #7575FF);
         }
     </style>
-    <title>Fix the Web</title>
-</head>
-<body>
-    <h1>Recent Reports</h1>
-    <p>The 15 most recent reported website problems are listed here: (<strong>TODO:</strong> pagination and <em>(eventually)</em> sorting and searching)</p>
-
-    <ul id="recent-reports"></ul>
-    
-    <script src="scripts/jquery-1.6.4.min.js"></script>
-    <script src="scripts/jquery.simplemodal.1.4.2.min.js"></script>    
-    <script src="scripts/background.js"></script>
-    
-    <script>
+      <title>Fix the Web</title>
+    </head>
+    <body>
+      <div id="container">
+        <h1>Recent Reports</h1>
+        <p>
+          The 15 most recently reported website problems are listed here: 
+          (<strong>TODO:</strong> pagination and <em>(eventually)</em> sorting and searching)
+        </p>
+        
+        <ul id="recent-reports">
+            
+        </ul>
+      </div>
+      <script src="scripts/jquery-1.6.4.min.js"></script>
+      <script src="scripts/jquery.simplemodal.1.4.2.min.js"></script>
+      <script src="scripts/background.js"></script>
+      <script>
         $(function() {
             jQuery.support.cors = true; // enable cross-domain jQuery requests; if you don't do this, then you will get a "No Transport" error
             
             var outputReports = function(page_num) { // TODO pagination
-                $.getJSON(CONFIG.defaultHost + 'ajax_request_handler.php?mode=get_report_list&order=time_desc&count=15', function(data) {
+                $.getJSON(CONFIG.defaultHost + 'ajax_request_handler.php?mode=get_report_list&amp;order=time_desc&amp;count=15', function(data) {
                     if (!data.length) $('#recent-reports').html('<li><em>There are no reports yet.</em></li>')
                     else {
                         var output = '';
@@ -157,5 +169,5 @@
             outputReports('hi')
         })
     </script>
-</body>
-</html>
+    </body>
+  </html>

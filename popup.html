@@ -240,8 +240,10 @@
                opera.extension.bgProcess.opera.extension.tabs.getFocused().postMessage({
                    load_comments_frame : true  
                }); // trigger the comments frame's creation
+               
+               window.close(); // closes the popup window - doesn't work in developer mode
                 
-                return false; // keep link from following the default action
+               return false; // keep link from following the default action
             }, false);
             
             // function show_message() shows an error or success message above the form            
