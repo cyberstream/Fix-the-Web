@@ -80,7 +80,11 @@
         text-transform:uppercase;
         text-shadow: 0 1px 1px #fff;
     }    
-    #nav a.active { background:#fff }
+    #nav a.active { 
+        background:#fff;
+        border-radius: 6px 6px 0 0;
+        box-shadow: 0 -1px 1px #bbb;
+    }
     
     section {
         width:80%;
@@ -100,6 +104,31 @@
     section.inactive {
         display:block;
         opacity: 0;
+    }
+    
+    #nav a.active:before, #nav a.active:after {
+        content:''; 
+        position: absolute; 
+        padding: 0px; 
+        height: 7px; 
+        width: 6px; 
+        border: 1px solid #ff0000;
+    }
+    
+    #nav a.active:before {  
+        margin-left: -15px; 
+        margin-top: 13px; 
+        border-radius: 0 0 5px 0; 
+        border-color: transparent #ccc #aaa transparent; 
+        box-shadow: 5px 5px 5px #fff;
+    }
+    
+    #nav a.active:after { 
+        margin-left: 7px; 
+        margin-top: 13px; 
+        border-radius: 0 0 0 5px; 
+        border-color: transparent transparent #aaa #ccc; 
+        box-shadow: -5px 5px 0 #fff;
     }
     
     .light {color: #888}
@@ -140,6 +169,23 @@
     
     #facebook-login:hover, #twitter-login:hover {background-position:0 -24px}
     #facebook-login:active, #twitter-login:active {background-position: 0 -48px;}
+    
+    ul {
+        padding: 3px 0;
+        background: #eaeaea; 
+        text-shadow: 0 1px 1px #fff; 
+        border-radius: 5px; 
+        border:1px solid #ddd;
+        display: inline-block;
+        margin: 0;
+    }
+    
+    ul li {
+        padding: 2px 5px;
+        list-style:none;
+    }
+    
+    ul li:nth-child(2n) {background: #fff; }
     </style>
 </head>
 <body>
@@ -192,7 +238,7 @@
     <section id="about">
         <h1>Fix the Web <span class="light"> About</span></h1>
         
-        Fix the Web is open source. You can contribute to the project on Github:
+        <p>Fix the Web is open source. You can contribute to the project on Github:</p>
         
         <ul>
             <li><strong><a href="http://github.com/cyberstream/Fix-the-Web">Main extension files repository</a></strong></li>
@@ -200,7 +246,7 @@
             <li><strong><a href="http://github.com/cyberstream/Fix-the-Web">Patches script</a></strong> (If you want to patch a bug on a website, add the fix to the <em>patches.js</em> file in this repo)</li>
         </ul>
         
-        <h2>Contributors</h2>
+        <p><strong>Contributors:</strong></p>
         
         <ul>
             <li><strong><a href="http://my.opera.com/cyberstream">cyberstream</a></strong></li>
