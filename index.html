@@ -108,6 +108,18 @@
             background: #3344fa;
             background: -o-linear-gradient(bottom, #0000ff, #7575FF);
         }
+        
+        .os_icon {
+            position: relative;
+            top: 3px;
+        }
+        
+        .date_time {
+            opacity: 0; 
+            -o-transition: opacity 600ms ease-in-out;
+        }
+        
+        li:hover .date_time {opacity:1}
     </style>
       <title>Fix the Web</title>
     </head>
@@ -144,9 +156,18 @@
                                       1 : 'minor annoyance',
                                       2 : 'major problem',
                                       3 : 'site unusable'
-                                  }
+                                    }
+                                  
+                            if (current.OS.length) {
+                                var os_image;
+
+                                if ( /windows/i.test(current.OS) ) os_image = 'images/windows.png'
+                                else if ( /mac/i.test(current.OS) ) os_image = 'images/mac.png'
+                                else if ( /linux/i.test(current.OS) ) os_image = 'images/linux.png'
+                                else os_image = 'images/unidentified.png'
+                            }
                             
-                            output += '<li title="Click to expand report" data-username="' +current.username+ '" data-category="' +current.category+ '" data-datetime="' +current.date_time+ '" data-url="' +current.page+ '" data-report="' +current.report+ '" data-version="' +current.Opera+ '" data-build="' +current.build+ '" data-platform="' +current.OS+ '" data-plugins="' +encodeURIComponent(current.misc)+ '">'
+                            output += '<li title="Click to expand report" data-username="' +current.username+ '" data-category="' +current.category+ '" data-datetime="' +current.date_time+ '" data-url="' +current.page+ '" data-report="' +current.report+ '" data-version="' +current.Opera+ '" data-build="' +current.build+ '" data-platform="' +current.OS+ '" data-platform-icon="' +os_image+ '" data-plugins="' +encodeURIComponent(current.misc)+ '">'
                                 + '<span class="severity_' +current.category+ '" title="' +(severity[current.category] || 'unknown')+ '"></span> <strong class="username">' +current.username+ '</strong> reported a problem on ' +page_url+ ' <span class="date_time">(' +current.date_time+ ')</span></li>';
                         }
                         
@@ -159,7 +180,7 @@
                             
                             $.modal('<span style="float: right;" class="severity_' +$(this).data('category')+ '" title="' +(severity[$(this).data('category')] || 'unknown')+ '"></span><strong>' +$(this).data('username')+ '</strong> reported a problem on ' +page_url + ':' 
                                 + '<p class="report">"' + $(this).data('report') + '"</p>Reported on <strong>' +$(this).data('datetime') + '</strong>'
-                                + '<p>Opera version: ' + $(this).data('version') + ' build: ' + $(this).data('build') + ' platform: ' + $(this).data('platform')
+                                + '<p><img class="os_icon" src="' +$(this).data('platform-icon') + '" title="' +$(this).data('platform')+ '" alt="' +$(this).data('platform')+ '" /> <em title="Opera version: ' + $(this).data('version') + ' Build number: ' + $(this).data('build') + '">' + $(this).data('version') + '.' + $(this).data('build') + '</em>'
                                 + ' <a title="Click to see the reporting user\'s plugins and screen information." href="data:text/plain;charset=utf-8,' +$(this).data('plugins')+ '" target="_blank">plugins and screen</a></p>');
                         });
                     }
