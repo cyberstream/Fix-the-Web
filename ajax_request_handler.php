@@ -291,7 +291,8 @@ if (isset($_GET) && count($_GET)) {
                     "id"    =>  (isset($_GET['id'])     ?   $_GET['id']     :   ""),
                     "domain"=>  (isset($_GET['domain']) ?   $_GET['domain'] :   ""),
                     "page"  =>  (isset($_GET['page'])   ?   $_GET['page']   :   "1"),
-                    "user"  =>  (isset($_GET['user'])   ?   $_GET['user']   :   "")
+                    "user"  =>  (isset($_GET['user'])   ?   $_GET['user']   :   ""),
+                    "order" =>(isset($_GET['order']))   ?   $_GET['order']  :   "time_desc"
                 );
                 while ($stmt->fetch()) {
                     $JSON["list"][] = array("id" => $id,
