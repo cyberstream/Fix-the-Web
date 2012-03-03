@@ -145,9 +145,11 @@ function go2page(page){
         var type        = window.history.state.type;
         var domain      = window.history.state.domain;
     }else{
-        var currentPage = (c["page"]==undefined ? "1" : c["page"]) ;
-        var type        = (c["Comments"]==undefined?"report":"comment");
-        var domain      = (c["domain"]==undefined?"":c["domain"]);
+        var currentPage = (c["page"]    ==  undefined ? "1"     : c["page"]);
+        var type        = (c["Comments"]==  undefined ? "report": "comment");
+        var domain      = (c["domain"]  ==  undefined ? ""      : c["domain"]);
+        var user        = (c["user"]    ==  undefined ? ""      : c["user"]);
+        var order       = (c["order"]   ==  undefined ? ""      : c["order"]);
     }
     /*var currentPage = (window.history.state!=null)?window.history.state.page:(c["page"]==undefined?"1":c["page"]);
     var type = (window.history.state!=null)?window.history.state.type:(c["Comments"]==undefined?"report":"comment");
@@ -170,6 +172,20 @@ function go2page(page){
         case "report":
         query+="&mode=get_report_list";
         break;
+    }
+    switch(order){
+        case "most_followed":
+            query+="&order=most_followed";
+        break;
+        case "popularity":
+            query+="&order=popularity";
+        break;
+        case "time_asc":
+            query+="&order=time_asc";
+        break;
+        case "time_desc":
+            query+="&order=time_desc";
+        break
     }
     if(domain.length>2){
         query+="&domain="+domain;
