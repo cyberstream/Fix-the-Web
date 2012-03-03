@@ -178,7 +178,9 @@ if (isset($_GET) && count($_GET)) {
 
         // What page that you want to look at
         if(isset($_GET['page']) && settype($_GET['page'],"int")){
-            $bind_page_number = --$_GET['page'];
+            $bind_page_number = $_GET['page'];
+            $bind_page_number --;
+            $bind_page_number *= 5;
         }
         else{
             $bind_page_number = "0";
@@ -206,9 +208,9 @@ if (isset($_GET) && count($_GET)) {
             if ($q && $stmt->num_rows) {
                 $stmt->bind_result($id,$username, $language, $category, $report, $page, $domain_db, $version, $build, $OS, $misc, $date_time);
 
-                $JSON = array();
+                $JSON = array("id"=>(isset($_GET['id'])?$_GET['id']:""),"page"=>(isset($_GET['page'])?$_GET['page']:"1"),"domain"=>(isset($_GET['domain'])?$_GET['domain']:''));
                 while ($stmt->fetch()) {
-                    $JSON[] = array("id" => $id,
+                    $JSON["list"][] = array("id" => $id,
                                             "username" => htmlentities ( $username ),
                                             "language" => htmlentities ( $language ),
                                             "category" => $category,
@@ -282,9 +284,9 @@ if (isset($_GET) && count($_GET)) {
             if ($q && $stmt->num_rows) {
                 $stmt->bind_result($id,$username, $language, $category, $report, $page, $domain_db, $version, $build, $OS, $misc, $date_time);
 
-                $JSON = array();
+                $JSON = array("id"=>(isset($_GET['id'])?$_GET['id']:"null"),"page"=>(isset($_GET['page'])?$_GET['page']:"1"));
                 while ($stmt->fetch()) {
-                    $JSON[] = array("id" => $id,
+                    $JSON["list"][] = array("id" => $id,
                                             "username" => htmlentities ( $username ),
                                             "language" => htmlentities ( $language ),
                                             "category" => $category,

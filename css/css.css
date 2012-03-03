@@ -1,0 +1,194 @@
+        body {
+            font-family:arial, "lucida grande", "lucida sans unicode", "bitstream vera sans", "dejavu sans", "trebuchet ms", sans-serif;
+            font-size:1em;
+            margin:0;
+            padding:0;
+            color:#222;
+            
+        }
+        a,a:link{
+            color:rgb(51, 153, 255);
+            text-decoration:none;
+        }
+
+        header {
+            border-bottom:1px solid #dfdfdf;
+            box-sizing:border-box;
+            padding:.33em 1em;
+            position:relative;
+            width:100%
+        }
+
+        h1 {
+            color:#9ACD32;
+            float:left;
+            min-width:100px;
+            text-align:center;
+            text-shadow: 1px 0px 0px #FFFFFF, 2px 2px 2px #393939;
+            width:20%
+        }
+        h1:hover{
+        cursor:pointer;
+        }
+
+        #explanation-about-the-extension {
+            border-left:1px solid #dfdfdf;
+            box-sizing:border-box;
+            float:right;
+            padding:.33em 1em;
+            position:relative;
+            width:80%;
+            overflow: hidden;
+            height:100px;
+        }
+
+        section {
+            box-sizing:border-box;
+            float:left;
+            padding:.33em 1em;
+            width:75%
+        }
+
+        article {
+            margin:.33em;
+            padding:.33em;
+            position:relative;
+            border-bottom:2px solid #d0d0d0
+        }
+
+        h2{
+            margin: 5px 0
+        }
+        h6 {
+            font-size:1em;
+            margin:0;
+            padding:0;
+            position:relative;
+            width:100%
+        }
+        .tools{
+            position:absolute;
+            right:5px;
+            top:0px
+        }
+
+        .go-button,.follow-button,.like-button {
+            background: -o-linear-gradient(top, #9ACD32, #74a412) transparent;
+            box-shadow: 0px 0px 1px #000;
+            border-radius:2px;
+            text-align:center;
+            border: 1px solid #999;
+            color: #FFFFFF;
+            font-weight: 700;
+            border:0px;
+            color:#fff;
+            font-weight:700;
+            padding:.33em 1em;
+            float:right;
+            position:relative;
+            text-shadow:1px 1px 0px #666;
+        }
+        .go-button{
+
+        }
+        .like-button{
+
+        }
+        .follow-button{
+ 
+        }
+        .small{
+            font-size:0.9em;
+        }
+        article p{
+            column-width:700px;
+        }
+        .additional-information {
+            bottom:0;
+            font-size:.8em;
+            padding:.11em;
+            position:absolute;
+            right:0
+        }
+
+        #more-detail-about-project{
+            position: absolute;
+            bottom:5px;
+            cursor:pointer;
+            border:0;
+            padding:2px;
+            width:90px;
+            height:20px;
+            right:10px;
+        }
+        #comment-form{
+            padding:0.33em;
+        }
+        #comment-form textarea{
+            width:90%;
+            padding:4px 6px;
+            border-radius:3px;
+            box-sizing:border-box;
+            border:1px solid rgb(200, 200, 200);
+        }
+        #comment-form textarea:hover{
+            border:1px solid rgb(51, 153, 255);
+        }
+        #comment-form textarea:focus{
+            border:1px solid #999;
+            box-shadow:inset 0 0 1px #000;
+        }
+        #comment-form button{
+            width:10%;
+            padding: 12px;
+            background: -o-linear-gradient(top, #3CA0FF, #288CFA) transparent;
+            box-shadow: 0px 0px 1px #000;
+            border-radius:2px;
+            text-align:center;
+            border: 1px solid #3399FF;
+            color: #FFFFFF;
+            float:right;
+            font-weight: 700;
+        }
+        aside {
+            box-sizing:border-box;
+            float:left;
+            padding:.33em 1em;
+            width:25%
+        }
+
+        form label {
+            clear:both;
+            float:left;
+            position:relative
+        }
+        aside ul{
+            list-style:none;
+            padding:0;
+            margin:0;
+        }
+        #most-popular-reports,#most-followed-reports,#prev,#forw{
+            
+            background: -o-linear-gradient(top, #3CA0FF, #288CFA) transparent;
+            box-shadow: 0px 0px 1px #000;
+            border-radius:2px;
+            text-align:center;
+            border: 1px solid #3399FF;
+            color: #FFFFFF;
+            float:left;
+            display: block;
+            font-weight: 700;
+            margin: 2px;
+            padding: 4px 7px;
+            position: relative;
+            text-decoration:none;
+        }
+        input[type=number] {
+            width:60px;
+            border-radius:2px;
+            border:1px solid #999;
+            float:left;
+            padding:1px;
+            margin:1px;
+            font-size:1.4em;
+        }
