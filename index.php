@@ -241,7 +241,7 @@
             </div>
         </aside>
         <script type="text/javascript">
-var HOST="http://localhost/Fix-the-Web-Server-Side/"; // TODO edit this for your system
+var HOST="http://localhost/"; // TODO edit this for your system
 var PAGE={
             query:"report-list=1", //
             id:0,

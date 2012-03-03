@@ -147,12 +147,12 @@ if (isset($_GET) && count($_GET)) {
         $query = "SELECT 
         id, username, language, category, report, page, domain, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
         FROM reports WHERE post_type = 0";
-
+        
         if(isset($_GET['domain'])){
             $query.=" AND domain = ?";
             $bind_domain = $_GET['domain'];
         }
-
+        
         if(isset($_GET['order'])){
             switch ($_GET['order']) {
                 case 'most_followed':
@@ -177,10 +177,10 @@ if (isset($_GET) && count($_GET)) {
 
 
         // What page that you want to look at
-        if(isset($_GET['page']) && settype($_GET['page'],"int")){
+        if ( isset($_GET['page']) && settype($_GET['page'],"int") ) {
             $bind_page_number = --$_GET['page'];
         }
-        else{
+        else {
             $bind_page_number = "0";
         }
 
@@ -192,19 +192,18 @@ if (isset($_GET) && count($_GET)) {
             $bind_count="5"; // TODO: Default limit
         }
 
-        if ($stmt->prepare($query)) {
+        if ( $stmt->prepare($query) ) {
 
-            if(isset($bind_domain))
-                $stmt->bind_param('sii', $bind_domain,$bind_page_number,$bind_count);
-            else
-            if(isset($bind_page_number) && isset($bind_count))
-                $stmt->bind_param('ii', $bind_page_number,$bind_count);
+            if ( isset($bind_domain) )
+                $stmt->bind_param('sii', $bind_domain, $bind_page_number, $bind_count);
+            elseif ( isset($bind_page_number) && isset($bind_count) )
+                $stmt->bind_param('ii', $bind_page_number, $bind_count);
 
             $q = $stmt->execute();
             $stmt->store_result();
         
             if ($q && $stmt->num_rows) {
-                $stmt->bind_result($id,$username, $language, $category, $report, $page, $domain_db, $version, $build, $OS, $misc, $date_time);
+                $stmt->bind_result($id, $username, $language, $category, $report, $page, $domain_db, $version, $build, $OS, $misc, $date_time);
 
                 $JSON = array();
                 while ($stmt->fetch()) {
@@ -214,12 +213,12 @@ if (isset($_GET) && count($_GET)) {
                                             "category" => $category,
                                             "report" => htmlentities ( $report ),
                                             "page" => htmlentities ( $page ),
-                                            "domain" => htmlentities ( $domain_db ),
-                                            "date_time" => htmlentities ( $date_time ),
+                                            "domain" => htmlentities ( $domain_db ),                                            
                                             "Opera" => htmlentities ( $version ),
                                             "build" => htmlentities ( $build ),
                                             "OS" => htmlentities ( $OS ),
-                                            "misc" =>htmlentities ( $misc )
+                                            "misc" => ( $misc ),
+                                            "date_time" => htmlentities ( $date_time )
                                     );
                 }
                 
@@ -274,14 +273,13 @@ if (isset($_GET) && count($_GET)) {
                 else
                     $stmt->bind_param('s',$bind_user);
             }
-                
 
             $q = $stmt->execute();
             $stmt->store_result();
         
             if ($q && $stmt->num_rows) {
-                $stmt->bind_result($id,$username, $language, $category, $report, $page, $domain_db, $version, $build, $OS, $misc, $date_time);
-
+                $stmt->bind_result($id, $username, $language, $category, $report, $page, $domain_db, $version, $build, $OS, $misc, $date_time);
+                
                 $JSON = array();
                 while ($stmt->fetch()) {
                     $JSON[] = array("id" => $id,
