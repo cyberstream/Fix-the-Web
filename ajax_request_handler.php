@@ -175,22 +175,25 @@ if (isset($_GET) && count($_GET)) {
         }
         $query.=" LIMIT ?,?";
 
+        $defaultItemsPerPage = 5;
 
         // What page that you want to look at
-        if(isset($_GET['page']) && settype($_GET['page'],"int")){
+        if ( isset($_GET['page']) && settype($_GET['page'],"int") ) {
             $bind_page_number = $_GET['page'];
             $bind_page_number --;
-            $bind_page_number *= 5;
-        }else {
+            
+            if ( $bind_page_number < 1 ) $bind_page_number = 0; // mininum offset number is 0 - it can't be negative
+        } else {
             $bind_page_number = "0";
         }
 
 
         if(isset($_GET['count']) && settype($_GET['count'],"int")){
-            $bind_count=$_GET['count'];
-        }
-        else {
-            $bind_count="5"; // TODO: Default limit
+            $bind_count = $_GET['count'];
+            $bind_page_number *= $bind_count; // the offset needs to be the page number * the number of items on each page
+        } else {
+            $bind_count = "5"; // TODO: Default limit
+            $bind_page_number *= $defaultItemsPerPage;
         }
 
         if ( $stmt->prepare($query) ) {
