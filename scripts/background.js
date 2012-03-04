@@ -1,5 +1,12 @@
 CONFIG = {
-    defaultHost: 'http://localhost/' // the default domain to make AJAX post requests to; *must have* the trailing slash "/"
+    defaultHost: 'http://www.operaturkiye.net/fix-the-web/', // the default domain to make AJAX post requests to; *must have* the trailing slash "/"
+    twitter: {
+        consumerKey: "frKRutacGx6VUkMhwQeJ6Q",
+        consumerSecret: "aUEFth57HGgRQC0pYjkCwrIZUpROLCVvPBZsM4dg",
+        requestTokenUrl: "https://api.twitter.com/oauth/request_token",
+        authorizationUrl: "https://api.twitter.com/oauth/authenticate",
+        accessTokenUrl: "https://api.twitter.com/oauth/access_token"
+    }
 }
 
 createToolbarIcon = function(badgeProperties) {
@@ -51,6 +58,35 @@ createToolbarIcon = function(badgeProperties) {
 }
 
 window.addEventListener('DOMContentLoaded', createToolbarIcon, false);
+
+// detect if the user is authenticated
+function isLoggedIn () {
+    var access_token = widget.preferences.access_token || '';
+    
+    if ( !access_token.length || access_token == '|' || access_token == 'none') return false;
+    else return true;
+}
+
+function getUserName (callback) {
+    if ( isLoggedIn() && typeof OAuth != 'undefined') {
+        var r,
+             access_token = widget.preferences.access_token || '';
+             oauth = new OAuth (CONFIG.twitter);
+             
+        if (typeof callback != 'function') {
+            callback = function(data) {
+//                parsedResponse = data && data.text && data.text != '' && JSON.parse(data.text) ? JSON.parse(data.text) : {};
+//                return parsedResponse.screen_name || false;
+                console.log(data)
+            } 
+        }
+        
+        oauth.setAccessToken(access_token.split('|'));
+        oauth.get ('https://api.twitter.com/1/account/verify_credentials.json', callback, function(data) {
+            console.log('Error: ' + data)
+        });
+    } else return false;
+}
 
 /* function sendRequest() makes sending AJAX requests easier and simpler
  * method: GET or POST (must use CORS for cross-domain POST requests, otherwise it won't work)

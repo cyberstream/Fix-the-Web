@@ -186,6 +186,29 @@
     }
     
     ul li:nth-child(2n) {background: #fff; }
+    
+    .hide { display: none; }
+    
+    #loading img {
+        display:block; 
+        margin: 0 auto;
+    }
+    
+    footer {
+        text-align:center;
+        margin-top: 20px;            
+    }
+    
+    footer a {
+        background: -o-linear-gradient(bottom, #ddd, #fff); 
+        color: #777;
+        text-transform: uppercase; 
+        padding: 2px 4px; 
+        border-radius: 3px; 
+        border: 1px solid #ccc; 
+        font-size: 12px;
+        font-weight: bold;
+    }
     </style>
 </head>
 <body>
@@ -220,10 +243,10 @@
     <section id="authenticate">
         <h1>Fix the Web <span class="light"> Authentication</span></h1>
         
-        <form id="auth">
+        <form id="auth" class="hide">
             <p>            
                 <a href="#" id="twitter-login"></a>
-                <a href="#" id="facebook-login"></a>
+<!--                <a href="#" id="facebook-login"></a>-->
             </p>
             
             <p>
@@ -232,8 +255,12 @@
             </p>
             
             <button disabled="disabled">Connect with your Opera Account</button> 
-            <em>(Opera's API is not capable of doing this yet. Login with Twitter or Facebook.)</em>
+            <em>(Opera's API is not capable of doing this yet. In the meanwhile, login with Twitter.)</em>
         </form>
+        
+        <p id="loading"><img src="images/loading-circle.png" alt="loading" title="Loading..." /></p>
+        
+        <p id="connected" class="hide">You are connected to your Twitter account right now. <strong><a href="#" id="disconnect">disconnect</a></strong></p>
     </section>
     <section id="about">
         <h1>Fix the Web <span class="light"> About</span></h1>
@@ -241,9 +268,11 @@
         <p>Fix the Web is open source. You can contribute to the project on Github:</p>
         
         <ul>
+            <li><strong><a href="http://my.opera.com/fix-the-web">My Opera <em>Fix the Web</em> Group</a></strong> (support, blog, forums, etc.)</li>
+            <li><strong><a href="http://www.operaturkiye.net/fix-the-web">Home Page</a></strong> (still under construction)</li>
             <li><strong><a href="http://github.com/cyberstream/Fix-the-Web">Main extension files repository</a></strong></li>
-            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-Server-Side">Server-side files</a></strong></li>
-            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web">Patches script</a></strong> (If you want to patch a bug on a website, add the fix to the <em>patches.js</em> file in this repo)</li>
+            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-Server-Side">Server-side repository</a></strong></li>
+            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-Patch-Script">Patches script</a></strong> (If you want to patch a bug on a website, add the fix to the <em>patches.js</em> file in this repo)</li>
         </ul>
         
         <p><strong>Contributors:</strong></p>
@@ -256,6 +285,10 @@
             <li><strong><a href="http://my.opera.com/zahek">zahek</a></strong> <a href="mailto:zahek@myopera.com">(email)</a></li>
         </ul>
     </section>
+    
+    <footer>
+        <a href="index.html">Recent Reports List</a>
+    </footer>
     
     <script type="text/javascript" src="scripts/background.js"></script>
     <script type="text/javascript" src="scripts/jsOAuth-1.3.3.min.js"></script>
@@ -358,54 +391,78 @@
     
     // OAuth authentication
     
-    var twitterConfig = {
-        consumerKey: "frKRutacGx6VUkMhwQeJ6Q",
-        consumerSecret: "aUEFth57HGgRQC0pYjkCwrIZUpROLCVvPBZsM4dg",
-
-        requestTokenUrl: "https://api.twitter.com/oauth/request_token",
-        authorizationUrl: "https://api.twitter.com/oauth/authorize",
-        accessTokenUrl: "https://api.twitter.com/oauth/access_token"
-    };
+    if ( isLoggedIn() ) {
+        $('#connected').removeClass('hide');
+        $('#loading').attr('class', 'hide');
+    } else {
+        $('#auth').removeClass('hide');
+        $('#loading').attr('class', 'hide');
+    }
+    
+    // disconnect from your Twitter account
+    $('#disconnect').click(function(e) {
+        e.preventDefault ();
+        
+        $('#connected').fadeOut(500, function() {
+            widget.preferences.access_token = ''; // remove the access token from local storage
+            
+            $('#auth').removeClass('hide');   
+            $('#auth').css('opacity', 0).animate({
+                opacity: 1
+            }, 650);
+        });
+    });
+    
+    $('#auth').bind('submit', function() {
+        $.modal ('Click the "<strong>Sign in with Twitter</strong>" button before entering a PIN number.', { overlayClose: true });
+        
+        return false;
+    });
     
     $('#twitter-login').click(function() { // Twitter OAuth
-        oauth = new OAuth(twitterConfig);
-        oauth.fetchRequestToken(openAuthoriseWindow, failureHandler);
+        oauth = new OAuth(CONFIG.twitter);
+        oauth.fetchRequestToken(function(url) {
+            window.open(url, 'authorise', 'width=700,height=400,resizable=no');
+        }, failureHandler);
+        
+        $.modal ('A window should appear asking you to authorize this app on Twitter. After authorizing "Fix the Web", copy the PIN number Twitter gives you and paste it into the text box below the sign in button.', {maxWidth: Math.abs(window.innerWidth - 150), overlayClose: true})
+        
+        $('#auth').unbind('submit'); // detach the previously attached event handler
+        
+        $('#auth').bind('submit', function() { // add new event handler
+            var pin = $('#pin-number', this).val();
+
+            if (!pin || !pin.length) $.modal('Please enter the PIN number you got from Twitter.', { overlayClose: true })
+            else {
+                $('#auth').fadeTo(500, 0.4);
+                
+                oauth.setVerifier (pin);
+                
+                oauth.fetchAccessToken(function(data) {
+                    var query_string = parseQueryString(data.text),
+                          oauth_access_token = query_string.oauth_token || '',
+                          oauth_access_secret = query_string.oauth_token_secret || '';
+                          
+                    widget.preferences.access_token = oauth_access_token + '|' + oauth_access_secret;
+                    
+                    // hide authorization form and show the "logged in" paragraph
+                    $('#auth').addClass('hide');
+                    $('#connected').removeClass('hide');
+                    
+                    $.modal('You are signed in!', { overlayClose: true });
+                }, failureHandler);
+            }
+
+            return false;
+        });
         
         return false;
     });
     
-    $('#auth').submit(function() {
-        var pin = $('#pin-number', this).val();
-        
-        if (!pin || !pin.length) $.modal('Please enter a PIN number.')
-        else {
-            $.modal('Got this: ' + pin)
-        }
-        
-        return false;
-    });
-
-    function openAuthoriseWindow(url) {
-        var wnd = window.open(url, 'authorise', 'width=700,height=400,resizable=no');
-
-        function waitForPin() {
-            if ( wnd.closed ) {
-                var pin = prompt( "Please enter your PIN", "" );
-                oauth.setVerifier( pin );
-                oauth.fetchAccessToken( getSomeData, failureHandler );
-            } else {
-                setTimeout( waitForPin, 100 );
-            }
-        }
-    }
-
-    function getSomeData() {
-        oauth.get("https://api.twitter.com/oauth/something/?format=json", function (data) {
-            console.log(data.text);
-        }, failureHandler);
-    }
-
-    function failureHandler(data) { console.error(data); }
+    function failureHandler (data) { data ? console.log(data) : console.log('Request failed') }
+    
+    // parses a query string and returns 
+    function parseQueryString (a,b,c,d,e) {for(b=/[?&]?([^=]+)=([^&]*)/g,c={},e=decodeURIComponent;d=b.exec(a.replace(/\+/g,' '));c[e(d[1])]=e(d[2]));return c;}
     </script>
 </body>
 </html>

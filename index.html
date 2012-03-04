@@ -120,33 +120,284 @@
         }
         
         li:hover .date_time {opacity:1}
+        
+        #recent-reports li#loading-img {display: block }
+        #recent-reports li#loading-img img {margin: 0 auto; display: block; position: relative}
+        
+        .dropdown .active {
+            color: red;
+        }
+        
+        ul.dropdown li {
+            list-style:none; 
+            padding: 2px 5px;
+        }
+        
+        ul.dropdown {
+            padding: 3px 0; 
+            margin: 0; 
+            display: none; 
+            margin-left: -4px; 
+            position: absolute; 
+            width: 126px; 
+            background-color: inherit; 
+            border-radius: 0 0 6px 6px;
+        }
+        
+        ul#controls {
+            float: right; 
+            position:relative; 
+            top:-10px;
+        }
+         
+        ul#controls > li { 
+            padding: 3px; 
+            display: inline-block; 
+            cursor: pointer; 
+            float: left; 
+            background-color: #fff; 
+            border-radius: 4px; 
+            background: -o-linear-gradient(top, #fff, #ccc); 
+            text-shadow: 0 1px 1px #fff; 
+            border: 1px solid #bbb; 
+            margin: 0 5px; 
+            width: 120px; 
+            font-size: 13px; 
+        }
+        
+        ul#controls > li:first-child {width: 80px;}       
+        
+        ul#controls > li:hover {
+            background: #eee; 
+            border-radius: 6px 6px 0 0; 
+            border-bottom: none;
+            background-image:-o-linear-gradient(top, #ddd, #eee 50%);
+        }
+        
+        ul#controls > li:hover ul.dropdown {
+            display: block;
+            border: 1px solid #bbb; 
+            border-width: 0 1px 1px 1px;
+        }
+        
+        ul#controls > li:after {
+            content: ''; 
+            position:relative;  
+            float:right; 
+            width:0; 
+            height:0; 
+            border: 5px solid red; 
+            top: 4px; 
+            border-color: transparent transparent transparent #444; 
+            right: -3px; 
+            border-radius: 1px; 
+        }
+
+        ul#change-count {width: 126px}
+        ul#order-by {width: 86px}
+        
+        ul#controls > li:hover:after {
+              border-color: #666 transparent transparent transparent;
+              right: 0; 
+              top: 7px;
+        }
+        
+        footer {text-align:center}
+        footer a {
+            background: -o-linear-gradient(bottom, #ddd, #fff); 
+            color: #777;
+            text-transform: uppercase; 
+            padding: 2px 4px; 
+            border-radius: 3px; 
+            border: 1px solid #ccc; 
+            font-size: 12px;
+        }
+        
+        div.pagination a {
+            display: inline-block;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 3px;
+            background: -o-linear-gradient(top, #6CB8FF, #288CFA);
+            margin: 0 2px;
+            font-size: 14px;
+            text-transform: uppercase;
+            text-shadow: 0 1px 1px #ccc;
+        }
+
+        div.pagination a:hover { 
+            background: -o-linear-gradient(top, #99CEFF, #3A98FB);
+            color: #444;
+            text-decoration: none;
+        }
+        
+        div.pagination a.disabled { opacity: .6; }
+        div.pagination a.disabled:hover {
+            cursor: default;
+            background: -o-linear-gradient(top, #6CB8FF, #288CFA);
+            color: #333;
+        }        
+        
+        .pagination { -o-transition: opacity 600ms ease-in-out; }        
+        .hidden { opacity: 0; }
+        
+        .pagination #page-number { 
+            background: -o-linear-gradient(top, #888, #444); 
+            padding: 5px; 
+            margin-top:0; 
+            font-weight: bold; 
+            color: #333; 
+            text-shadow: 0 0 5px #ccc; 
+            border-radius: 3px; 
+            text-transform: uppercase; 
+            color: #fff; 
+            font-size: 12px;
+        }
+        
+        .pagination #page-number:before {content:'Page ';}
     </style>
       <title>Fix the Web</title>
     </head>
     <body>
       <div id="container">
+        <ul id="controls">
+            <li>                
+                <strong>Order by</strong>
+                <ul id="order-by" class="dropdown">
+                    <li><a href="#" data-order="time_desc" class="active change_state">newest first</a></li>
+                    <li><a href="#" data-order="time_asc" class="change_state">oldest first</a></li>
+                    <!--TODO add "most followed" and "popular" as options when comment ratings system is implemented-->
+                </ul>
+            </li>
+        
+            <li>                
+                <strong>Reports per page</strong>
+                <ul id="change-count" class="dropdown">
+                    <li><a href="#" data-count="5" data-page="1" class="change_state">5 reports</a></li>
+                    <li><a href="#" data-count="15" data-page="1" class="active change_state">15 reports</a></li>
+                    <li><a href="#" data-count="25" data-page="1" class="change_state">25 reports</a></li>
+                    <li><a href="#" data-count="50" data-page="1" class="change_state">50 reports</a></li>
+                    <li><a href="#" data-count="100" data-page="1" class="change_state">100 reports</a></li>
+                </ul>
+            </li>
+        </ul>
+          
         <h1>Recent Reports</h1>
-        <p>
-          The 15 most recently reported website problems are listed here: 
-          (<strong>TODO:</strong> pagination and <em>(eventually)</em> sorting and searching)
-        </p>
+        
+        <p>This is a list of everyone's bug reports from any website. Click on a report to see more about it.</p>
         
         <ul id="recent-reports">
-            
+            <li id="loading-img"><img src="images/loading-circle.png" alt="Loading" title="Loading changes..." /></li>
         </ul>
-      </div>
-      <script src="scripts/jquery-1.6.4.min.js"></script>
-      <script src="scripts/jquery.simplemodal.1.4.2.min.js"></script>
-      <script src="scripts/background.js"></script>
-      <script>
-        $(function() {
+        
+        <div class="pagination hidden">
+            <a href="#" data-page="0" class="disabled previous change_state" title="Go back">Previous Page</a>
+            <span id="page-number">1</span>
+            <a href="#" data-page="2" class="next change_state" title="Go to the next page">Next Page</a>
+        </div>
+        
+        <footer>
+            <a href="http://www.operaturkiye.net/fix-the-web">Web Interface</a>
+            <a href="options.html#about">About Fix the Web</a>         
+        </footer>
+    </div>
+    <script src="scripts/jquery-1.6.4.min.js"></script>
+    <script type="text/javascript" src="scripts/jsOAuth-1.3.3.min.js"></script>
+    <script src="scripts/jquery.simplemodal.1.4.2.min.js"></script>
+    <script src="scripts/background.js"></script>
+    <script>
+        $(function() {            
+            $('.change_state').click(function(e) {
+                
+                // prevent page from following the link
+                e.preventDefault(); 
+                
+                // don't load new data if the button clicked is disabled
+                if ( e.target.className.indexOf('disabled') != -1 ) return false; 
+                
+                // default values
+                var queryString = parseQueryString(location.search) || '',
+                    page_num = queryString.page && parseInt(queryString.page) > 0 ? queryString.page : 1,
+                    reports_count = queryString.count && parseInt(queryString.count) > 0 ? parseInt(queryString.count) : 15,
+                    list_order = queryString.order && /^(most_followed|popularity|time_desc|time_asc)$/i.test(queryString.order) ? queryString.order : 'time_desc';
+                
+                var data = { 
+                            page: $(this).data('page') || page_num,
+                            count: $(this).data('count') || reports_count,
+                            order: $(this).data('order') || list_order
+                        }
+                        
+                $('#change-count a.active').removeClass('active');
+                $('#change-count a[data-count=' + data.count + ']').addClass('active');
+                
+                $('#order-by a.active').removeClass('active');
+                $('#order-by a[data-order=' + data.order + ']').addClass('active');
+                
+                history.pushState(data, '', 'index.html?page=' +data.page+ '&count=' +data.count+ '&order=' + data.order);
+                
+                $('#recent-reports').html('<li id="loading-img"><img src="images/loading-circle.png" alt="Loading" title="Loading changes..." /></li>')
+                outputReports (data.page, data.count, data.order); // update the reports
+                
+                changeButtonState();
+            });
+            
+            // load reports from previous history state when the user clicks the back button            
+            window.addEventListener ('popstate', function(data) {
+                // display the loading animation icon
+                $('#recent-reports').html('<li id="loading-img"><img src="images/loading-circle.png" alt="Loading" title="Loading changes..." /></li>');
+                
+                $('#change-count a.active').removeClass('active');
+                $('#change-count a[data-count=' + data.state.count + ']').addClass('active');
+                
+                $('#order-by a.active').removeClass('active');
+                $('#order-by a[data-order=' + data.state.order + ']').addClass('active');
+                
+                // load reports into the page
+                outputReports(data.state.page, data.state.count, data.state.order);
+                changeButtonState()      
+            }, false);
+            
             jQuery.support.cors = true; // enable cross-domain jQuery requests; if you don't do this, then you will get a "No Transport" error
             
-            var outputReports = function(page_num) { // TODO pagination
-                $.getJSON(CONFIG.defaultHost + 'ajax_request_handler.php?mode=get_report_list&amp;order=time_desc&amp;count=15', function(data) {
-                    if (!data.length) $('#recent-reports').html('<li><em>There are no reports yet.</em></li>')
+            // parses a query string and returns 
+            parseQueryString = function (a,b,c,d,e) {for(b=/[?&]?([^=]+)=([^&]*)/g,c={},e=decodeURIComponent;d=b.exec(a.replace(/\+/g,' '));c[e(d[1])]=e(d[2]));return c;}
+            
+            // modify the button state based on whether the next/previous pages exist
+            changeButtonState = function () {
+                var queryString = parseQueryString(location.search) || '',
+                      page_number = queryString.page && parseInt(queryString.page) > 0 ? parseInt(queryString.page) : 1,
+                      items_per_page = queryString.count && parseInt(queryString.count) > 0 ? parseInt(queryString.count) : 15;
+                
+                // disable the "back" button if this is page #1
+                if (page_number <= 1) $('.pagination .previous').addClass('disabled')
+                else $('.pagination .previous').removeClass('disabled')
+                
+                $('.pagination').addClass('hidden')                
+                
+                $.get(CONFIG.defaultHost + 'ajax_request_handler.php?mode=get_report_list&count=' + items_per_page + '&page=' + (page_number + 1), function(data) {
+                    if (!data) $('.pagination .next').addClass('disabled');
+                    else $('.pagination .next').removeClass('disabled');
+                    
+                    $('.pagination').removeClass('hidden')
+                });
+                
+                $('.pagination .next').data('page', page_number + 1);
+                $('.pagination .previous').data('page', page_number - 1);
+                $('.pagination #page-number').html(page_number);
+            }
+            
+            outputReports = function ( page_number, reports_per_page, order ) {
+                
+                // set default values for the reports query
+                var order = order && /^(most_followed|popularity|time_desc|time_asc)$/i.test(order) ? order : 'time_desc',
+                      page_number = page_number && page_number > 0 ? page_number : 1,
+                      reports_per_page = reports_per_page && reports_per_page > 0 ? reports_per_page : 15;
+                
+                $.getJSON(CONFIG.defaultHost + 'ajax_request_handler.php?mode=get_report_list&order=' +order+ '&count=' + reports_per_page + '&page=' + page_number, function(data) {
+                    if (!data || data == '') console.log(data), $('#recent-reports').html('<li>Oops, there are no reports for this page! <em><a href="#" class="change_state" onclick="history.go(-1); return false;">go back</a></em></li>')
                     else {
-                        var output = '';
+                        var output = '',
+                              data = data.list;
                         
                         for ( i = 0; i < data.length; i++ ) {
                             var current = data[i],
@@ -171,7 +422,7 @@
                                 + '<span class="severity_' +current.category+ '" title="' +(severity[current.category] || 'unknown')+ '"></span> <strong class="username">' +current.username+ '</strong> reported a problem on ' +page_url+ ' <span class="date_time">(' +current.date_time+ ')</span></li>';
                         }
                         
-                        $('#recent-reports').append(output)
+                        $('#recent-reports').html(output)
                         
                         $('#recent-reports li').click(function() {
                             var url = $(this).data('url');
@@ -179,16 +430,48 @@
                                 + (url.length > 40 ? url.substr(0, 40) + '...' : url) + '</a>';
                             
                             $.modal('<span style="float: right;" class="severity_' +$(this).data('category')+ '" title="' +(severity[$(this).data('category')] || 'unknown')+ '"></span><strong>' +$(this).data('username')+ '</strong> reported a problem on ' +page_url + ':' 
-                                + '<p class="report">"' + $(this).data('report') + '"</p>Reported on <strong>' +$(this).data('datetime') + '</strong>'
+                                + '<p class="report">"' + $(this).data('report').replace(/\\/g, '') + '"</p>Reported on <strong>' +$(this).data('datetime') + '</strong>'
                                 + '<p><img class="os_icon" src="' +$(this).data('platform-icon') + '" title="' +$(this).data('platform')+ '" alt="' +$(this).data('platform')+ '" /> <em title="Opera version: ' + $(this).data('version') + ' Build number: ' + $(this).data('build') + '">' + $(this).data('version') + '.' + $(this).data('build') + '</em>'
-                                + ' <a title="Click to see the reporting user\'s plugins and screen information." href="data:text/plain;charset=utf-8,' +$(this).data('plugins')+ '" target="_blank">plugins and screen</a></p>');
-                        });
-                    }
-                })
-            }
+                                + ' <a title="Click to see the reporting user\'s plugins and screen information." href="data:text/plain;charset=utf-8,' +$(this).data('plugins')+ '" target="_blank">plugins and screen</a></p>', 
+                            {
+                                onOpen: function (dialog) {
+                                    dialog.overlay.fadeIn('medium', function () {
+                                            dialog.container.slideDown('medium', function () {
+                                                    dialog.data.fadeIn('medium');
+                                            });
+                                    });
+                                },
+                                onClose: function (dialog) {
+                                    dialog.container.fadeOut('medium', function () {
+                                        dialog.overlay.fadeOut('medium', function () {
+                                            $.modal.close(); // must call this!
+                                        });
+                                    });
+                                },
+                                maxWidth: window.innerWidth - 150,
+                                maxHeight: window.innerHeight - 150
+                            }); // end of the modal dialog functions
+                        }); // end function that handles displaying reports modal window
+                    } // end reports output
+                });
+            } // end outputReports() function
             
-            outputReports('hi')
+            var queryString = parseQueryString(location.search) || '',
+                  page_num = queryString.page && parseInt(queryString.page) > 0 ? queryString.page : 1,
+                  reports_count = queryString.count && parseInt(queryString.count) > 0 ? parseInt(queryString.count) : 15,
+                  list_order = queryString.order && /^(most_followed|popularity|time_desc|time_asc)$/i.test(queryString.order) ? queryString.order : 'time_desc';
+            
+            $('#change-count a.active').removeClass('active');
+            $('#change-count a[data-count=' + reports_count + ']').addClass('active');
+
+            $('#order-by a.active').removeClass('active');
+            $('#order-by a[data-order=' + list_order + ']').addClass('active');
+            $('.pagination').addClass('hidden');
+            
+            outputReports(page_num, reports_count, list_order)
+            changeButtonState()
+            $('.pagination').removeClass('hidden')
         })
     </script>
     </body>
-  </html>
+</html>
