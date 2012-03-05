@@ -70,7 +70,7 @@ opera.extension.onmessage = function(event) {
                         else os_image = '<img class="os_icon" src="' +icons.unidentified+ '" alt="' +current.OS+ '" title="' +current.OS+ '" />'
                     }
                     
-                    commentFrameHTML += '<div class="thread collapsed"><div class="title">Posted by <span class="username">' +current.username+ '</span> on ' +current.date_time+ ' from page ' +page_url+ ' <span class="change_state"></span></div><div class="toggle"><div class="report_body">"' +current.report+ '"</div> ' +(os_image || '')+ ' ' +current.Opera+ '.' +current.build+ ' <a href="data:text/plain;charset=utf-8,' +encodeURIComponent(current.misc)+ '" target="_blank">miscellaneous information</a></div></div>'
+                    commentFrameHTML += '<div class="thread collapsed"><div class="title">Posted by <span class="username">' +current.username+ '</span> on ' +current.date_time+ ' from page ' +page_url+ ' <span class="change_state"></span></div><div class="toggle"><div class="report_body">"' +current.report.replace(/\\/g, '') + '"</div> ' +(os_image || '')+ ' ' +current.Opera+ '.' +current.build+ ' <a href="data:text/plain;charset=utf-8,' +encodeURIComponent(current.misc)+ '" target="_blank">miscellaneous information</a></div></div>'
                 }
             }
         }

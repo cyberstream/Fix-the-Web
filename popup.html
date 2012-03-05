@@ -289,7 +289,7 @@
                       domain_name = /:\/\/([^\/]+)\/?/.test(error_form.page_address.value) ? error_form.page_address.value.match(/:\/\/([^\/]+)\/?/)[1] : '', // get the second item in the result's array which is the matched text in the parentheses
                       params = {
                           mode : 'submit error', // this is to select the correct form handler in ajax_request_handler.php
-                          url : error_form.page_address.value,
+                          url : error_form.page_address.value.replace(/#(.*)/, '').replace(/\/$/ig, ''),
                           domain : domain_name,
                           category : (document.querySelector('input.category:checked') ? document.querySelector('input.category:checked').value : false),
                           description : error_form.description.value,

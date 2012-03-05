@@ -1,5 +1,5 @@
 CONFIG = {
-    defaultHost: 'http://www.operaturkiye.net/fix-the-web/', // the default domain to make AJAX post requests to; *must have* the trailing slash "/"
+    defaultHost: 'http://localhost/', // the default domain to make AJAX post requests to; *must have* the trailing slash "/"
     twitter: {
         consumerKey: "frKRutacGx6VUkMhwQeJ6Q",
         consumerSecret: "aUEFth57HGgRQC0pYjkCwrIZUpROLCVvPBZsM4dg",
@@ -9,55 +9,129 @@ CONFIG = {
     }
 }
 
-createToolbarIcon = function(badgeProperties) {
-    if (opera.contexts) {
-        // Set the properties of the button
-        var buttonProperties = {
-            disabled: false,
-            title: widget.name,
-            icon: 'images/icon-18.png',
-            popup: {
-                href: 'popup.html',
-                width: 325,
-                height: 450
-            },
-            badge: {} // need to create an empty object now so it can be potentially modified later
+ToolbarIcon = {
+    button : false,
+    
+    create : function(badgeProperties) {
+        if (opera.contexts) {
+            // Set the properties of the button
+            var buttonProperties = {
+                disabled: false,
+                title: widget.name,
+                icon: 'images/icon-18.png',
+                popup: {
+                    href: 'popup.html',
+                    width: 325,
+                    height: 450
+                },
+                badge: {} // need to create an empty object now so it can be potentially modified later
+            }
+
+            var icon = opera.contexts.toolbar[0];
+
+            // if the button already was created and there is badge information passed to this function, then edit the icon's badge
+            if (typeof icon != 'undefined' && icon instanceof UIItem && typeof badgeProperties == 'object') {
+                if (parseInt(badgeProperties.textContent) > 0) {
+                    icon.title = parseInt(badgeProperties.textContent) == 1 ? 
+                        'A bug was reported on this ' + (widget.preferences['display-reports-by'] || 'website') : 
+                        badgeProperties.textContent+ ' bugs were reported on this ' + (widget.preferences['display-reports-by'] || 'domain');
+                }
+
+                for (i in badgeProperties) { // loop through the badgeProperties object and assign each key: val to a key: val in the toolbar icon badge
+                    icon.badge[i] = badgeProperties[i]
+                }
+            } else {
+                // Create the button and add it to the toolbar
+                ToolbarIcon.button = opera.contexts.toolbar.createItem(buttonProperties);
+                                
+                // if there was data passed representing a badge, then add the badge to the icon
+                if (typeof badgeProperties == 'object') {
+                    if (parseInt(badgeProperties.textContent) > 0) {
+                        ToolbarIcon.button.title = parseInt(badgeProperties.textContent) == 1 ? 
+                            'A bug was reported on this ' + (widget.preferences['display-reports-by'] || 'website') : 
+                            badgeProperties.textContent+ ' bugs were reported on this ' + (widget.preferences['display-reports-by'] || 'domain');
+                    }
+
+                    for (i in badgeProperties) { // loop through the badgeProperties object and assign each key: val to a key: val in the toolbar icon badge
+                        ToolbarIcon.button.badge[i] = badgeProperties[i]
+                    }
+                }
+                
+                ToolbarIcon.init(); // put the button in the proper state
+                
+                opera.contexts.toolbar.addItem(ToolbarIcon.button);
+            }
+        }
+    },
+    
+    // update the badge on the toolbar icon with the right reports count
+    updateBadge: function() {
+        var mode = widget.preferences['display-reports-by'] || 'domain',
+              tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : '',
+              page_address = tab ? tab.url.replace(/#(.*)/, '').replace(/\/$/ig, '') : '', // remove trailing slashes and the hash segment of the URL
+              domain_name = page_address.match(/:\/\/([^\/]+)\/?/) ? page_address.match(/:\/\/([^\/]+)\/?/)[1] : ''; // get the second item in the result's array (the matched text in the parentheses)
+        
+        if (tab) {
+            ToolbarIcon.button.disabled = false;
+            if (sessionStorage.getItem(page_address)) {
+                var count = sessionStorage.getItem(page_address),
+                      badge = {
+                          display: 'block',
+                          textContent: count,
+                          color: 'white',
+                          backgroundColor: '#c12a2a'
+                      }
+                
+                if (parseInt(count) > 0) {
+                    ToolbarIcon.button.title = parseInt(count) == 1 ? 
+                        'A bug was reported on this ' + (widget.preferences['display-reports-by'] || 'website') : 
+                        count+ ' bugs were reported on this ' + (widget.preferences['display-reports-by'] || 'domain');
+                } else ToolbarIcon.button.title = 'Report a bug on this website'
+
+                // create the badge              
+                ToolbarIcon.create(badge);
+            }
+            else {
+                sendRequest ('GET', 'ajax_request_handler.php?mode=get_reports_count&method=' + mode + '&page=' + encodeURIComponent(page_address) + '&domain=' + encodeURIComponent(domain_name), function(data) {
+                    if (data) {
+                        var badge = {
+                                display: 'block',
+                                textContent: data,
+                                color: 'white',
+                                backgroundColor: '#c12a2a'
+                            }
+
+                        // create the badge              
+                        ToolbarIcon.create(badge);
+                        sessionStorage.setItem(page_address, data);
+                    }
+                }, true);
+            }
+        }
+    },
+    
+    // select the right state for the button
+    init: function() {
+        if ( !ToolbarIcon.button ) {
+            console.log( 'Oops, no button!' )
+            return;
         }
         
-        var toolbarIcon = opera.contexts.toolbar[0];
-
-        // if the button already was created and there is badge information passed to this function, then edit the icon's badge
-        if (typeof toolbarIcon != 'undefined' && toolbarIcon instanceof UIItem && typeof badgeProperties == 'object') {
-            if (parseInt(badgeProperties.textContent) > 0) {
-                toolbarIcon.title = parseInt(badgeProperties.textContent) == 1 ? 
-                    'A bug was reported on this ' + (widget.preferences['display-reports-by'] || 'website') : 
-                    badgeProperties.textContent+ ' bugs were reported on this ' + (widget.preferences['display-reports-by'] || 'domain');
-            }
-            
-            for (i in badgeProperties) { // loop through the badgeProperties object and assign each key: val to a key: val in the toolbar icon badge
-                toolbarIcon.badge[i] = badgeProperties[i]
-            }
+        var tab = opera.extension.tabs.getFocused();
+        if (tab) {
+            ToolbarIcon.button.disabled = false;
+            ToolbarIcon.updateBadge()
         } else {
-            // Create the button and add it to the toolbar
-            var button = opera.contexts.toolbar.createItem(buttonProperties);
-
-            initButton = function() {
-                var tab = opera.extension.tabs.getFocused();
-                if (tab) button.disabled = false;
-                else button.disabled = true;
-            }
-
-            opera.contexts.toolbar.addItem(button);
-
-            // button is enabled when tab is ready
-            opera.extension.addEventListener('connect', initButton, false);
-            opera.extension.addEventListener('focus', initButton, false);
-            opera.extension.addEventListener('blur', initButton, false);
+            ToolbarIcon.button.disabled = true;
+            ToolbarIcon.button.badge.display = 'none'
         }
     }
 }
 
-window.addEventListener('DOMContentLoaded', createToolbarIcon, false);
+// button is enabled when tab is ready
+opera.extension.onconnect = ToolbarIcon.init
+opera.extension.tabs.onfocus = ToolbarIcon.init
+opera.extension.tabs.onblur = ToolbarIcon.init
 
 // detect if the user is authenticated
 function isLoggedIn () {
@@ -207,7 +281,7 @@ opera.extension.onconnect = function(e) {
 opera.extension.onmessage = function(event) {
     var mode = widget.preferences['display-reports-by'] || 'domain',
             tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : '',
-            page_address = tab ? tab.url.replace(/\/$/ig, '') : '',
+            page_address = tab ? tab.url.replace(/#(.*)/, '').replace(/\/$/ig, '') : '', // remove trailing slashes and the hash segment of the URL
             domain_name = page_address.match(/:\/\/([^\/]+)\/?/) ? page_address.match(/:\/\/([^\/]+)\/?/)[1] : ''; // get the second item in the result's array (the matched text in the parentheses)
     
     if (event.data == 'get_frame_content') {    
@@ -217,19 +291,6 @@ opera.extension.onmessage = function(event) {
             }, true);
         }
     } else if (event.data == 'initialize badge') {
-        if (tab) {
-            sendRequest ('GET', 'ajax_request_handler.php?mode=get_reports_count&method=' + mode + '&page=' + encodeURIComponent(page_address) + '&domain=' + encodeURIComponent(domain_name), function(data) {
-                if (data) {
-                    var badge = {
-                            display: 'block',
-                            textContent: data,
-                            color: 'white',
-                            backgroundColor: '#c12a2a'
-                        };
-                    
-                    createToolbarIcon(badge);
-                }
-            }, true);
-        }
+        ToolbarIcon.updateBadge();
     }
 }
