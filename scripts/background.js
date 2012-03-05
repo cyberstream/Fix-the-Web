@@ -1,5 +1,5 @@
 CONFIG = {
-    defaultHost: 'http://localhost/', // the default domain to make AJAX post requests to; *must have* the trailing slash "/"
+    defaultHost: 'http://www.operaturkiye.net/fix-the-web/', // the default domain to make AJAX post requests to; *must have* the trailing slash "/"
     twitter: {
         consumerKey: "frKRutacGx6VUkMhwQeJ6Q",
         consumerSecret: "aUEFth57HGgRQC0pYjkCwrIZUpROLCVvPBZsM4dg",
@@ -67,12 +67,13 @@ ToolbarIcon = {
     // update the badge on the toolbar icon with the right reports count
     updateBadge: function() {
         var mode = widget.preferences['display-reports-by'] || 'domain',
-              tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : '',
+              tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : tab,
               page_address = tab ? tab.url.replace(/#(.*)/, '').replace(/\/$/ig, '') : '', // remove trailing slashes and the hash segment of the URL
               domain_name = page_address.match(/:\/\/([^\/]+)\/?/) ? page_address.match(/:\/\/([^\/]+)\/?/)[1] : ''; // get the second item in the result's array (the matched text in the parentheses)
         
         if (tab) {
             ToolbarIcon.button.disabled = false;
+            
             if (sessionStorage.getItem(page_address)) {
                 var count = sessionStorage.getItem(page_address),
                       badge = {
@@ -92,6 +93,16 @@ ToolbarIcon = {
                 ToolbarIcon.create(badge);
             }
             else {
+                // display a "?" badge to show that the actual reports count is loading
+                var loadingBadge = {
+                    display: 'block',
+                    textContent: ' ? ',
+                    color: 'white',
+                    backgroundColor: '#c12a2a'
+                }
+                
+                ToolbarIcon.create(loadingBadge);
+                
                 sendRequest ('GET', 'ajax_request_handler.php?mode=get_reports_count&method=' + mode + '&page=' + encodeURIComponent(page_address) + '&domain=' + encodeURIComponent(domain_name), function(data) {
                     if (data) {
                         var badge = {
