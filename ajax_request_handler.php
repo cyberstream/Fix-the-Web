@@ -64,7 +64,7 @@ if (isset($_GET) && count($_GET)) {
                 $q = $stmt->execute();
                 if ($q && $stmt->affected_rows) {
                     exit ('true');
-                } else exit ('An error occurred while submitting the error report. Please try submitting it again.');       
+                } else exit ('An error occurred while submitting the error report. Please try submitting it again.');
             }
         }
         
@@ -116,6 +116,11 @@ if (isset($_GET) && count($_GET)) {
         if ($_GET['method'] == 'domain' || $_GET['method'] == 'page') {
             $stmt = $db->stmt_init();
             
+            // decode the URL
+            $_GET = array_map(function($data) {
+                                return urldecode($data);
+                            }, $_GET);
+            
             if ($_GET['method'] == 'domain' && isset($_GET['domain'])) {
                 $query = "SELECT COUNT(DISTINCT id) FROM reports WHERE domain = ?";
                 $bind_variable = $_GET['domain'];
@@ -133,7 +138,8 @@ if (isset($_GET) && count($_GET)) {
                 
                 $count = (strlen($count) == 1 ? " $count " : $count); // put some padding around the badge if there is only one number
                 
-                exit ($count);
+                echo $count; // for some reason, it doesn't work to just do "exit($count);"                
+                exit;
             }
         }
         
