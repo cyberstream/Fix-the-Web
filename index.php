@@ -1,3 +1,33 @@
+<?php
+session_start();
+require_once 'tmhOAuth/FixTheWeb.php';
+
+// Configure Twitter OAuth with the right credentials
+
+$tmhOAuth_config = array(
+  'consumer_key'    => 'YOUR_CONSUMER_KEY',
+  'consumer_secret' => 'YOUR_CONSUMER_SECRET',
+);
+
+$FixTheWeb = new FixTheWeb(new tmhOAuth($tmhOAuth_config));
+$logged_in = $FixTheWeb->isAuthed();
+
+if ($logged_in) 
+    $twitter_name = $FixTheWeb->userdata->screen_name;
+if (isset($_GET['login'])) {
+    $FixTheWeb->auth();
+}
+
+// logout user when s/he clicks the logout link 
+
+if ($logged_in) {    
+    if (isset($_GET['logout'])) {
+        $FixTheWeb->endSession();
+        header ('Location: /fix-the-web');
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,6 +36,10 @@
     <link rel="stylesheet" type="text/css" href="css/css.css">
 </head>
 <body>
+    <?php
+        if ($logged_in) echo '<div id="user">You are logged in as @<strong>' . $twitter_name . '</strong>. <a href="?logout" title="Logout of Fix the Web" class="go-button">logout</a></div>';
+        else echo '<div id="user"><strong>You are not logged in.</strong> <a href="?login" title="Login to Fix the Web with your Twitter Account" class="go-button">login with Twitter</a></div>';
+    ?>
     <header>
         <h1>Fix the Web</h1>
         <div id="explanation-about-the-extension">
@@ -29,8 +63,7 @@
         <div id="more-detail-about-project">More</div>
         <p style="clear:both;"></p>
     </header>
-    <section>
-
+    <section>    
     </section>
         <aside>
             
