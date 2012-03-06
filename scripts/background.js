@@ -9,56 +9,63 @@ CONFIG = {
     }
 }
 
-ToolbarIcon = {
-    button : false,
+ToolbarIcon = {    
+    initButton: function() {
+                ToolbarIcon.button = opera.contexts.toolbar.createItem({
+                    disabled: false,
+                    title: widget.name,
+                    icon: 'images/icon-18.png',
+                    popup: {
+                        href: 'popup.html',
+                        width: 325,
+                        height: 450
+                    },
+                    badge: {} // need to create an empty object now so it can be potentially modified later
+               })
+        },
     
-    create : function(badgeProperties) {
+    // creates a title for the icon based on the number of error reports
+    title: function(c) {
+        var count = parseInt(c)
+        
+        if (count > 0) {
+            return count == 1 ? 
+                'A bug was reported on this ' + (widget.preferences['display-reports-by'] || 'website') : 
+                count + ' bugs were reported on this ' + (widget.preferences['display-reports-by'] || 'domain');
+        } return 'Report a problem on this website';
+    },
+    
+    create: function(badgeProperties) {
         if (opera.contexts) {
             // Set the properties of the button
-            var buttonProperties = {
-                disabled: false,
-                title: widget.name,
-                icon: 'images/icon-18.png',
-                popup: {
-                    href: 'popup.html',
-                    width: 325,
-                    height: 450
-                },
-                badge: {} // need to create an empty object now so it can be potentially modified later
-            }
 
             var icon = opera.contexts.toolbar[0];
 
             // if the button already was created and there is badge information passed to this function, then edit the icon's badge
             if (typeof icon != 'undefined' && icon instanceof UIItem && typeof badgeProperties == 'object') {
-                if (parseInt(badgeProperties.textContent) > 0) {
-                    icon.title = parseInt(badgeProperties.textContent) == 1 ? 
-                        'A bug was reported on this ' + (widget.preferences['display-reports-by'] || 'website') : 
-                        badgeProperties.textContent+ ' bugs were reported on this ' + (widget.preferences['display-reports-by'] || 'domain');
-                }
+                icon.title = ToolbarIcon.title(badgeProperties.textContent); // create a title for the button based on the number of reports
 
                 for (i in badgeProperties) { // loop through the badgeProperties object and assign each key: val to a key: val in the toolbar icon badge
                     icon.badge[i] = badgeProperties[i]
                 }
             } else {
                 // Create the button and add it to the toolbar
-                ToolbarIcon.button = opera.contexts.toolbar.createItem(buttonProperties);
-                                
+                ToolbarIcon.initButton()
+                
                 // if there was data passed representing a badge, then add the badge to the icon
                 if (typeof badgeProperties == 'object') {
-                    if (parseInt(badgeProperties.textContent) > 0) {
-                        ToolbarIcon.button.title = parseInt(badgeProperties.textContent) == 1 ? 
-                            'A bug was reported on this ' + (widget.preferences['display-reports-by'] || 'website') : 
-                            badgeProperties.textContent+ ' bugs were reported on this ' + (widget.preferences['display-reports-by'] || 'domain');
-                    }
+                    ToolbarIcon.button.title = ToolbarIcon.title(badgeProperties.textContent); // create a title for the button based on the number of reports
 
                     for (i in badgeProperties) { // loop through the badgeProperties object and assign each key: val to a key: val in the toolbar icon badge
                         ToolbarIcon.button.badge[i] = badgeProperties[i]
                     }
                 }
                 
-                ToolbarIcon.init(); // put the button in the proper state
+                // put the button in the proper state
+                if (opera.extension.tabs.getFocused()) ToolbarIcon.button.disabled = false
+                else ToolbarIcon.button.disabled = true
                 
+                // add the icon to the toolbar
                 opera.contexts.toolbar.addItem(ToolbarIcon.button);
             }
         }
@@ -67,7 +74,7 @@ ToolbarIcon = {
     // update the badge on the toolbar icon with the right reports count
     updateBadge: function() {
         var mode = widget.preferences['display-reports-by'] || 'domain',
-              tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : tab,
+              tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : '',
               page_address = tab ? tab.url.replace(/#(.*)/, '').replace(/\/$/ig, '') : '', // remove trailing slashes and the hash segment of the URL
               domain_name = page_address.match(/:\/\/([^\/]+)\/?/) ? page_address.match(/:\/\/([^\/]+)\/?/)[1] : ''; // get the second item in the result's array (the matched text in the parentheses)
         
@@ -83,11 +90,8 @@ ToolbarIcon = {
                           backgroundColor: '#c12a2a'
                       }
                 
-                if (parseInt(count) > 0) {
-                    ToolbarIcon.button.title = parseInt(count) == 1 ? 
-                        'A bug was reported on this ' + (widget.preferences['display-reports-by'] || 'website') : 
-                        count+ ' bugs were reported on this ' + (widget.preferences['display-reports-by'] || 'domain');
-                } else ToolbarIcon.button.title = 'Report a bug on this website'
+                // add a title to the button
+                ToolbarIcon.button.title = ToolbarIcon.title(count)
 
                 // create the badge              
                 ToolbarIcon.create(badge);
@@ -122,11 +126,8 @@ ToolbarIcon = {
     },
     
     // select the right state for the button
-    init: function() {
-        if ( !ToolbarIcon.button ) {
-            console.log( 'Oops, no button!' )
-            return;
-        }
+    init: function() {     
+        if (typeof ToolbarIcon.button == 'undefined') ToolbarIcon.initButton()
         
         var tab = opera.extension.tabs.getFocused();
         if (tab) {
@@ -143,6 +144,7 @@ ToolbarIcon = {
 opera.extension.onconnect = ToolbarIcon.init
 opera.extension.tabs.onfocus = ToolbarIcon.init
 opera.extension.tabs.onblur = ToolbarIcon.init
+window.onload = ToolbarIcon.create()
 
 // detect if the user is authenticated
 function isLoggedIn () {
