@@ -70,7 +70,7 @@ if (isset($_GET) && count($_GET)) {
         
         // if the data is processed and inserted into the database successfully then echo "true":
         exit;
-    } elseif ($_GET['mode'] == 'get_frame_content') {
+    } elseif ($_GET['mode'] == 'get_frame_content') { // TODO this section can be removed once the extension versions dependent upon it are updated
         $stmt = $db->stmt_init();
         
         if ($_GET['method'] == 'domain' && isset($_GET['domain'])) {
@@ -154,10 +154,13 @@ if (isset($_GET) && count($_GET)) {
         id, username, language, category, report, page, domain, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
         FROM reports WHERE post_type = 0";
         
-        if(isset($_GET['domain'])){
+        if ( isset($_GET['page']) && isset($_GET['method']) && $_GET['method'] == 'page' ) {
+            $query.=" AND page = ?";
+            $bind_domain = preg_replace('/\/$/', '', $_GET['page']);
+        } elseif ( isset($_GET['domain']) ) {
             $query.=" AND domain = ?";
             $bind_domain = $_GET['domain'];
-        }
+        } 
         
         if(isset($_GET['order'])){
             switch ($_GET['order']) {
