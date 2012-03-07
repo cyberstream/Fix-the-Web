@@ -1,5 +1,5 @@
 CONFIG = {
-    defaultHost: 'http://www.operaturkiye.net/fix-the-web/', // the default domain to make AJAX post requests to; *must have* the trailing slash "/"
+    defaultHost: 'http://localhost/', // the default domain to make AJAX post requests to; *must have* the trailing slash "/"
     twitter: {
         consumerKey: "frKRutacGx6VUkMhwQeJ6Q",
         consumerSecret: "aUEFth57HGgRQC0pYjkCwrIZUpROLCVvPBZsM4dg",
@@ -102,6 +102,7 @@ ToolbarIcon = {
                     display: 'block',
                     textContent: ' ? ',
                     color: 'white',
+                    title: 'Loading reports count...',
                     backgroundColor: '#c12a2a'
                 }
                 
@@ -141,9 +142,11 @@ ToolbarIcon = {
 }
 
 // button is enabled when tab is ready
+if (opera.extension.tabs) {
+    opera.extension.tabs.onfocus = ToolbarIcon.init
+    opera.extension.tabs.onblur = ToolbarIcon.init
+}
 opera.extension.onconnect = ToolbarIcon.init
-opera.extension.tabs.onfocus = ToolbarIcon.init
-opera.extension.tabs.onblur = ToolbarIcon.init
 window.onload = ToolbarIcon.create()
 
 // detect if the user is authenticated
@@ -234,8 +237,10 @@ function update(callback) {
             // Pull the last checksum from localStorage and compare it to the checksum of the most recent commit on Github.
             // If the file was updated, then update the local copy of it
             this.onload = function() {
-                if (this.responseXML && this.responseXML.getElementsByTagName("entry")) 
+                if ( this.responseXML && this.responseXML.getElementsByTagName("entry")[0] ) {
                     var checksum = this.responseXML.getElementsByTagName("entry")[0].getElementsByTagName('id')[0].firstChild.nodeValue.match(/\/([\d\w]*)/)[1]
+                }
+                    
                 else error = true
 
                 updated = (checksum == widget.preferences["patches-js-checksum"] ? 1 : 0);

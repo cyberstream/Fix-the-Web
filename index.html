@@ -394,7 +394,7 @@
                       reports_per_page = reports_per_page && reports_per_page > 0 ? reports_per_page : 15;
                 
                 $.getJSON(CONFIG.defaultHost + 'ajax_request_handler.php?mode=get_report_list&order=' +order+ '&count=' + reports_per_page + '&page=' + page_number, function(data) {
-                    if (!data || data == '') console.log(data), $('#recent-reports').html('<li>Oops, there are no reports for this page! <em><a href="#" class="change_state" onclick="history.go(-1); return false;">go back</a></em></li>')
+                    if (!data || data == '') $('#recent-reports').html('<li>Oops, there are no reports for this page! <em><a href="#" class="change_state" onclick="history.go(-1); return false;">go back</a></em></li>')
                     else {
                         var output = '',
                               data = data.list;
