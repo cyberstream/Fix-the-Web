@@ -17,7 +17,7 @@ if ($db) {
     `opera_build` varchar(10) NOT NULL COMMENT 'opera.buildNumber()',
     `operating_system` varchar(64) DEFAULT NULL COMMENT 'The information about the operating system of the commenter or reporter',
     `additional_information` text COMMENT 'Other information about the user''s system, e.g. plugins, screen resolution and size, etc',
-    `post_type` tinyint(1) NOT NULL COMMENT '0 => an error report; 1 => is a comment, not a correction or solution; 2 => a comment, not a correction, is a solution; 3 => a comment, is a correction, but not a solution; 4 => a comment, is a correction and a solution',
+    `post_type` tinyint(1) NOT NULL COMMENT '0 => an error report; 1 => is a comment, but not a solution or confirmation of the original bug report; 2 => is a comment and a solution, but not a confirmation; 3 => is a comment and a confirmation, but not a solution; 4 => is a comment, a confirmation, and a solution',
     `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     KEY `page` (`page`(255),`post_type`)
