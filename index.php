@@ -3,7 +3,6 @@ session_start();
 require_once 'tmhOAuth/FixTheWeb.php';
 
 // Configure Twitter OAuth with the right credentials
-
 $tmhOAuth_config = array(
   'consumer_key'    => 'YOUR_CONSUMER_KEY',
   'consumer_secret' => 'YOUR_CONSUMER_SECRET',
