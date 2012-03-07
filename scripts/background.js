@@ -237,10 +237,8 @@ function update(callback) {
             // Pull the last checksum from localStorage and compare it to the checksum of the most recent commit on Github.
             // If the file was updated, then update the local copy of it
             this.onload = function() {
-                if ( this.responseXML && this.responseXML.getElementsByTagName("entry")[0] ) {
+                if ( this.responseXML && this.responseXML.getElementsByTagName("entry")[0] )
                     var checksum = this.responseXML.getElementsByTagName("entry")[0].getElementsByTagName('id')[0].firstChild.nodeValue.match(/\/([\d\w]*)/)[1]
-                }
-                    
                 else error = true
 
                 updated = (checksum == widget.preferences["patches-js-checksum"] ? 1 : 0);
@@ -304,8 +302,10 @@ opera.extension.onmessage = function(event) {
     
     if (event.data == 'get_frame_content') {    
         if (tab) {
-            sendRequest ('GET', 'ajax_request_handler.php?mode=get_frame_content&method=' + mode + '&page=' + encodeURIComponent(page_address) + '&domain=' + encodeURIComponent(domain_name), function(data) {
-                event.source.postMessage({frame_content : data})
+            
+            sendRequest ('GET', 'ajax_request_handler.php?mode=get_report_list&count=50&page=1&domain=' + encodeURIComponent(domain_name) + '&method=' + mode + '&page=' + encodeURIComponent(page_address), function(data) {
+                console.log( JSON.stringify(JSON.parse(data)['list']))
+                event.source.postMessage({frame_content : JSON.stringify(JSON.parse(data)['list'])})
             }, true);
         }
     } else if (event.data == 'initialize badge') {
