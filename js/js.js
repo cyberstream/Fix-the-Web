@@ -3,13 +3,13 @@ var HOST="http://localhost/"; // TODO edit this for your system
 
 function reportTemplate(id,username,date_time,report,operaVersion,operaBuildNumber,OS,domain,page,isComment){
     var content='';
-    content="<article><h6><a href='?mode=get_comment_list&user="+username+"'>"+username+"</a> said on "+date_time+":</h6><div class='tools'>";
+    content="<article><h6><a href='?mode=get_comment_list&include_report=true&user="+username+"'>"+username+"</a> said on "+date_time+":</h6><div class='tools'>";
     if(!isComment)
     content+="<button data-id="+id+" class='go-button'> &gt; </button>";
     content+="<button data-id="+id+" class='follow-button'> follow </button>";
     content+="<button data-id="+id+" class='like-button'> like </button></div><p>";
 
-    content+=report+"</p><span class='small'><a href="+page+">"+page+"</a> on "+domain+"</a><span class='additional-information'>"+operaVersion+"."+operaBuildNumber+" on "+OS+"</span></article>";
+    content+=report+"</p><span class='small'><a href="+page+" title=\"" + page + "\">"+(page.length > 40 ? page.substr(0, 40) + '...' : page)+"</a> on "+domain+"</a><span class='additional-information'>"+operaVersion+"."+operaBuildNumber+" on "+OS+"</span></article>";
     return content;
 }
 
@@ -69,7 +69,7 @@ function resultWriter(data,hist){
     for (c=0;c<buttons.length;c++){
         
         buttons[c].addEventListener("click",function(event){
-            sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_comment_list&id="+event.target.dataset.id,commentWriter,null);
+            sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_comment_list&include_report=true&id="+event.target.dataset.id,commentWriter,null);
             
         },false);
     }
