@@ -251,20 +251,23 @@ if (isset($_GET) && count($_GET)) {
         
         // TODO check DATE_FORMAT when multilangualizing
         $query = "SELECT 
-        id,username, language, category, report, page, domain, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
+        id, username, language, category, report, page, domain, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
         FROM reports WHERE 1=1 ";
 
-        if(isset($_GET['domain'])) {
+        if ( isset($_GET['domain']) ) {
             $query.=" AND domain = ?";
             $bind_domain = $_GET['domain'];
         }
-        if(isset($_GET['id']) && settype($_GET['id'], "int")) {
-
-            $query.=" AND (id = ? OR report_id = ?)";
+        
+        if ( isset($_GET['id']) && settype($_GET['id'], "int") ) {
+            if ( isset($_GET['include_report']) && $_GET['include_report'] == 'true' ) // if you want the report that the comments are commenting on included, then set include_report=true 
+               $query.=" AND (id = ? OR report_id = ?)";
+            else $query.=" AND report_id = ?";
+            
             $bind_report_id=$_GET["id"];
         }
-         if(isset($_GET['user'])) {
-
+        
+         if ( isset($_GET['user']) ) {
             $query.=" AND username = ?";
             $bind_user=$_GET["user"];
         }
@@ -274,9 +277,11 @@ if (isset($_GET) && count($_GET)) {
             if ( isset($bind_domain) ){
                 if ( isset($bind_report_id) )
                     if ( isset($bind_user) )
-                        $stmt->bind_param('siis', $bind_domain,$bind_report_id,$bind_report_id,$bind_user);
+                        if ( isset($_GET['include_report']) && $_GET['include_report'] == 'true' ) $stmt->bind_param('siis', $bind_domain, $bind_report_id, $bind_report_id, $bind_user);
+                        else $stmt->bind_param('sis', $bind_domain, $bind_report_id, $bind_user);
                     else
-                        $stmt->bind_param('sii', $bind_domain,$bind_report_id,$bind_report_id);
+                        if ( isset($_GET['include_report']) && $_GET['include_report'] == 'true' ) $stmt->bind_param('sii', $bind_domain, $bind_report_id, $bind_report_id);
+                        else $stmt->bind_param('si', $bind_domain, $bind_report_id);
                 else
                     if(isset($bind_user))
                         $stmt->bind_param('ss', $bind_domain,$bind_user);
@@ -285,10 +290,13 @@ if (isset($_GET) && count($_GET)) {
             }
             else{
                 if(isset($bind_report_id))
-                    if(isset($bind_user))
-                        $stmt->bind_param('iis',$bind_report_id,$bind_report_id,$bind_user);
-                    else
-                        $stmt->bind_param('ii',$bind_report_id,$bind_report_id);
+                    if(isset($bind_user)) {
+                        if ( isset($_GET['include_report']) && $_GET['include_report'] == 'true' ) $stmt->bind_param('iis', $bind_report_id, $bind_report_id, $bind_user);
+                         else $stmt->bind_param('is', $bind_report_id, $bind_user);                        
+                    } else {
+                        if ( isset($_GET['include_report']) && $_GET['include_report'] == 'true' ) $stmt->bind_param('ii', $bind_report_id, $bind_report_id);
+                         else $stmt->bind_param('i', $bind_report_id);  
+                    }
                 else
                     $stmt->bind_param('s',$bind_user);
             }
@@ -297,7 +305,7 @@ if (isset($_GET) && count($_GET)) {
             $stmt->store_result();
         
             if ($q && $stmt->num_rows) {
-                $stmt->bind_result($id,$username, $language, $category, $report, $page, $domain_db, $version, $build, $OS, $misc, $date_time);
+                $stmt->bind_result($id, $username, $language, $category, $report, $page, $domain_db, $version, $build, $OS, $misc, $date_time);
 
                 $JSON = array(
                     "id"    =>  (isset($_GET['id'])     ?   $_GET['id']     :   ""),
