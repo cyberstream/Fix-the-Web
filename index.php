@@ -1,15 +1,7 @@
 <?php
 session_start();
 require_once 'tmhOAuth/FixTheWeb.php';
-
-// Configure Twitter OAuth with the right credentials
-$tmhOAuth_config = array(
-  'consumer_key'    => 'YOUR_CONSUMER_KEY',
-  'consumer_secret' => 'YOUR_CONSUMER_SECRET',
-);
-
-$FixTheWeb = new FixTheWeb(new tmhOAuth($tmhOAuth_config));
-$logged_in = $FixTheWeb->isAuthed();
+require_once 'auth.php';
 
 if ($logged_in) 
     $twitter_name = $FixTheWeb->userdata->screen_name;
@@ -31,7 +23,7 @@ if ($logged_in) {
 <html>
 <head>
     <meta charset="utf-8">
-        <title>Fix the Web Front Panel</title> <!-- // TODO: Change title with suitable one-->
+        <title>Fix the Web</title> <!-- // TODO: Change title with suitable one-->
     <link rel="stylesheet" type="text/css" href="css/css.css">
 </head>
 <body>

@@ -1,7 +1,9 @@
 <?php 
 header("Cache-Control: no-cache, must-revalidate");
 require_once 'db.php'; // include the database configuration file
-error_reporting(E_ALL);
+require_once 'tmhOAuth/FixTheWeb.php';
+require_once 'auth.php';
+
 if (isset($_GET) && count($_GET)) {
     if ($_GET['mode'] == 'get_OS') {
         // detects the OS by reading the HTTP_USER_AGENT string and extracting details about the OS from it. 
@@ -327,4 +329,11 @@ if (isset($_GET) && count($_GET)) {
             }
         }
     }
-} else echo 'Page not found!';
+} else if($_GET["mode"]=="write_a_comment"){
+    $stmt = $db->stmt_init();
+        
+        
+        $query = "INSERT INTO reports VALUES (id,$twitter_name, 'EN', '0','' , '','', '','','','','' DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
+        FROM reports WHERE 1=1 ";
+
+}else echo 'Page not found!';

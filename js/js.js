@@ -1,5 +1,5 @@
 
-var HOST="http://localhost/"; // TODO edit this for your system
+var HOST="http://localhost/Fix-the-Web-Server-Side/"; // TODO edit this for your system
 
 function reportTemplate(id,username,date_time,report,operaVersion,operaBuildNumber,OS,domain,page,isComment){
     var content='';
@@ -23,8 +23,33 @@ function commentWriter(data,hist){
         a=result.list[i];
         resultArea+=reportTemplate(a.id,a.username,a.date_time,a.report,a.Opera,a.build,a.OS,a.domain,a.page,true);
     }
-    var form="<form action='' id='comment-form'><textarea name='d' placeholder='Please enter your comment'></textarea><button type='submit'>Send</button></form>";
+    var form="<form action='' id='comment-form'> \
+                <select id='category'> \
+                    <option value='2'>Major problem</option> \
+                    <option value='1'>Minor problem</option> \
+                    <option value='3'>Site is unuseable</option> \
+                </select> \
+                <input type='text' id='OS' value=''> \
+                <input type='text' id='opera-version'> \
+                <input type='text' id='opera-build-number'> \
+                <textarea name='d' placeholder='Please enter your comment'></textarea> \
+                <button type='submit'>Send</button> \
+            </form>";
     document.getElementsByTagName("section")[0].innerHTML=resultArea+form;
+    document.getElementById("opera-version").value=opera.version();
+    document.getElementById("opera-build-number").value=opera.buildNumber();
+    sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_OS",function(data){
+       document.getElementById("OS").value=data; 
+    },null);
+    
+    document.getElementById("comment-form").addEventListener("submit",function(event){
+        event.preventDefault();
+        sendRequest("GET",HOST+"ajax_request_handler.php?mode=write_a_comment&id="+result.id,function(){
+
+        },null);
+
+
+    },false);
     if(!hist)
         history.pushState(
             {
