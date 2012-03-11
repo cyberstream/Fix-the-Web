@@ -219,12 +219,12 @@
         <h1>Fix the Web <span class="light"> Options</span></h1>
         
         <form id="prefs-form">            
-                <label>Check for updates to the patches script every 
-                    <input type="range" min="30" max="720" step="15" name="update-interval" id="update-interval"/>
-                    <span id="update-interval-in-minute"></span> minutes
+                <label>Check for updates to the CSS patches file every 
+                    <input type="range" min="30" max="720" step="30" name="update-interval" id="update-interval"/>
+                    <span id="update-interval-value"></span>
                 </label>
 
-                <div id="update">update patches script now</div>
+                <div id="update">Check for new CSS patches now</div>
 
                 <p>
                     Show reports count in the toolbar icon badge by
@@ -238,11 +238,11 @@
                     </label>
                 </p>
         </form>
+        <!--
     </section>
-
-    <section id="authenticate">
-        <h1>Fix the Web <span class="light"> Authentication</span></h1>
-        
+    <section id="authenticate">-->
+<!--        <h1>Fix the Web <span class="light"> Authentication</span></h1>-->
+        <hr />
         <form id="auth" class="hide">
             <p>            
                 <a href="#" id="twitter-login"></a>
@@ -272,7 +272,7 @@
             <li><strong><a href="http://www.operaturkiye.net/fix-the-web">Home Page</a></strong> (still under construction)</li>
             <li><strong><a href="http://github.com/cyberstream/Fix-the-Web">Main extension files repository</a></strong></li>
             <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-Server-Side">Server-side repository</a></strong></li>
-            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-Patch-Script">Patches script</a></strong> (If you want to patch a bug on a website, add the fix to the <em>patches.js</em> file in this repo)</li>
+            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-CSS-Patches">CSS Patches</a></strong> (If a website just needs CSS to be patched, then add the patch to the <em><strong>patches.json</strong></em> file in this repo. If the problematic website needs JS for the patch, place it in <em><strong>includes/</strong>patches.js</em> in the <a title="Fix the Web's Repository" href="http://github.com/cyberstream/Fix-the_Web">extension repo</a>.)</li>
         </ul>
         
         <p><strong>Contributors:</strong></p>
@@ -320,9 +320,24 @@
         updateIntervalValue();
     }
     
+    function readableInterval (minutes) {
+        var minutes = parseInt(minutes),
+              readable; 
+        
+        if ( minutes == 60 ) readable = 'hour';
+        else if ( minutes == 30 ) readable = 'half hour';
+        else if ( minutes % 60 == 0 ) readable = (minutes / 60) + ' hours';
+        else if ( minutes % 60 == 30 ) readable = (minutes - 30) / 60 + '-1/2 hours';
+        else readable = minutes + ' minutes';
+        
+        return readable;
+    }
+    
     // That function shows update-interval's value on a visible HTML element
-    function updateIntervalValue(){
-        document.getElementById("update-interval-in-minute").innerText = document.getElementById("update-interval").value;
+    function updateIntervalValue () {
+        var interval = parseInt(document.getElementById("update-interval").value);
+        
+        document.getElementById("update-interval-value").innerText = readableInterval(interval);
     }
     
     // when the page is loaded, get extension preferences and assign them into correct input elements
@@ -361,11 +376,15 @@
         var updated = update(function(u) {
             if (document.getElementById('loading_spinner')) loading.parentNode.removeChild(loading);
 
-            if (u == 2) alert('The patches script was successfully updated!');
-            else if (u == 1) alert('No changes have been made to the patches script since you last updated it.');
-            else alert('There was an error updating the patches script' + (u != 0 ? ': \n\n' + u : '.'));            
+            if (u == 2) $.modal('The CSS patches file was successfully updated!', { overlayClose: true });
+            else if (u == 1) $.modal('No changes have been made to the CSS patches file since you last updated it.', { overlayClose: true });
+            else $.modal('There was an error updating the CSS patches file' + (u != 0 ? ': \n\n' + u : '.'), { overlayClose: true });            
         });
     }, false)
+    
+    function freezeClick(e) {
+        e.preventDefault()
+    }
     
     window.addEventListener('hashchange', function() {
         var lastTab = document.querySelector('a.active'),
@@ -383,9 +402,15 @@
         lastSection.className = 'inactive';
         currentTab.className = 'active';
         
+        // cancel any click events temporarily to fix the problem of tabs not working after you click a non-active tab during animation
+        window.addEventListener('click', freezeClick, false);
+        
         setTimeout(function() {
             lastSection.className = '';
             currentSection.className = 'active';
+            
+            // remove the "click freeze"
+            window.removeEventListener('click', freezeClick, false);
         }, 600)
     }, false);
     

@@ -418,7 +418,7 @@
                                 else os_image = 'images/unidentified.png'
                             }
                             
-                            output += '<li title="Click to expand report" data-username="' +current.username+ '" data-category="' +current.category+ '" data-datetime="' +current.date_time+ '" data-url="' +current.page+ '" data-report="' +current.report+ '" data-version="' +current.Opera+ '" data-build="' +current.build+ '" data-platform="' +current.OS+ '" data-platform-icon="' +os_image+ '" data-plugins="' +encodeURIComponent(current.misc)+ '">'
+                            output += '<li title="Click to expand report" data-id="' +current.id+ '" data-username="' +current.username+ '" data-category="' +current.category+ '" data-datetime="' +current.date_time+ '" data-url="' +current.page+ '" data-report="' +current.report+ '" data-version="' +current.Opera+ '" data-build="' +current.build+ '" data-platform="' +current.OS+ '" data-platform-icon="' +os_image+ '" data-plugins="' +encodeURIComponent(current.misc)+ '">'
                                 + '<span class="severity_' +current.category+ '" title="' +(severity[current.category] || 'unknown')+ '"></span> <strong class="username">' +current.username+ '</strong> reported a problem on ' +page_url+ ' <span class="date_time">(' +current.date_time+ ')</span></li>';
                         }
                         
@@ -429,15 +429,25 @@
                             page_url = '<a href="' +url+ '" title="Page: ' +url+ '" target="_blank">'
                                 + (url.length > 40 ? url.substr(0, 40) + '...' : url) + '</a>';
                             
-                            $.modal('<span style="float: right;" class="severity_' +$(this).data('category')+ '" title="' +(severity[$(this).data('category')] || 'unknown')+ '"></span><strong>' +$(this).data('username')+ '</strong> reported a problem on ' +page_url + ':' 
+                            $.modal('<div id="report" data-id="' + $(this).data('id') + '"><span style="float: right;" class="severity_' +$(this).data('category')+ '" title="' +(severity[$(this).data('category')] || 'unknown')+ '"></span><strong>' +$(this).data('username')+ '</strong> reported a problem on ' +page_url + ':' 
                                 + '<p class="report">"' + $(this).data('report').replace(/\\/g, '') + '"</p>Reported on <strong>' +$(this).data('datetime') + '</strong>'
                                 + '<p><img class="os_icon" src="' +$(this).data('platform-icon') + '" title="' +$(this).data('platform')+ '" alt="' +$(this).data('platform')+ '" /> <em title="Opera version: ' + $(this).data('version') + ' Build number: ' + $(this).data('build') + '">' + $(this).data('version') + '.' + $(this).data('build') + '</em>'
-                                + ' <a title="Click to see the reporting user\'s plugins and screen information." href="data:text/plain;charset=utf-8,' +$(this).data('plugins')+ '" target="_blank">plugins and screen</a></p>', 
-                            {
-                                onOpen: function (dialog) {
+                                + ' <a title="Click to see the reporting user\'s plugins and screen information." href="data:text/plain;charset=utf-8,' +$(this).data('plugins')+ '" target="_blank">plugins and screen</a></p></div>', 
+                            { onOpen: function (dialog) {
                                     dialog.overlay.fadeIn('medium', function () {
                                             dialog.container.slideDown('medium', function () {
-                                                    dialog.data.fadeIn('medium');
+                                                    dialog.data.fadeIn('medium', function() {
+                                                        
+                                                        // load comments thread after the dialog box is visible
+                                                        var report_id = $('#report', this).data('id');
+                                                        
+                                                        $.get(CONFIG.defaultHost + 'ajax_request_handler.php?mode=get_comment_list&id=' + report_id, function(data) {
+                                                            data = JSON.parse(data || '[]')['list'] || '';
+                                                            
+                                                            $('<div>' +(data.length ? data[0]['report'] : '')+ '</div>').appendTo('#simplemodal-data')
+                                                        });
+                                                        
+                                                    });
                                             });
                                     });
                                 },

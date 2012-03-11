@@ -6,8 +6,8 @@
     <icon src="images/icon-64.png" /> 
     
     <!--default values for preferences-->
-    <preference name="patches-js" value="/* patches file is empty */" />
-    <preference name="patches-js-checksum" value="0" />
+    <preference name="patches" value="[]" />
+    <preference name="patches-checksum" value="0" />
     <preference name="update-interval" value="30" />
     <preference name="display-reports-by" value="domain" /> <!--either "domain" or "page"-->
     

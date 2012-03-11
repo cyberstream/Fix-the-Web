@@ -1,3 +1,5 @@
+
+
 opera.extension.onmessage = function(event) {    
     // the Github URL for the images; the base64 representation of the images is commented out in case you need it for offline testing
     var icons = {
@@ -188,26 +190,97 @@ opera.extension.onmessage = function(event) {
     }
 }    
 
+// add CSS to the web page
+function addCSS ( css ) {     
+
+    // detect if the page is loaded; if it isn't, then make it run when the page is loaded
+    if ( document.addEventListener ) {
+
+        // If the head element doesn't exist, create it and insert it into the DOM tree
+        if ( !document.getElementsByTagName('head').length ) {
+            var new_head = document.createElement('head'),
+                root = document.getElementsByTagName('html')[0],
+                children = root.childNodes,
+                firstChild = children.length ? children[0] : false;
+
+            if (firstChild) firstChild.parentNode.insertBefore(new_head, firstChild);
+            else root.appendChild(new_head);
+        }
+
+        // create the style tag and put the contents of the "css" parameter into the element        
+        var head = document.getElementsByTagName('head')[0],
+            style_tag = document.createElement('style');
+
+        style_tag.setAttribute('type', 'text/css');
+        style_tag.appendChild(document.createTextNode(css));
+
+        // append the style element to the head element
+        head.appendChild(style_tag)
+    } else addEventListener ('DOMContentLoaded', addCSS(css), false);
+}
+
 // get the patches.js script from localStorage and create a script element on the page with its contents
 
 window.addEventListener('DOMContentLoaded', function() {        
-    if (typeof widget.preferences['patches-js'] == 'undefined') widget.preferences['patches-js'] = '';
+    if (typeof widget.preferences['patches'] == 'undefined') widget.preferences['patches'] = '';
     
-    var patches_js = widget.preferences['patches-js'],    
-          script_tag = document.createElement('script');
+    var patches = JSON.parse(widget.preferences['patches']) || [];
     
-    script_tag.appendChild(document.createTextNode(patches_js))
-    script_tag.setAttribute('type', 'text/javascript')
-    
-    var body_tag = document.getElementsByTagName('body'),
-          root_html_element = document.getElementsByTagName('html')[0];
-    
-    if (body_tag.length) {
-        body_tag[0].appendChild(script_tag)
-    } else {
-        var new_body_element = document.createElement('body');
-        
-        new_body_element.appendChild(script_tag)
-        root_html_element.appendChild(new_body_element)
+    // loop through the patches if there are any in the array
+    if ( typeof patches == 'object' && patches instanceof Array && patches.length ) {
+        var hostname = location.hostname,
+              href = location.href, 
+              pathname = location.pathname;
+              
+        // loop through the object (the loop is labeled "main" so that we can send commands to it from a sub-loop)
+        main: for ( i in patches ) {
+            var patch = patches[i],
+            
+                  target = patch.patch_target,
+                  version = patch.opera_version,
+                  status = patch.status,
+                  comment = patch.comment,
+                  css = patch.css_patch;
+            
+            // ensure this is a valid patch before parsing it
+            if (typeof target == 'undefined' || typeof version == 'undefined' || typeof status == 'undefined' || typeof comment == 'undefined' || typeof css == 'undefined') continue;
+                              
+            if (target) {
+                
+                // if the target is a regular expression and the hostname does not match it, then continue
+                if ( typeof target == 'object' && target instanceof RegExp )
+                    if ( hostname.search(target) == -1 ) continue;
+                
+                // if the target is an object, then parse it and test the values
+                else if ( typeof target == 'object' ) {
+                    j = 0;
+                    for ( k in target ) {                        
+                        var string_to_search;
+                        j++;
+                        
+                        if ( k == 'href' || k == 'url' ) string_to_search = href;
+                        else if ( k == 'pathname' || k == 'path' ) string_to_search = pathname;
+                        else if ( k == 'hostname' || k == 'host' || k == 'domain' ) string_to_search = hostname;
+                        else continue; // ignore the rule if it isn't valid
+                        
+                        // convert strings to lowercase                                                
+                        if (target[k] instanceof String) {
+                            string_to_search == string_to_search.toLowerCase();
+                            target[k] = target[k].toLowerCase()
+                        }
+                        
+                        // if the specified string doesn't successfully get matched, then make the main loop continue to the next iteration
+                        if ( string_to_search.search(target[k]) == -1 ) continue main;
+                    }
+                }
+                
+                // if this is a string and it does not match anything in the hostname, then continue to the next iteration in the loop
+                else if ( hostname.toLowerCase().indexOf(target.toLowerCase()) == -1 ) continue;
+                
+                // If the loop *continued*, then it will not make it to this code in the current iteration.
+                // Add the css in the patch to the current page.
+                addCSS (css);
+            }
+        }
     }
 }, false);

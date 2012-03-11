@@ -146,7 +146,14 @@ if (opera.extension.tabs) {
     opera.extension.tabs.onfocus = ToolbarIcon.init
     opera.extension.tabs.onblur = ToolbarIcon.init
 }
-opera.extension.onconnect = ToolbarIcon.init
+opera.extension.onconnect = function() {
+    var tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : '',
+          page_address = tab ? tab.url.replace(/#(.*)/, '').replace(/\/$/ig, '') : '' // remove trailing slashes and the hash segment of the URL
+    
+    sessionStorage.removeItem(page_address) // Erase the cached error report count for the current page if it is set. It is updated when the page loads
+    opera.postError('hi')
+    ToolbarIcon.init()
+}
 window.onload = ToolbarIcon.create()
 
 // detect if the user is authenticated
@@ -223,14 +230,14 @@ function sendRequest (method, url, callback, params, useDefaultHost) {
     }
 } // end sendRequest() function
 
-// the update() function pulls the patches script from Github and puts its contents in widget.preferences['patches-js']
+// the update() function pulls the patches script from Github and puts its contents in widget.preferences['patches']
 function update(callback) {    
     var r = new XMLHttpRequest();        
     error = false,
     updated = 0;
     
-    if (typeof widget.preferences["patches-js-checksum"] == 'undefined') 
-        widget.preferences["patches-js-checksum"] = '0'
+    if (typeof widget.preferences["patches-checksum"] == 'undefined') 
+        widget.preferences["patches-checksum"] = '0'
     
     r.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200 || this.responseXML != '') {
@@ -241,20 +248,20 @@ function update(callback) {
                     var checksum = this.responseXML.getElementsByTagName("entry")[0].getElementsByTagName('id')[0].firstChild.nodeValue.match(/\/([\d\w]*)/)[1]
                 else error = true
 
-                updated = (checksum == widget.preferences["patches-js-checksum"] ? 1 : 0);
+                updated = (checksum == widget.preferences["patches-checksum"] ? 1 : 0);
 
-                if (typeof checksum != 'undefined' && checksum != widget.preferences["patches-js-checksum"]) {
-                    widget.preferences["patches-js-checksum"] = checksum;    
+                if (typeof checksum != 'undefined' && checksum != widget.preferences["patches-checksum"]) {
+                    widget.preferences["patches-checksum"] = checksum;    
                     updated = 2;
                     
-                    sendRequest('GET', 'https://raw.github.com/cyberstream/Fix-the-Web-Patch-Script/master/patches.js', 
+                    sendRequest('GET', 'https://raw.github.com/cyberstream/Fix-the-Web-CSS-Patches/master/patches.json', 
                         function(data) {
                             // TODO if patches.js exceeds the storage quota of one widget.preferences variable, 
                             // then split the file's contents up between multiple widget.preferences variables (like the ad block lists in Opera AdBlock)
                             // store the patches script in localStorage. Will turn it into a script element in 'includes/include.js'
 
-                            widget.preferences['patches-js'] = data
-                            console.log('Fix the Web\'s patches.js file was just updated.');
+                            widget.preferences['patches'] = JSON.stringify(JSON.parse(data.replace(/(\r\n|\n|\r)/gm,"")))
+                            console.log('Fix the Web\'s patches.json file was just updated.');
                         }, null, false);
                 } else if (checksum == 'undefined') error = true;
                 
@@ -269,7 +276,7 @@ function update(callback) {
         }
     }
     
-    r.open('GET', 'https://github.com/cyberstream/Fix-the-Web-Patch-Script/commits/master.atom', true);
+    r.open('GET', 'https://github.com/cyberstream/Fix-the-Web-CSS-Patches/commits/master.atom', true);
 
     try {
         r.send()
