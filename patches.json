@@ -3,7 +3,7 @@
         "patch_target": "newsminer.com",
         "opera_version": "11.62",
         "status": "patch added",
-        "comment": "Fixed the cramped links in the lists under \'National News\', \'International News\', and \'Entertainment News\'",
+        "comment": "Fixed the cramped links in the lists under National News, International News, and Entertainment News",
         "css_patch": ".ap_table_styles li { padding: 7px 4px}"
     },
 
