@@ -146,15 +146,14 @@ if (isset($_GET) && count($_GET)) {
         }
         
         exit ('0');
-    }elseif(($_GET['mode'] == 'get_report_list')){
+    } elseif ($_GET['mode'] == 'get_report_list') {
         // TODO control $_GET variable health
         
         $stmt = $db->stmt_init();
         
         // TODO check DATE_FORMAT when multilangualizing
         $query = "SELECT 
-        id, username, language, category, report, page, domain, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
-        FROM reports WHERE post_type = 0";
+        id, username, language, category, report, page, domain, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p') FROM reports WHERE post_type = 0";
         
         if ( isset($_GET['page']) && isset($_GET['method']) && $_GET['method'] == 'page' ) {
             $query.=" AND page = ?";
@@ -164,7 +163,7 @@ if (isset($_GET) && count($_GET)) {
             $bind_domain = $_GET['domain'];
         } 
         
-        if(isset($_GET['order'])){
+        if(isset($_GET['order'])) {
             switch ($_GET['order']) {
                 case 'most_followed':
                     $query="SELECT reports.id, reports.username, reports.language, reports.category, reports.report, reports.page, reports.domain, reports.opera_version, reports.opera_build, reports.operating_system, reports.additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p') FROM reports LEFT JOIN ratings ON reports.id = ratings.id_foreign_key WHERE ratings.rating = 0 GROUP BY reports.id ORDER BY COUNT(ratings.rating) DESC ";
@@ -252,9 +251,7 @@ if (isset($_GET) && count($_GET)) {
         $stmt = $db->stmt_init();
         
         // TODO check DATE_FORMAT when multilangualizing
-        $query = "SELECT 
-        id, username, language, category, report, page, domain, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
-        FROM reports WHERE 1=1 ";
+        $query = "SELECT id, username, language, category, report, page, domain, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p') FROM reports WHERE 1=1 ";
 
         if ( isset($_GET['domain']) ) {
             $query.=" AND domain = ?";
@@ -269,7 +266,7 @@ if (isset($_GET) && count($_GET)) {
             $bind_report_id=$_GET["id"];
         }
         
-         if ( isset($_GET['user']) ) {
+        if ( isset($_GET['user']) ) {
             $query.=" AND username = ?";
             $bind_user=$_GET["user"];
         }
@@ -336,12 +333,43 @@ if (isset($_GET) && count($_GET)) {
                     
             }
         }
-    }
-} else if($_GET["mode"]=="write_a_comment"){
-    $stmt = $db->stmt_init();
-        
-        
-        $query = "INSERT INTO reports VALUES (id,$twitter_name, 'EN', '0','' , '','', '','','','','' DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
-        FROM reports WHERE 1=1 ";
+    } else if($_GET["mode"]=="write_a_comment"){
+    // validate the form fields
+        if (!isset($_GET['id']) || !(settype($_GET['id'],"int"))) 
+             exit ("Please make sure you are commenting a real report");
+        if (!isset($_GET['description']) || strlen($_GET['description']) < 5) 
+            exit ('Please fill out the description field with a description of the problem you encountered.');
+        elseif (!isset($_GET['system']) || !isset($_GET['version']) || !isset($_GET['build']))
+            exit ('Please make sure your operating system name and Opera version & build number are filled out in the "additional details" section.');
+        elseif (!$logged_in)
+            exit ('Please logged in!');
+        else {
+            $stmt = $db->stmt_init();
+             //*****/
+            $query = "SELECT page,domain,category FROM reports WHERE id=? AND post_type=0";
+            $stmt->prepare($query);
+            $stmt->bind_param('i', $_GET["id"]);
+            $q = $stmt->execute();
+            $stmt->bind_result($page,$domain,$category);
+            $stmt->fetch();
+            
+            $stmt->free_result();
+            $stmt = $db->stmt_init();
 
-}else echo 'Page not found!';
+            if ($stmt->prepare("INSERT INTO reports (report_id, username, language, report, category, page, domain, opera_version, opera_build, operating_system, additional_information, post_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)")) {
+
+                $stmt->bind_param('issssssssss', $_GET['id'], $FixTheWeb->userdata->screen_name, $_GET['language'], $_GET['description'], $category, $page, $domain, $_GET['version'], $_GET['build'], $_GET['system'], $_GET['misc']);
+                
+                $q = $stmt->execute();
+                if ($q && $stmt->affected_rows) {
+                    exit ('true');
+                } else exit ('An error occurred while submitting the error report. Please try submitting it again.');
+           
+            }
+        }
+        
+        // if the data is processed and inserted into the database successfully then echo "true":
+        exit;
+    }
+
+} else echo 'Page not found!';

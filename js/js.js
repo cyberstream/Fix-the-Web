@@ -24,28 +24,73 @@ function commentWriter(data,hist){
         resultArea+=reportTemplate(a.id,a.username,a.date_time,a.report,a.Opera,a.build,a.OS,a.domain,a.page,true);
     }
     var form="<form action='' id='comment-form'> \
-                <select id='category'> \
-                    <option value='2'>Major problem</option> \
-                    <option value='1'>Minor problem</option> \
-                    <option value='3'>Site is unuseable</option> \
-                </select> \
-                <input type='text' id='OS' value=''> \
-                <input type='text' id='opera-version'> \
-                <input type='text' id='opera-build-number'> \
-                <textarea name='d' placeholder='Please enter your comment'></textarea> \
-                <button type='submit'>Send</button> \
+                <input type='text' data-fid='system' id='OS' value=''> \
+                <input type='text' data-fid='version' id='opera-version'> \
+                <input type='text' data-fid='build' id='opera-build-number'> \
+                <input type='hidden' data-fid='language' id='language'> \
+                <textarea id='comment-text' data-fid='description' placeholder='Please enter your comment'></textarea> \
+                <textarea style='display:none' id='additional-information' data-fid='misc'></textarea> \
+                <button type='submit' data-fid='misc'>Send</button> \
             </form>";
-    document.getElementsByTagName("section")[0].innerHTML=resultArea+form;
-    document.getElementById("opera-version").value=opera.version();
-    document.getElementById("opera-build-number").value=opera.buildNumber();
+            // TODO misc information will be editeable and its style will be added into css.css file.
+    document.getElementsByTagName("section")[0].innerHTML       = resultArea+form;
+
+    if ((window.opera) && (opera.buildNumber)){
+            // learn and write version into hidden element (#opera-version)
+            document.getElementById("opera-version").value      =   opera.version();
+
+            // learn and write version of Opera into hidden element (#opera-build-number)
+            document.getElementById("opera-build-number").value =   opera.buildNumber();
+    }
+
+    document.getElementById("language").value      =   navigator.userLanguage;
+
+    // seperator will split additional information to different parts
+    var separator = "\r\n===========\r\n";
+
+    // cache (#additional-information) element
+    var bug = '';
+
+    // learn what plugins is installed and write them into hidden element (#additional-information)
+    bug += "PLUGINS:" + separator;
+
+    // navigator.plugins stores what plugins is installed and which are activated
+    if (navigator.plugins) {
+            for (var i = 0; i < navigator.plugins.length; i++) {
+                    // for each plugin obtain its name, description and file name. Then write them into hidden element (#additional-information)
+                    var plugin = navigator.plugins[i];
+                    bug += "* " + plugin.name + " ("+plugin.description+") "+plugin.filename+"\r\n";
+            }
+    }
+
+    // learn screen resolution write them into hidden element (#additional-information)
+    bug += "\n\nSCREEN:" + separator;
+    if ((typeof(screen.width) != "undefined") && (screen.width && screen.height))
+            bug += "Resolution: " + screen.width + 'x' + screen.height + "\n";
+
+    // learn color depth and write them into hidden element (#additional-information)
+    if ((typeof(screen.colorDepth) != "undefined") && (screen.colorDepth))
+            bug += "ColorDepth: " + screen.colorDepth + "\r\n";
+    
+    document.getElementById('additional-information').innerHTML = bug;
+
     sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_OS",function(data){
        document.getElementById("OS").value=data; 
     },null);
     
     document.getElementById("comment-form").addEventListener("submit",function(event){
         event.preventDefault();
-        sendRequest("GET",HOST+"ajax_request_handler.php?mode=write_a_comment&id="+result.id,function(){
-
+        var commentQuery='';
+        for (i=0,formElements=document.getElementById("comment-form").children;i<6;i++){
+            commentQuery+="&"+formElements[i].dataset["fid"]+"="+formElements[i].value;
+        }
+        sendRequest("GET",HOST+"ajax_request_handler.php?mode=write_a_comment&id="+result.id+commentQuery,function(data){
+            if(data!="true")
+                alert(data);
+            else{
+                
+                alert("sent");
+            }
         },null);
 
 
