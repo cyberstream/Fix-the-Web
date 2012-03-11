@@ -1,46 +1,46 @@
 [
     {
-        "patch_target": 'newsminer.com',
-        "opera_version": '11.62',
-        "status": 'patch added',
-        "comment": 'Fixed the cramped links in the lists under "National News", "International News", and "Entertainment News"',
-        "css_patch": '.ap_table_styles li { padding: 7px 4px}'
+        "patch_target": "newsminer.com",
+        "opera_version": "11.62",
+        "status": "patch added",
+        "comment": "Fixed the cramped links in the lists under \'National News\', \'International News\', and \'Entertainment News\'",
+        "css_patch": ".ap_table_styles li { padding: 7px 4px}"
     },
 
     {
-        "patch_target": 'memurlar.net',
-        "opera_version": '11.62',
-        "status": 'patch added',
-        "comment": 'Fix the overflowed ul tag section in .Box',
-        "css_patch": 'div.Box ul { padding-left:22px; margin-left:0px !important } div.Box a.ListItem { padding-left:22px !important; }'
+        "patch_target": "memurlar.net",
+        "opera_version": "11.62",
+        "status": "patch added",
+        "comment": "Fix the overflowed ul tag section in .Box",
+        "css_patch": "div.Box ul { padding-left:22px; margin-left:0px !important } div.Box a.ListItem { padding-left:22px !important; }"
     },
     
     {
-        "patch_target": 'trtspor.com',
-        "opera_version": '11.62',
-        "status": 'patch added',
-        "comment": 'Fixed invisible content of body',
-        "css_patch": '#main{content: inherit;}'
+        "patch_target": "trtspor.com",
+        "opera_version": "11.62",
+        "status": "patch added",
+        "comment": "Fixed invisible content of body",
+        "css_patch": "#main{content: inherit;}"
     },
     
     {
         "patch_target" : {
             "domain": /(sanalgsm\.com|netgsm\.com\.tr)/i,
-            "path": 'gresim.asp'
+            "path": "gresim.asp"
         },
-        "opera_version": '11.61',
-        "status": 'patch added',
-        "comment": 'Fixed too small captcha images',
-        "css_patch": '.contain{padding:0 !important}'
+        "opera_version": "11.61",
+        "status": "patch added",
+        "comment": "Fixed too small captcha images",
+        "css_patch": ".contain{padding:0 !important}"
     },
     
     {
         "patch_target": {
             "url": /(invisionzone\.com\/index\.php?showuser\=|invisionpower\.com\/user\/)/i
         }
-        "opera_version": '11.62',
-        "status": 'patch added',
-        "comment": 'Fixed color fade in annoyance when hovering over sidebar items',
-        "css_patch": '.ipsVerticalTabbed_tabs li a {background: #F6F8FB;}'
+        "opera_version": "11.62",
+        "status": "patch added",
+        "comment": "Fixed color fade in annoyance when hovering over sidebar items",
+        "css_patch": ".ipsVerticalTabbed_tabs li a {background: #F6F8FB;}"
     }
 ]
