@@ -25,7 +25,7 @@
     
     {
         "patch_target" : {
-            "domain": "/(sanalgsm\.com|netgsm\.com\.tr)/i",
+            "domain_regex": ["(sanalgsm\.com|netgsm\.com\.tr)", "i"],
             "path": "gresim.asp"
         },
         "opera_version": "11.61",
@@ -36,7 +36,7 @@
     
     {
         "patch_target": {
-            "url": "/(invisionzone\.com\/index\.php?showuser\=|invisionpower\.com\/user\/)/i"
+            "url_regex": ["(invisionzone\.com\/index\.php?showuser\=|invisionpower\.com\/user\/)", "i"]
         }
         "opera_version": "11.62",
         "status": "patch added",
