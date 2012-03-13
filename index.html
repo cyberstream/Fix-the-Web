@@ -439,14 +439,14 @@
                                                     dialog.data.fadeIn('medium', function() {
                                                         
                                                         // load comments thread after the dialog box is visible
-                                                        var report_id = $('#report', this).data('id');
+                                                        /*var report_id = $('#report', this).data('id');
                                                         
                                                         $.get(CONFIG.defaultHost + 'ajax_request_handler.php?mode=get_comment_list&id=' + report_id, function(data) {
                                                             data = JSON.parse(data || '[]')['list'] || '';
                                                             
                                                             $('<div>' +(data.length ? data[0]['report'] : '')+ '</div>').appendTo('#simplemodal-data')
                                                         });
-                                                        
+                                                        */
                                                     });
                                             });
                                     });
@@ -459,7 +459,7 @@
                                     });
                                 },
                                 maxWidth: window.innerWidth - 150,
-                                maxHeight: window.innerHeight - 150
+                                maxHeight: window.innerHeight - 100
                             }); // end of the modal dialog functions
                         }); // end function that handles displaying reports modal window
                     } // end reports output

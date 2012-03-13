@@ -1,5 +1,5 @@
 CONFIG = {
-    defaultHost: 'http://localhost/', // the default domain to make AJAX post requests to; *must have* the trailing slash "/"
+    defaultHost: 'http://www.operaturkiye.net/fix-the-web/', // the default domain to make AJAX post requests to; *must have* the trailing slash "/"
     twitter: {
         consumerKey: "frKRutacGx6VUkMhwQeJ6Q",
         consumerSecret: "aUEFth57HGgRQC0pYjkCwrIZUpROLCVvPBZsM4dg",
@@ -260,7 +260,7 @@ function update(callback) {
                             // then split the file's contents up between multiple widget.preferences variables (like the ad block lists in Opera AdBlock)
                             // store the patches script in localStorage. Will turn it into a script element in 'includes/include.js'
 
-                            widget.preferences['patches'] = JSON.stringify(JSON.parse(data.replace(/(\r\n|\n|\r)/gm,"")))
+                            widget.preferences['patches'] = data.replace(/(\r\n|\n|\r)/gm, '');
                             console.log('Fix the Web\'s patches.json file was just updated.');
                         }, null, false);
                 } else if (checksum == 'undefined') error = true;
