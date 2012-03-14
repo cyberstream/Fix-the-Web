@@ -234,6 +234,7 @@
     padding: 6px;
     position: fixed;
     width: 100%;
+    top:0px;
     -moz-box-sizing:border-box;
     box-sizing:border-box;
     z-index: 100;
