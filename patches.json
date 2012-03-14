@@ -23,7 +23,7 @@
   {
     "patch_target":{
       "domain_regex":[
-        "(sanalgsm.com|netgsm.com.tr)",
+        "(sanalgsm\\\\.com|netgsm\\\\.com\\\\.tr)",
         "i"
       ],
       "path":"gresim.asp"
@@ -36,7 +36,7 @@
   {
     "patch_target":{
       "url_regex":[
-        "(invisionzone.com/index.php?showuser=|invisionpower.com/user/)",
+        "(invisionzone\\\\.com/index.php?showuser=|invisionpower\\\\.com/user/)",
         "i"
       ]
     },
