@@ -151,7 +151,6 @@ opera.extension.onconnect = function() {
           page_address = tab ? tab.url.replace(/#(.*)/, '').replace(/\/$/ig, '') : '' // remove trailing slashes and the hash segment of the URL
     
     sessionStorage.removeItem(page_address) // Erase the cached error report count for the current page if it is set. It is updated when the page loads
-    opera.postError('hi')
     ToolbarIcon.init()
 }
 window.onload = ToolbarIcon.create()
@@ -310,9 +309,13 @@ opera.extension.onmessage = function(event) {
     if (event.data == 'get_frame_content') {    
         if (tab) {
             
-            sendRequest ('GET', 'ajax_request_handler.php?mode=get_report_list&count=50&page=1&domain=' + encodeURIComponent(domain_name) + '&method=' + mode + '&page=' + encodeURIComponent(page_address), function(data) {
-                console.log( JSON.stringify(JSON.parse(data)['list']))
-                event.source.postMessage({frame_content : JSON.stringify(JSON.parse(data)['list'])})
+            // TODO change to this when server-side files are updated:
+            // sendRequest ('GET', ajax_request_handler.php?mode=get_report_list&count=50&page=1&domain=' + encodeURIComponent(domain_name) + '&method=' + mode + '&page=1&url=' + encodeURIComponent(page_address), function(data) {
+            sendRequest ('GET', 'ajax_request_handler.php?mode=get_frame_content&count=50&page=1&domain=' + encodeURIComponent(domain_name) + '&method=' + mode + '&page=' + encodeURIComponent(page_address), function(data) {
+                // TODO change to this when ss files are updated:
+                // event.source.postMessage({frame_content : JSON.stringify(JSON.parse(data)['list'])})
+                
+                event.source.postMessage({frame_content : JSON.stringify(JSON.parse(data))})
             }, true);
         }
     } else if (event.data == 'initialize badge') {
