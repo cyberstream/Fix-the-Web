@@ -155,9 +155,9 @@ if (isset($_GET) && count($_GET)) {
         $query = "SELECT 
         id, username, language, category, report, page, domain, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p') FROM reports WHERE post_type = 0";
         
-        if ( isset($_GET['page']) && isset($_GET['method']) && $_GET['method'] == 'page' ) {
+        if ( isset($_GET['url']) && isset($_GET['method']) && $_GET['method'] == 'page' ) {
             $query.=" AND page = ?";
-            $bind_domain = preg_replace('/\/$/', '', $_GET['page']);
+            $bind_domain = preg_replace('/\/$/', '', $_GET['url']);
         } elseif ( isset($_GET['domain']) ) {
             $query.=" AND domain = ?";
             $bind_domain = $_GET['domain'];
