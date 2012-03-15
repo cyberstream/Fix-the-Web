@@ -9,15 +9,16 @@ if (isset($_GET) && count($_GET)) {
         // detects the OS by reading the HTTP_USER_AGENT string and extracting details about the OS from it. 
 
         $OSList = array (
-                // Match user agent string with operating systems
+                // Match user agent string with operating systems            
                 'Windows 3.11' => 'Win16',
                 'Windows 95' => '(Windows 95)|(Win95)|(Windows_95)',
                 'Windows 98' => '(Windows 98)|(Win98)',
                 'Windows 2000' => '(Windows NT 5.0)|(Windows 2000)',
                 'Windows XP' => '(Windows NT 5.1)|(Windows XP)',
-                'Windows Server 2003' => '(Windows NT 5.2)',
+                'Windows Server 2003/XP 64-bit' => '(Windows NT 5.2)',
                 'Windows Vista' => '(Windows NT 6.0)',
-                'Windows 7' => '(Windows NT 7.0)',
+                'Windows 7' => '(Windows NT 7.0|Windows NT 6.1)',
+                'Windows 8' => '(Windows NT 6.2)',
                 'Windows NT 4.0' => '(Windows NT 4.0)|(WinNT4.0)|(WinNT)|(Windows NT)',
                 'Windows ME' => 'Windows ME',
                 'Open BSD' => 'OpenBSD',
