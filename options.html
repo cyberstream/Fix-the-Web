@@ -344,7 +344,7 @@
     window.addEventListener("load", function() {
         loadPrefs()
         
-        if (location.hash == '') location.hash = 'preferences'
+        if (location.hash == '' || !document.getElementById(location.hash.replace('#', ''))) location.hash = 'preferences'
         else document.getElementById(location.hash.replace('#', '')).className = 'active';
         
         var sections = document.querySelectorAll("section"),
@@ -393,8 +393,8 @@
               currentTab = document.getElementById(currentHash + '-tab'),
               currentSection = document.getElementById(currentHash);
               
-        if (currentHash == '') { // don't allow the URL to change to an empty hash
-            location.hash = '#authenticate';
+        if (currentHash == '' || !currentSection) { // don't allow the URL to change to an empty hash
+            location.hash = 'preferences';
             return;
         }
         

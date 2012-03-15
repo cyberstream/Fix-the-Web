@@ -191,12 +191,21 @@
         form, #login-notice { display: none; }        
         body.logged_in form { display: block; }
         body.login #login-notice { display:block; }
+        
+        #login-notice a {
+            background:-o-linear-gradient(top,rgb(60, 160, 255),rgb(40, 140, 250)); 
+            color: #222; 
+            padding: 2px 3px; 
+            text-shadow: 0 0 10px #fff; 
+            border-radius: 5px; 
+            border:1px solid #999;
+        }
     </style>
     <title>Fix the Web</title>
 </head>
 <body class="loading">
     <p id="login-notice">
-        Oops! It looks like you need to <a href="options.html#authenticate" target="_blank">login</a> to report a site problem. 
+        Oops! It looks like you need to <a href="options.html" target="_blank">login</a> to report a site problem. 
     </p>
     
     <form action="" method="post" id="report-site-form">
