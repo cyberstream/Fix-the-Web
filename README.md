@@ -13,4 +13,8 @@ The development roadmap is [here.](http://my.opera.com/community/forums/findpost
 
 You can found lastest stable version from [Opera Addons Catalog](https://addons.opera.com/en/addons/extensions/details/fix-the-web/).
 
+[Fix the Web Server Side](http://www.operaturkiye.net/fix-the-web/) files can be found in [here](https://github.com/cyberstream/Fix-the-Web-Server-Side/).
+
+Feel free to make any contribution.
+
 [Offical blog](http://my.opera.com/fix-the-web/blog/) and [official forums](http://my.opera.com/fix-the-web/forums/)
