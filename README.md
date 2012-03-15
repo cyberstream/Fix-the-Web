@@ -11,4 +11,6 @@ If you want to apply a patch to a web page, then then you are looking for the [p
 You can see the long-term plan for the extension [here.](http://my.opera.com/community/forums/findpost.pl?id=11505222)
 The development roadmap is [here.](http://my.opera.com/community/forums/findpost.pl?id=11512302)
 
+You can found lastest stable version from [Opera Addons Catalog](https://addons.opera.com/en/addons/extensions/details/fix-the-web/).
+
 [Offical blog](http://my.opera.com/fix-the-web/blog/) and [official forums](http://my.opera.com/fix-the-web/forums/)
