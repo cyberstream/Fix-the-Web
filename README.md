@@ -19,10 +19,15 @@ The development roadmap is [here.](http://my.opera.com/community/forums/findpost
 
 #Links
 [Lastest Stable version from Opera Addons Catalog](https://addons.opera.com/en/addons/extensions/details/fix-the-web/)
-[Offical blog](http://my.opera.com/fix-the-web/blog/) 
-[Official forums](http://my.opera.com/fix-the-web/forums/)
-[CSS Patches](https://github.com/cyberstream/Fix-the-Web-CSS-Patches/)
-[Server-side](https://github.com/cyberstream/Fix-the-Web-Server-Side/) - [Web Interface](http://www.operaturkiye.net/fix-the-web/)
-[How to Patch a Web Page](http://my.opera.com/fix-the-web/blog/2012/03/01/how-to-patch-a-web-page)
-[How to Create CSS Patches](http://my.opera.com/fix-the-web/blog/2012/03/16/how-to-add-a-css-patch)
 
+[Offical blog](http://my.opera.com/fix-the-web/blog/) 
+
+[Official forums](http://my.opera.com/fix-the-web/forums/)
+
+[CSS Patches](https://github.com/cyberstream/Fix-the-Web-CSS-Patches/)
+
+[Server-side](https://github.com/cyberstream/Fix-the-Web-Server-Side/) - [Web Interface](http://www.operaturkiye.net/fix-the-web/)
+
+[How to Patch a Web Page](http://my.opera.com/fix-the-web/blog/2012/03/01/how-to-patch-a-web-page)
+
+[How to Create CSS Patches](http://my.opera.com/fix-the-web/blog/2012/03/16/how-to-add-a-css-patch)
