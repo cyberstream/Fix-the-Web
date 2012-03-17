@@ -17,9 +17,9 @@ Install the lastest stable version in the [Opera addons catalog](https://addons.
 
 [Official forums](http://my.opera.com/fix-the-web/forums/)
 
-[CSS Patches](https://github.com/cyberstream/Fix-the-Web-CSS-Patches/)
+[CSS Patches repository](https://github.com/cyberstream/Fix-the-Web-CSS-Patches/)
 
-[Server-side](https://github.com/cyberstream/Fix-the-Web-Server-Side/) - [Web Interface](http://www.operaturkiye.net/fix-the-web/)
+[Server-side repository](https://github.com/cyberstream/Fix-the-Web-Server-Side/) - **[Web Interface](http://www.operaturkiye.net/fix-the-web/)**
 
 [How to Patch a Web Page](http://my.opera.com/fix-the-web/blog/2012/03/01/how-to-patch-a-web-page)
 
