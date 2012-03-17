@@ -1,5 +1,5 @@
 #What is Fix the Web?
-"Fix the Web" is an upcoming extension for [Opera Web Browser](http://www.opera.com/browser). Many web pages use malformed HTML, poorly-written Javascript, or bad web development practices such as browser-sniffing. Consequently, these pages could produce visual flaws, functional glitches, or even worse, be completely nonfunctional in Opera, a standards-conforming web browser. 
+*Fix the Web* is an extension-in-progress for [Opera Web Browser](http://www.opera.com/browser). Many web pages use malformed HTML, poorly-written Javascript, or bad web development practices such as browser-sniffing. Consequently, these pages could produce visual flaws, functional glitches, or even worse, be completely nonfunctional in Opera, a standards-conforming web browser. 
 
 ##What is purpose of this extension?
 The goal of *Fix the Web* is to provide a solution to these problems by allowing users to report site problems they encounter, reply to others' bug reports, and, most importantly, apply patches to broken web pages.
