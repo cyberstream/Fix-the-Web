@@ -288,7 +288,7 @@ function update(callback) {
 if(widget.preferences.getItem("update-interval"))
     // "update-interval" in widget.preferences will determine how often the patches.js file is updated
     // update-interval is in minutes, but setTimeout accepts milliseconds, so convert update-interval to seconds unit
-    setTimeout(update(), (widget.preferences.getItem("update-interval") * 1000 * 60)); 
+    setTimeout(update, (widget.preferences.getItem("update-interval") * 1000 * 60)); 
 
 function getOS () {
     sendRequest('GET', 'ajax_request_handler.php?mode=get_OS', function(data) {
