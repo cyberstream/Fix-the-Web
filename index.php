@@ -54,7 +54,13 @@ if ($logged_in) {
         <div id="more-detail-about-project">More</div>
         <p style="clear:both;"></p>
     </header>
-    <section>    
+    <section>
+        <noscript>
+            <?php
+            $questionMarkPosition    =   strpos($_SERVER["REQUEST_URI"],"?");
+            ?>
+            <iframe src='writer.php<?php echo substr( $_SERVER["REQUEST_URI"],$questionMarkPosition);?>'></iframe>
+        </noscript>   
     </section>
         <aside>
             

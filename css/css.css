@@ -262,3 +262,9 @@
     top: -6px;
     border-radius: 0;
 }
+iframe{
+    border: none;
+    width:100%;
+
+
+}
