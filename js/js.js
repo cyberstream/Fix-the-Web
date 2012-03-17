@@ -5,9 +5,9 @@ function reportTemplate(id,username,date_time,report,operaVersion,operaBuildNumb
     var content='';
     content="<article><h6><a href='?mode=get_comment_list&include_report=true&user="+username+"'>"+username+"</a> said on "+date_time+":</h6><div class='tools'>";
     if(!isComment)
-    content+="<button data-id="+id+" class='go-button'> &gt; </button>";
-    content+="<button data-id="+id+" class='follow-button'> follow </button>";
-    content+="<button data-id="+id+" class='like-button'> like </button></div><p>";
+    content+="<a href='' data-id="+id+" class='go-button'> &gt; </a>";
+    content+="<a href='' data-id="+id+" class='follow-button'> follow </a>";
+    content+="<a href='' data-id="+id+" class='like-button'> like </a></div><p>";
 
     content+=report+"</p><span class='small'><a href="+page+" title=\"" + page + "\">"+(page.length > 40 ? page.substr(0, 40) + '...' : page)+"</a> on "+domain+"</a><span class='additional-information'>"+operaVersion+"."+operaBuildNumber+" on "+OS+"</span></article>";
     return content;
@@ -88,30 +88,32 @@ function commentWriter(data,hist){
             if(data!="true")
                 alert(data);
             else{
-                
                 alert("sent");
             }
         },null);
 
 
     },false);
+    
     if(!hist)
         history.pushState(
             {
                 data:   data,
-                type:   "comment",
-                id:     result.id,
-                page:   result.page,
-                //user:   result.user,
-                domain: result.domain
+                type:   result.type,
+                query:  result.query,
+                id:     (result.id      ==  undefined) ? ''  :  result.id,
+                page:   (result.page    ==  undefined) ? '1' :  result.page,
+                user:   (result.user    ==  undefined) ? ''  :  result.user,
+                domain: (result.domain  ==  undefined) ? ''  :  result.domain,
+                url:    (result.url     ==  undefined) ? ''  :  result.url,
             },
-            'Comments ',
-            HOST+"#!/Comments=1/page="+result.page+"/"+"id="+result.id+"/domain="+result.domain
+            'Comments',
+            HOST+"?"+result.query
         );
 }
 
 // If xmlHTTPRequest is succesfull, then write the result into a suitable area
-function resultWriter(data,hist){
+function reportWriter(data,hist){
     if(!data) return false;
     var result=JSON.parse(data);
     var resultArea='';
@@ -124,23 +126,28 @@ function resultWriter(data,hist){
     document.querySelector("section").innerHTML=resultArea;
     if(!hist)
         history.pushState(
-            {   data: data,
-                type:"report",
-                id:result.id,
-                page:result.page,
-                domain:result.domain,
-                order:result.order
-            }, 
-            "Report List",
-            HOST+"#!/Reports=1/page="+result.page+"/"+"id="+result.id+"/"+"domain="+result.domain+"/order="+result.order);
+            {
+                data:   data,
+                type:   result.type,
+                query:  result.query,
+                id:     (result.id      ==  undefined) ? ''  :  result.id,
+                page:   (result.page    ==  undefined) ? '1' :  result.page,
+                user:   (result.user    ==  undefined) ? ''  :  result.user,
+                domain: (result.domain  ==  undefined) ? ''  :  result.domain,
+                url:    (result.url     ==  undefined) ? ''  :  result.url,
+            },
+            'Reports',
+            HOST+"?"+result.query
+        );
 
     var buttons = document.querySelectorAll(".go-button");
 
     for (c=0;c<buttons.length;c++){
         
         buttons[c].addEventListener("click",function(event){
+            event.preventDefault();
             sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_comment_list&include_report=true&id="+event.target.dataset.id,commentWriter,null);
-            
+            return false;
         },false);
     }
 }
@@ -148,53 +155,71 @@ function resultWriter(data,hist){
 window.addEventListener('popstate', function (event) {
   if(event.state==null) return false;
   switch(event.state.type){
-      case "comment":
+      case "comments":
       commentWriter(event.state.data,1);
       break;
-      case "report":
-      resultWriter(event.state.data,1);
+      case "reports":
+      reportWriter(event.state.data,1);
       break;
   }
   
 },false);
 
 function goHomePage(){
-    sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list",resultWriter,null);
+    sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list",reportWriter,null);
 }
 
 window.addEventListener("DOMContentLoaded",function(){
     // index page operations
     //if you have a hash you will be redirecting exact page that you requested
-    if(location.hash.length>2)
-        go2page(-2);
+    if(location.hash.length>1){
+        // load comment list
+        if(location.hash.search("get_report_list")>0){
+            sendRequest("GET",HOST+"ajax_request_handler.php"+location.hash,reportWriter,null);
+        // or load report list
+        }else if(location.hash.search("get_comment_list")>0){
+            sendRequest("GET",HOST+"ajax_request_handler.php"+location.hash,commentWriter,null);
+        }
+    }
     else // otherwise you will see lastest reports on home screen
         goHomePage();
 
+    // Search form sent event
     document.getElementById("form").addEventListener("submit",function(){
-
+        // prevent default sent action
         event.preventDefault();
-
-        var query='&';
-        if(document.getElementById("domain").value)
-            query+="domain="+document.getElementById("domain").value+"&";
-        query+="a=1";
         
-        sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list&search=1"+query,resultWriter,null);
+        // join domain value into query
+        if(document.getElementById("domain").value)
+            query+="&domain="+document.getElementById("domain").value;
+        
+        // sent query server and write results
+        sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list&search=1"+query,reportWriter,null);
         
         return false;
-        
     },false);
 
-    document.querySelector("header h1").addEventListener("click",goHomePage,false);
+    // Bind home page link into logo
+    document.querySelector("header h1 a").addEventListener("click",function(){
+        // prevent default action
+        event.preventDefault();
+
+        // load home page data
+        goHomePage();
+
+        return false;
+    },false);
 
     document.getElementById("most-popular-reports").addEventListener("click",function(event){
+        // prevent default click action
         event.preventDefault();
-        sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list&order=popularity",resultWriter,null);
+        sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list&order=popularity",reportWriter,null);
     },false);
 
     document.getElementById("most-followed-reports").addEventListener("click",function(event){
+        // prevent default click action
         event.preventDefault();
-        sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list&order=most_followed",resultWriter,null);
+        sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list&order=most_followed",reportWriter,null);
     },false);
 
     document.getElementById("more-detail-about-project").addEventListener("click",function(event){
@@ -211,16 +236,11 @@ window.addEventListener("DOMContentLoaded",function(){
                     explanation.style.height="100px";
                     event.target.innerText="More";
                 break;
-
             }
-
         },false);
-    
-    
-
 },false);
 
-function go2page(page){
+/*function go2page(page){
     
     var variables = document.location.hash.slice(3).split("/");
     var c=Array();
@@ -281,26 +301,28 @@ function go2page(page){
         query+="&user="+user;   
     }*/
 
-    switch(type){
+    /*switch(type){
         case "comment":
             query+="&mode=get_comment_list";
             sendRequest("GET",query,commentWriter,null);
         break;
         case "report":
             query+="&mode=get_report_list";
-            sendRequest("GET",query,resultWriter,null);
+            sendRequest("GET",query,reportWriter,null);
         break;
     }
     
     
 }
+*/
 
 function sendRequest (method, url, callback, params) {
     var xhr = new XMLHttpRequest();
-   
+    document.getElementById("loading").style.display="block";
     xhr.onreadystatechange = function() {
         if (this.status == 200 && this.readyState == 4) {
             if (typeof callback == 'function') callback(this.responseText);
+            document.getElementById("loading").style.display="none";
         }
     }
          

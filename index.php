@@ -27,12 +27,15 @@ if ($logged_in) {
     <link rel="stylesheet" type="text/css" href="css/css.css">
 </head>
 <body>
+    <div id="user">
     <?php
-        if ($logged_in) echo '<div id="user">You are logged in as @<strong>' . $twitter_name . '</strong>. <a href="?logout" title="Logout of Fix the Web" class="go-button">logout</a></div>';
-        else echo '<div id="user"><strong>You are not logged in.</strong> <a href="?login" title="Login to Fix the Web with your Twitter Account" class="go-button">login with Twitter</a></div>';
-    ?>
+        if ($logged_in) echo 'You are logged in as @<strong>' . $twitter_name . '</strong>. <a href="?logout" title="Logout of Fix the Web" class="go-button">logout</a>';
+            else echo '<strong>You are not logged in.</strong> <a href="?login" title="Login to Fix the Web with your Twitter Account" class="go-button">login with Twitter</a>';            
+        ?>
+        <span id="loading" class="go-button">Loading</span>
+    </div>
     <header>
-        <h1>Fix the Web</h1>
+        <h1><a href="<?php echo "?mode=get_report_list";?>">Fix the Web</a></h1>
         <div id="explanation-about-the-extension">
             <h2>
                 What is Fix the Web?

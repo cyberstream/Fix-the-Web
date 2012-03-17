@@ -7,7 +7,7 @@
 </head>
 <body>
 <?php 
-$questionMarkPosition    =   strpos($_SERVER["REQUEST_URI"],"?") || 0;
+$questionMarkPosition    =   strpos($_SERVER["REQUEST_URI"],"?"); // TODO fix the bug about no request (home page request)
 //$fp = fopen("ajax_request_handler.php".substr( $_SERVER["REQUEST_URI"],$questionMarkPosition), "r");
 
 // create a new cURL resource

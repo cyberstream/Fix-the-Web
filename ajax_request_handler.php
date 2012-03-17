@@ -150,7 +150,6 @@ if (isset($_GET) && count($_GET)) {
         exit ('0');
     } elseif ($_GET['mode'] == 'get_report_list') {
         // TODO control $_GET variable health
-        
         $stmt = $db->stmt_init();
         
         // TODO check DATE_FORMAT when multilangualizing
@@ -220,10 +219,14 @@ if (isset($_GET) && count($_GET)) {
         
             if ($q && $stmt->num_rows) {
                 $stmt->bind_result($id, $username, $language, $category, $report, $page, $domain_db, $version, $build, $OS, $misc, $date_time);
-
+                foreach ($_GET as $key => $value) {
+                    $resultQuery.=$key."=".$value."&";
+                }
                 $JSON = array(
                     "id"    =>(isset($_GET['id'])       ?   $_GET['id']     :   ""      ),
                     "page"  =>(isset($_GET['page'])     ?   $_GET['page']   :   "1"     ),
+                    "type"  =>"reports",
+                    "query" => substr($resultQuery,0,-1),
                     "domain"=>(isset($_GET['domain'])   ?   $_GET['domain'] :   ""      ),
                     "order" =>(isset($_GET['order']))   ?   $_GET['order']  :   "time_desc"
                 );
@@ -307,12 +310,16 @@ if (isset($_GET) && count($_GET)) {
         
             if ($q && $stmt->num_rows) {
                 $stmt->bind_result($id, $username, $language, $category, $report, $page, $domain_db, $version, $build, $OS, $misc, $date_time);
-
+                foreach ($_GET as $key => $value) {
+                    $resultQuery.=$key."=".$value."&";
+                }
                 $JSON = array(
                     "id"    =>  (isset($_GET['id'])     ?   $_GET['id']     :   ""),
                     "domain"=>  (isset($_GET['domain']) ?   $_GET['domain'] :   ""),
                     "page"  =>  (isset($_GET['page'])   ?   $_GET['page']   :   "1"),
                     "user"  =>  (isset($_GET['user'])   ?   $_GET['user']   :   ""),
+                    "type"  =>  "comments",
+                    "query" => substr($resultQuery,0,-1),
                     "order" =>(isset($_GET['order']))   ?   $_GET['order']  :   "time_desc"
                 );
                 while ($stmt->fetch()) {

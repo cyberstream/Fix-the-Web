@@ -20,17 +20,16 @@
             position:relative;
             width:100%
         }
-
-        h1 {
-            color:#9ACD32;
-            float:left;
+        h1{
+            width:20%;
             min-width:100px;
             text-align:center;
-            text-shadow: 1px 0px 0px #FFFFFF, 2px 2px 2px #393939;
-            width:20%
+            float:left;
         }
-        h1:hover{
-        cursor:pointer;
+        h1 a,h1 a:link,h1 a:visited{
+            color:#9ACD32;
+            text-shadow: 1px 0px 0px #FFFFFF, 2px 2px 2px #393939;
+            padding:0.67em 0; 
         }
 
         #explanation-about-the-extension {
@@ -85,13 +84,11 @@
             box-shadow: 0px 0px 1px #000;
             border-radius:2px;
             text-align:center;
-            border: 1px solid #999;
+            border: 0;
             color: #FFFFFF;
             font-weight: 700;
-            border:0px;
-            color:#fff;
-            font-weight:700;
-            padding:.33em 1em;
+            font-size:0.8em;
+            padding:4px 15px;
             float:right;
             position:relative;
             text-shadow:1px 1px 0px #666;
@@ -251,20 +248,27 @@
 }
 
 #user strong {color: #222;}
-#user a.go-button {
+#user a.go-button,span.go-button {
     box-shadow: -1px 0px 1px #BBBBBB, inset 1px 0px 1px #666666;
     color: #FFFFFF;
     font-size: 14px;
-    margin: 0px 0px 0px 10px;
+    margin: 0px;
     padding: 7px;
     right: -6px;
     text-transform: uppercase;
     top: -6px;
     border-radius: 0;
 }
+#loading{
+   margin:0px 0px 0px 10px;
+   background: #00C4FF;
+    background: -o-linear-gradient(bottom, #D11219, #E82727 40px);
+    background: -moz-linear-gradient(bottom, #D11219, #E82727 40px);
+    background: -webkit-linear-gradient(bottom, #D11219, #E82727 40px);
+    background: -ms-linear-gradient(bottom, #D11219, #E82727 40px);
+    background: linear-gradient(bottom, #D11219, #E82727 40px);
+}
 iframe{
     border: none;
     width:100%;
-
-
 }
