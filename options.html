@@ -209,6 +209,32 @@
         font-size: 12px;
         font-weight: bold;
     }
+    
+    #recent-posts li {
+        font-weight: bold;
+        opacity: 0;
+        -o-transition: opacity 1s ease-in-out;
+        position: absolute;
+        z-index: -1;
+        padding: 4px 6px;
+        padding: 3px; 
+        background: -o-linear-gradient(top, #eaeaea, #ddd); 
+        border-radius: 4px; 
+        box-shadow: 0 0 5px #ccc; 
+        border: 1px solid #ccc        
+    }
+    
+    #recent-posts li.current {
+        opacity: 1;
+        z-index: 10;
+    }
+    
+    #blog-header {
+        margin: 0;
+        padding: 10px 0 0 0;
+    }
+    
+    #blog-header a {color: #111}
     </style>
 </head>
 <body>
@@ -261,6 +287,8 @@
         <p id="loading"><img src="images/loading-circle.png" alt="loading" title="Loading..." /></p>
         
         <p id="connected" class="hide">You are connected to your Twitter account right now. <strong><a href="#" id="disconnect">disconnect</a></strong></p>
+    
+        <ul id="recent-posts"></ul><!--populated by Javascript-->
     </section>
     <section id="about">
         <h1>Fix the Web <span class="light"> About</span></h1>
@@ -295,6 +323,47 @@
     <script type="text/javascript" src="scripts/jquery-1.6.4.min.js"></script>
     <script type="text/javascript" src="scripts/jquery.simplemodal.1.4.2.min.js"></script>
     <script type="text/javascript">
+        $.support.cors = true;
+        
+        // get recent blog posts from Fix the Web's blog'
+        $(function() {
+            $.get('http://my.opera.com/fix-the-web/xml/rss/blog', function(data) {
+                var items = $('item', data);
+                
+                // populate the list with the the 7 most recent blog posts
+                for (i in items) {
+                    if ( i > 7 ) break;
+                    if ( !items[i] || typeof items[i].getElementsByTagName != 'function' || i == 'context' ) continue;
+
+                    var link = items[i].getElementsByTagName('link')[0].firstChild.nodeValue,
+                          title = items[i].getElementsByTagName('title')[0].firstChild.nodeValue
+
+                    $('<li><a href="' +link+ '" title="Click to read this post" target="_blank">' +title+ '</a></li>').appendTo('#recent-posts');
+                }
+                
+                if ($('#recent-posts').children().length) {
+                    $('<h3 id="blog-header"><span class="light">Latest Posts on</span> <a href="http://my.opera.com/fix-the-web/blog">Fix the Web\'s Blog</a></h3>').insertBefore('#recent-posts')
+                    
+                    var k = -1,
+                          posts = $('#recent-posts').children();
+                    
+                    function loop () {
+                        var previous = k;
+                        
+                        if (k + 1 == posts.length) k = 0;
+                        else k++;
+                        
+                        $(posts[previous]).removeClass('current');
+                        $(posts[k]).addClass('current');
+                        
+                        setTimeout(loop, 4000);
+                    }
+                    
+                    loop();
+                }
+            });
+        });
+        
     var form = document.getElementById("prefs-form"),
           fields = form.querySelectorAll("input[type='range'], input[type='radio']");
     
