@@ -46,6 +46,13 @@
     "css_patch":".ipsVerticalTabbed_tabs li a {background: #F6F8FB;}"
   },
   {
+    "patch_target":"kramerelectronics.com",
+    "opera_version":"11.62",
+    "status":"patch added",
+    "comment":"Fix for layout",
+    "css_patch":"BODY > TABLE#container {table-layout: auto;}"
+  },
+  {
       "patch_target": "twitter.com",
       "opera_version": "11.62",
       "status": "patch added",
