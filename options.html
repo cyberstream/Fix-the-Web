@@ -297,6 +297,11 @@
     #columnize {
         min-height:190px;
     }
+    
+    label[for=as-opera], input:checked + label[for=as-opera] {color: red}
+    label[for=as-ie], input:checked + label[for=as-ie] {color: blue}
+    label[for=as-firefox], input:checked + label[for=as-firefox] {color: orange}
+    label[for=as-chrome], input:checked + label[for=as-chrome] {color: green}
     </style>
 </head>
 <body>
@@ -330,7 +335,7 @@
                     </label>
                 </p>
                 <div class="sub_section">
-                    Automatically make CSS3 properties coded for other browsers <strong><a href="https://addons.opera.com/addons/extensions/details/css-prefixr">work in Opera too</a></strong>?
+                    Make CSS3 properties coded for other browsers <strong><a href="https://addons.opera.com/addons/extensions/details/css-prefixr" title="Feature derived from Christoph142's CSS3 Prefixr extension">work in Opera too</a></strong>?
                     <input type="radio" name="prefixr" value="true" id="prefixr-on" />
                     <label for="prefixr-on">
                         <strong>Enable</strong>
@@ -344,6 +349,29 @@
                         <label for="prefixr-exclude">Don't run Prefixr on these sites <em>(one site per line)</em>:</label>
                         <textarea name="prefixr-exclude" id="prefixr-exclude" cols="60" rows="7" title="one site per line; don't include the protocol (e.g. http://)" placeholder="exclude.com"></textarea>
                     </div>
+                </div>
+                <div class="sub_section">
+                    Browser Identification (<abbr title="Will mask Javascript properties as the selected browser. However, the user-agent string sent in the HTTP request can not be masked by the extension. To do that, right-click the page, select Edit Site Preferences..., and go to Network &gt; Browser Identification">about</abbr>): 
+                    
+                    <input type="radio" name="browser-id" value="opera" id="as-opera" />
+                    <label for="as-opera">
+                        <strong>Opera (default)</strong>
+                    </label>
+                    
+                    <input type="radio" name="browser-id" value="ie" id="as-ie" />
+                    <label for="as-ie">
+                        <strong>Internet Explorer</strong>
+                    </label>
+                    
+                    <input type="radio" name="browser-id" value="firefox" id="as-firefox" />
+                    <label for="as-firefox">
+                        <strong>Firefox</strong>
+                    </label>
+                    
+                    <input type="radio" name="browser-id" value="chrome" id="as-chrome" />
+                    <label for="as-chrome">
+                        <strong>Chrome</strong>
+                    </label>
                 </div>
         </form>
         <!--
@@ -498,9 +526,9 @@
                         } catch(e) {}
                     } else widget.preferences.setItem('prefixr-exclude', '[]')  
                 } else field.value = widget.preferences.getItem(field.name)
-
-                field.addEventListener("change", savePrefs, false);
             }
+            
+            field.addEventListener("change", savePrefs, false);
         }
 
         updateIntervalValue();

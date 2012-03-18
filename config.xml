@@ -12,6 +12,7 @@
     <preference name="display-reports-by" value="domain" /> <!--either "domain" or "page"-->
     <preference name="prefixr" value="true" />
     <preference name="prefixr-exclude" value="[]" />
+    <preference name="browser-id" value="opera" />
     
     <access origin="*" subdomains="true" />
 </widget>
