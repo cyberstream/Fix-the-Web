@@ -13,7 +13,6 @@ function reportTemplate(id,username,date_time,report,operaVersion,operaBuildNumb
     return content;
 }
 
-
 function commentWriter(data,hist){
     if(!data) return false;
     var result=JSON.parse(data);
@@ -88,6 +87,7 @@ function commentWriter(data,hist){
             if(data!="true")
                 alert(data);
             else{
+                // TODO Edit this area
                 alert("sent");
             }
         },null);
@@ -122,6 +122,7 @@ function reportWriter(data,hist){
         a=result.list[i];
         resultArea+=reportTemplate(a.id,a.username,a.date_time,a.report,a.Opera,a.build,a.OS,a.domain,a.page,false);
     }
+    // TODO links are broken
     resultArea+="<a href='' id='prev' onclick='go2page(-1)'>&lt;</a> <input type='number' onchange='go2page(this.value)' id='page' value='"+(result.page)+"'><a href='' id='forw' onclick='go2page(0)'>&gt;</a>";
     document.querySelector("section").innerHTML=resultArea;
     if(!hist)
@@ -172,13 +173,13 @@ function goHomePage(){
 window.addEventListener("DOMContentLoaded",function(){
     // index page operations
     //if you have a hash you will be redirecting exact page that you requested
-    if(location.hash.length>1){
+    if(location.search.length>1){
         // load comment list
-        if(location.hash.search("get_report_list")>0){
-            sendRequest("GET",HOST+"ajax_request_handler.php"+location.hash,reportWriter,null);
+        if(location.search.search("get_report_list")>0){
+            sendRequest("GET",HOST+"ajax_request_handler.php"+location.search,reportWriter,null);
         // or load report list
-        }else if(location.hash.search("get_comment_list")>0){
-            sendRequest("GET",HOST+"ajax_request_handler.php"+location.hash,commentWriter,null);
+        }else if(location.search.search("get_comment_list")>0){
+            sendRequest("GET",HOST+"ajax_request_handler.php"+location.search,commentWriter,null);
         }
     }
     else // otherwise you will see lastest reports on home screen
@@ -240,88 +241,17 @@ window.addEventListener("DOMContentLoaded",function(){
         },false);
 },false);
 
-/*function go2page(page){
-    
-    var variables = document.location.hash.slice(3).split("/");
-    var c=Array();
-    for(var b=0;b<variables.length;b++){
-        c[variables[b].split("=")[0]]=variables[b].split("=")[1];
-    }
-    // if you have a windows.history object you are surfing on this web site
-    if(window.history.state!=null && window.history.state.page!=undefined){
-        var currentPage = window.history.state.page;
-        var type        = window.history.state.type;
-        var domain      = window.history.state.domain;
-        var id          = window.history.state.id;
-        //var user        = window.history.state.user;
-        var order       = window.history.state.order   
-    }else{ 
-        var id          = (c["id"]      ==  undefined ? ""      : c["id"]);
-        var currentPage = (c["page"]    ==  undefined ? "1"     : c["page"]);
-        var type        = (c["Comments"]==  undefined ? "report": "comment");
-        var domain      = (c["domain"]  ==  undefined ? ""      : c["domain"]);
-        //var user        = (c["user"]    ==  undefined ? ""      : c["user"]);
-        var order       = (c["order"]   ==  undefined ? ""      : c["order"]);
-    }
-    // base query URL
-    var query = HOST+"ajax_request_handler.php?";
-
-    // if you send -2 as page parameter you are first time to visit the web site and trying to open a spesific url from your referer, so page parameter in your address will be pushed the query
-    if(page==-2){
-        query+="page="+currentPage;
-    }else if(page==-1) // you are trying to open previous page
-        query+="page="+(--currentPage);
-    else if(page==0){ // you are trying to open next page
-        query+="page="+(++currentPage);
-    }else if(page>0){ // you are trying to open a page that you specify. 
-        query+="page="+(page);
-    }
-    switch(order){
-        case "most_followed":
-            query+="&order=most_followed";
-        break;
-        case "popularity":
-            query+="&order=popularity";
-        break;
-        case "time_asc":
-            query+="&order=time_asc";
-        break;
-        case "time_desc":
-        default:
-            query+="&order=time_desc";
-        break;
-    }
-    if(id>0){
-        query+="&id="+id;
-    }
-    if(domain.length>2){
-        query+="&domain="+domain;
-    }
-    /*if(user.length>1){
-        query+="&user="+user;   
-    }*/
-
-    /*switch(type){
-        case "comment":
-            query+="&mode=get_comment_list";
-            sendRequest("GET",query,commentWriter,null);
-        break;
-        case "report":
-            query+="&mode=get_report_list";
-            sendRequest("GET",query,reportWriter,null);
-        break;
-    }
-    
-    
-}
-*/
-
 function sendRequest (method, url, callback, params) {
     var xhr = new XMLHttpRequest();
+
+    // for loading indicator
     document.getElementById("loading").style.display="block";
+
     xhr.onreadystatechange = function() {
         if (this.status == 200 && this.readyState == 4) {
             if (typeof callback == 'function') callback(this.responseText);
+
+            // if loading done, loading indicator will vanish
             document.getElementById("loading").style.display="none";
         }
     }

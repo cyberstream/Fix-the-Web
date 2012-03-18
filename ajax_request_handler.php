@@ -32,7 +32,7 @@ if (isset($_GET) && count($_GET)) {
         );
 
         $OS = '';
-        
+
         // Loop through the array of user agents and matching operating systems
         foreach($OSList as $current_OS => $match) {
             // Find a match
@@ -235,7 +235,7 @@ if (isset($_GET) && count($_GET)) {
                                             "username" => htmlentities ( $username ),
                                             "language" => htmlentities ( $language ),
                                             "category" => $category,
-                                            "report" => htmlentities ( $report ),
+                                            "report" => stripslashes(htmlentities ( $report )),
                                             "page" => htmlentities ( $page ),
                                             "domain" => htmlentities ( $domain_db ),          
                                             "Opera" => htmlentities ( $version ),
@@ -326,7 +326,7 @@ if (isset($_GET) && count($_GET)) {
                                             "username" => htmlentities ( $username ),
                                             "language" => htmlentities ( $language ),
                                             "category" => $category,
-                                            "report" => htmlentities ( $report ),
+                                            "report" => stripslashes(htmlentities ( $report )),
                                             "page" => htmlentities ( $page ),
                                             "domain" => htmlentities ( $domain_db ),
                                             "date_time" => htmlentities ( $date_time ),
