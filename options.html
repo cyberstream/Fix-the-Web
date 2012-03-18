@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <link rel="shortcut icon" href="images/icon-18.png" />
     <title>Options | Fix the Web</title>
-    
+
     <style type="text/css">
         @import 'modal_styles.css';
-        
+
     body {
         padding:0;
         margin:0;
@@ -15,26 +15,26 @@
         font-family: "arial", "lucida grande", "lucida sans unicode", "bitstream vera sans", "dejavu sans", "trebuchet ms", sans-serif;
         color:#111;
     }
-    
+
     a, a:link {
         color: #111;
         text-decoration: none;
     }
-    
-    section a, section a:link { color: #389CFE }    
+
+    section a, section a:link { color: #389CFE }
     a:hover { text-decoration: underline }
-    
+
     #prefs-form h1 {
         border-bottom:1px solid rgb(230,230,230 );
         margin:2px 0;
         padding:5px;
         clear:both;
     }
-    
+
     #prefs-form input[type=range] {
         width:300px;
     }
-    
+
     #update {
         margin:10px 0 0 0;
         padding:3px;
@@ -42,50 +42,53 @@
         border:1px solid #416fe2;
         display:inline-block;
         border-radius:5px;
-        cursor:pointer;
-        font-weight:bold;
-        -o-transition:background-color 400ms ease-in-out;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: bold;
+        -o-transition: background-color 400ms ease-in-out;
         text-shadow:0 0 12px #fff, 0 1px 1px #ddd;
     }
-    
+
     #update:hover {
         background: #7298f7;
     }
-    
+
     #loading_spinner {
-        width:28px; 
-        height:28px; 
+        width:28px;
+        height:28px;
         margin-left: 5px;
-        position:relative; 
+        position:relative;
         top:8px;
     }
-    
+
     #nav {
-        background:-o-linear-gradient(top, #eee, #ccc); 
-        padding:10px 5px 3px 5px; 
+        background:-o-linear-gradient(top, #eee, #ccc);
+        padding:10px 5px 3px 5px;
         z-index:10;
         border-bottom:1px solid #aaa;
     }
-    
+
     #nav a:not(.active):hover {
         background: #c1c1c1;
         padding-bottom: 3px;
     }
-    
+
     #nav a {
-        padding:5px 7px; 
-        text-decoration:none; 
-        font-weight:bold; 
-        font-size:14px; 
+        padding:5px 7px;
+        text-decoration:none;
+        font-weight:bold;
+        font-size:14px;
         text-transform:uppercase;
         text-shadow: 0 1px 1px #fff;
-    }    
-    #nav a.active { 
+    }
+
+    #nav a.active {
         background:#fff;
         border-radius: 6px 6px 0 0;
         box-shadow: 0 -1px 1px #bbb;
     }
-    
+
     section {
         width:80%;
         position:relative;
@@ -95,121 +98,121 @@
         display:none;
         -o-transition: opacity 0.6s ease;
     }
-    
+
     section.active {
         display: block;
-        opacity: 1;        
+        opacity: 1;
     }
-    
+
     section.inactive {
         display:block;
         opacity: 0;
     }
-    
+
     #nav a.active:before, #nav a.active:after {
-        content:''; 
-        position: absolute; 
-        padding: 0px; 
-        height: 7px; 
-        width: 6px; 
+        content:'';
+        position: absolute;
+        padding: 0px;
+        height: 7px;
+        width: 6px;
         border: 1px solid #ff0000;
     }
-    
-    #nav a.active:before {  
-        margin-left: -15px; 
-        margin-top: 13px; 
-        border-radius: 0 0 5px 0; 
-        border-color: transparent #ccc #aaa transparent; 
+
+    #nav a.active:before {
+        margin-left: -15px;
+        margin-top: 13px;
+        border-radius: 0 0 5px 0;
+        border-color: transparent #ccc #aaa transparent;
         box-shadow: 5px 5px 5px #fff;
     }
-    
-    #nav a.active:after { 
-        margin-left: 7px; 
-        margin-top: 13px; 
-        border-radius: 0 0 0 5px; 
-        border-color: transparent transparent #aaa #ccc; 
+
+    #nav a.active:after {
+        margin-left: 7px;
+        margin-top: 13px;
+        border-radius: 0 0 0 5px;
+        border-color: transparent transparent #aaa #ccc;
         box-shadow: -5px 5px 0 #fff;
     }
-    
+
     .light {color: #888}
-    
-    #display-reports-by-domain, #display-reports-by-page {
-        position: absolute; 
+
+    input[type=radio] {
+        position: absolute;
         opacity: 0;
     }
-    
-    #display-reports-by-domain + label,#display-reports-by-page + label {
-        cursor: pointer; 
-        padding: 2px 5px; 
-        padding-right:0; 
-        margin: 0 2px; 
-        border-radius:5px; 
-        border: 1px solid transparent; 
-        text-transform:uppercase; 
+
+    input[type=radio] + label {
+        cursor: pointer;
+        padding: 2px 5px;
+        padding-right:0;
+        margin: 0 2px;
+        border-radius:5px;
+        border: 1px solid transparent;
+        text-transform:uppercase;
         font-size:.8em;
     }
-    
-    #display-reports-by-domain:checked + label, #display-reports-by-page:checked + label {
-        background:-o-linear-gradient(top, #fff, #ccc); 
-        border: 1px solid #aaa; 
-        text-shadow: 0 1px 1px #fff; 
-        box-shadow: 0 0 3px #bbb; 
+
+    input[type=radio]:checked + label {
+        background:-o-linear-gradient(top, #fff, #ccc);
+        border: 1px solid #aaa;
+        text-shadow: 0 1px 1px #fff;
+        box-shadow: 0 0 3px #bbb;
         color:#0000cc;
     }
-    
+
     #twitter-login {background-image: url('images/signin_twitter.png')}
-    #facebook-login {background-image: url('images/signin_facebook.png')}
-    
+/*    #facebook-login {background-image: url('images/signin_facebook.png')}*/
+
     #facebook-login, #twitter-login {
-        width: 150px; 
-        height: 22px; 
-        display: inline-block; 
+        width: 150px;
+        height: 22px;
+        display: inline-block;
         background-position: 0 0;
     }
-    
+
     #facebook-login:hover, #twitter-login:hover {background-position:0 -24px}
     #facebook-login:active, #twitter-login:active {background-position: 0 -48px;}
-    
+
     ul {
         padding: 3px 0;
-        background: #eaeaea; 
-        text-shadow: 0 1px 1px #fff; 
-        border-radius: 5px; 
+        background: #eaeaea;
+        text-shadow: 0 1px 1px #fff;
+        border-radius: 5px;
         border:1px solid #ddd;
         display: inline-block;
         margin: 0;
     }
-    
+
     ul li {
         padding: 2px 5px;
         list-style:none;
     }
-    
+
     ul li:nth-child(2n) {background: #fff; }
-    
+
     .hide { display: none; }
-    
+
     #loading img {
-        display:block; 
+        display:block;
         margin: 0 auto;
     }
-    
+
     footer {
         text-align:center;
-        margin-top: 20px;            
+        margin-top: 20px;
     }
-    
+
     footer a {
-        background: -o-linear-gradient(bottom, #ddd, #fff); 
+        background: -o-linear-gradient(bottom, #ddd, #fff);
         color: #777;
-        text-transform: uppercase; 
-        padding: 2px 4px; 
-        border-radius: 3px; 
-        border: 1px solid #ccc; 
+        text-transform: uppercase;
+        padding: 2px 4px;
+        border-radius: 3px;
+        border: 1px solid #ccc;
         font-size: 12px;
         font-weight: bold;
     }
-    
+
     #recent-posts li {
         font-weight: bold;
         opacity: 0;
@@ -217,42 +220,105 @@
         position: absolute;
         z-index: -1;
         padding: 4px 6px;
-        padding: 3px; 
-        background: -o-linear-gradient(top, #eaeaea, #ddd); 
-        border-radius: 4px; 
-        box-shadow: 0 0 5px #ccc; 
-        border: 1px solid #ccc        
+        padding: 3px;
+        background: -o-linear-gradient(top, #eaeaea, #ddd);
+        border-radius: 4px;
+        box-shadow: 0 0 5px #ccc;
+        border: 1px solid #ccc
     }
-    
+
     #recent-posts li.current {
         opacity: 1;
         z-index: 10;
     }
-    
+
     #blog-header {
         margin: 0;
         padding: 10px 0 0 0;
     }
-    
+
     #blog-header a {color: #111}
+
+    label[for=prefixr-exclude] {
+        padding: 0 0 10px 0;
+        position: relative;
+        top: 25px;
+        width: 35%;
+        display: block;
+        float: left;
+    }
+
+    textarea#prefixr-exclude{
+        height: 100px;
+        overflow-y:auto;
+        width: 50%;
+        border: 1px solid #aaa;
+        border-radius: 3px;
+        padding: 5px;
+        font-family: sans-serif;
+        margin-left: 10px;
+        margin-top: 15px;
+    }
+
+    textarea#prefixr-exclude:hover {border:1px solid rgb(51, 153, 255);}
+    textarea#prefixr-exclude:focus {box-shadow: inset 0 0 10px #aaa;}
+
+    .sub_section {
+        padding: 15px 10px;
+        margin: 0;
+        border: 1px solid transparent;
+    }
+
+    .sub_section:hover, form.sub_section:hover {
+        background: #fff;
+        border:1px solid #FFB062;
+        box-shadow: 0 0 7px #ccc;
+        border-radius: 5px;
+    }
+
+    form.sub_section {padding-top: 0}
+
+    .sub_section:first-child {
+        margin-top: 0;
+        padding-top: 10px;
+    }
+    
+    #columnize div:nth-child(2) {
+        float:left; 
+        margin-left: 10px;
+        max-width: 70%;
+    }
+    
+    #columnize div:nth-child(1) {
+        float:left; 
+        max-width: 30%; 
+    } 
+    
+    #columnize {
+        min-height:190px;
+    }
     </style>
 </head>
 <body>
     <div id="nav"></div><!--This tab bar is automatically filled with JS.-->
-    
+
     <!-- To create a new tab, simply create a new <section> element with an ID. The ID will be the title of the tab. -->
     <section id="preferences">
         <h1>Fix the Web <span class="light"> Options</span></h1>
-        
-        <form id="prefs-form">            
-                <label>Check for updates to the CSS patches file every 
-                    <input type="range" min="30" max="720" step="30" name="update-interval" id="update-interval"/>
-                    <span id="update-interval-value"></span>
-                </label>
 
-                <div id="update">Check for new CSS patches now</div>
+        <form id="prefs-form">
+                <div class="sub_section">
+                    <label>Check for updates to the CSS patches file
+                        <input type="range" min="0" max="960" step="60" name="update-interval" id="update-interval" />
+                        <em><span id="update-interval-value"></span></em>
+                    </label>
 
-                <p>
+                    <div>
+                        <div id="update">check for updates now</div>
+                    </div>
+                </div>
+
+                <p class="sub_section">
                     Show reports count in the toolbar icon badge by
                     <input type="radio" id="display-reports-by-domain" name="display-reports-by" value="domain" />
                     <label for="display-reports-by-domain">
@@ -263,38 +329,53 @@
                         <strong>page</strong>
                     </label>
                 </p>
+                <div class="sub_section">
+                    Automatically add the <strong><a href="https://addons.opera.com/addons/extensions/details/css-prefixr">-o- prefix</a></strong> to CSS properties?
+                    <input type="radio" name="prefixr" value="true" id="prefixr-on" />
+                    <label for="prefixr-on">
+                        <strong>Enable</strong>
+                    </label>
+                    <input type="radio" name="prefixr" value="false" id="prefixr-off" />
+                    <label for="prefixr-off">
+                        <strong>Disable</strong>
+                    </label>
+
+                    <div>
+                        <label for="prefixr-exclude">Don't add the <strong>-o-</strong> prefix to CSS properties on these sites <em>(one site per line)</em>:</label>
+                        <textarea name="prefixr-exclude" id="prefixr-exclude" cols="60" rows="7" title="one site per line; don't include the protocol (e.g. \"http://\")" placeholder="exclude.com"></textarea>
+                    </div>
+                </div>
         </form>
         <!--
     </section>
     <section id="authenticate">-->
 <!--        <h1>Fix the Web <span class="light"> Authentication</span></h1>-->
-        <hr />
-        <form id="auth" class="hide">
-            <p>            
+        <form id="auth" class="hide sub_section">
+            <p>
                 <a href="#" id="twitter-login"></a>
 <!--                <a href="#" id="facebook-login"></a>-->
             </p>
-            
+
             <p>
                 <input type="text" placeholder="PIN number" size="30" id="pin-number" required="required" />
                 <button type="submit">Connect</button>
             </p>
-            
-            <button disabled="disabled">Connect with your Opera Account</button> 
+
+            <button disabled="disabled">Connect with your Opera Account</button>
             <em>(Opera's API is not capable of doing this yet. In the meanwhile, login with Twitter.)</em>
         </form>
-        
+
         <p id="loading"><img src="images/loading-circle.png" alt="loading" title="Loading..." /></p>
-        
+
         <p id="connected" class="hide">You are connected to your Twitter account right now. <strong><a href="#" id="disconnect">disconnect</a></strong></p>
-    
+
         <ul id="recent-posts"></ul><!--populated by Javascript-->
     </section>
     <section id="about">
         <h1>Fix the Web <span class="light"> About</span></h1>
-        
+
         <p>Fix the Web is open source. You can contribute to the project on Github:</p>
-        
+
         <ul>
             <li><strong><a href="http://my.opera.com/fix-the-web">My Opera <em>Fix the Web</em> Group</a></strong> (support, blog, forums, etc.)</li>
             <li><strong><a href="http://www.operaturkiye.net/fix-the-web">Home Page</a></strong> (still under construction)</li>
@@ -302,34 +383,48 @@
             <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-Server-Side">Server-side repository</a></strong></li>
             <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-CSS-Patches">CSS Patches</a></strong> (If a website just needs CSS to be patched, then add the patch to the <em><strong>patches.json</strong></em> file in this repo. If the problematic website needs JS for the patch, place it in <em><strong>includes/</strong>patches.js</em> in the <a title="Fix the Web's Repository" href="http://github.com/cyberstream/Fix-the-Web">extension repo</a>.)</li>
         </ul>
-        
-        <p><strong>Contributors:</strong></p>
-        
-        <ul>
-            <li><strong><a href="http://my.opera.com/cyberstream">cyberstream</a></strong> <a href="mailto:cyberstream@myopera.com">(email)</a></li>
-            <li><strong><a href="http://my.opera.com/greench">greench</a></strong> <a href="mailto:greench@myopera.com">(email)</a></li>
-            <li><strong><a href="http://my.opera.com/inbuster">inbuster</a></strong> <a href="mailto:inbuster@myopera.com">(email)</a></li>
-            <li><strong><a href="http://my.opera.com/metude">metude</a></strong> <a href="mailto:metude@myopera.com">(email)</a></li>           
-            <li><strong><a href="http://my.opera.com/zahek">zahek</a></strong> <a href="mailto:zahek@myopera.com">(email)</a></li>
-        </ul>
+            
+        <div id="columnize">            
+            <div>
+                <h4>Contributors:</h4>
+            
+                <ul>
+                    <li><strong><a href="http://my.opera.com/cyberstream">cyberstream</a></strong> <a href="mailto:cyberstream@myopera.com">(email)</a></li>
+                    <li><strong><a href="http://my.opera.com/greench">greench</a></strong> <a href="mailto:greench@myopera.com">(email)</a></li>
+                    <li><strong><a href="http://my.opera.com/inbuster">inbuster</a></strong> <a href="mailto:inbuster@myopera.com">(email)</a></li>
+                    <li><strong><a href="http://my.opera.com/metude">metude</a></strong> <a href="mailto:metude@myopera.com">(email)</a></li>
+                    <li><strong><a href="http://my.opera.com/zahek">zahek</a></strong> <a href="mailto:zahek@myopera.com">(email)</a></li>
+                    <li><strong><a href="http://my.opera.com/BSHarou">BS-Harou</a></strong></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4>Thanks:</h4>
+                
+                <ul>
+                    <li><strong><a href="http://my.opera.com/AntonDiaz">AntonDiaz</a></strong> (Added CSS fixes from his <strong><a href="https://addons.opera.com/addons/extensions/details/twitter-fix">Twitter Fix</a></strong> extension)</li>
+                    <li><strong><a href="http://my.opera.com/Christoph142">Christoph142</a></strong> (Based the <strong>-o- prefix</strong> feature off of his <strong><a href="https://addons.opera.com/addons/extensions/details/css-prefixr/">CSS Prefixr</a></strong> extension)</li>
+                </ul>
+            </div>
+        </div>
     </section>
-    
+
     <footer>
         <a href="index.html">Recent Reports List</a>
     </footer>
-    
+
     <script type="text/javascript" src="scripts/background.js"></script>
     <script type="text/javascript" src="scripts/jsOAuth-1.3.3.min.js"></script>
     <script type="text/javascript" src="scripts/jquery-1.6.4.min.js"></script>
     <script type="text/javascript" src="scripts/jquery.simplemodal.1.4.2.min.js"></script>
     <script type="text/javascript">
         $.support.cors = true;
-        
-        // get recent blog posts from Fix the Web's blog'
+
+        // get recent blog posts from Fix the Web's blog
         $(function() {
             $.get('http://my.opera.com/fix-the-web/xml/rss/blog', function(data) {
                 var items = $('item', data);
-                
+
                 // populate the list with the the 7 most recent blog posts
                 for (i in items) {
                     if ( i > 7 ) break;
@@ -340,151 +435,175 @@
 
                     $('<li><a href="' +link+ '" title="Click to read this post" target="_blank">' +title+ '</a></li>').appendTo('#recent-posts');
                 }
-                
+
                 if ($('#recent-posts').children().length) {
                     $('<h3 id="blog-header"><span class="light">Latest Posts on</span> <a href="http://my.opera.com/fix-the-web/blog">Fix the Web\'s Blog</a></h3>').insertBefore('#recent-posts')
-                    
+
                     var k = -1,
                           posts = $('#recent-posts').children();
-                    
+
                     function loop () {
                         var previous = k;
-                        
+
                         if (k + 1 == posts.length) k = 0;
                         else k++;
-                        
+
                         $(posts[previous]).removeClass('current');
                         $(posts[k]).addClass('current');
-                        
+
                         setTimeout(loop, 4000);
                     }
-                    
+
                     loop();
                 }
             });
         });
-        
+
     var form = document.getElementById("prefs-form"),
-          fields = form.querySelectorAll("input[type='range'], input[type='radio']");
-    
+          fields = form.querySelectorAll("input[type='range'], input[type='radio'], textarea");
+    var sliderOptions = {
+        '780': 'every day',
+        '840': 'every three days',
+        '900': 'every week',
+        '960': 'manually only',
+        '0': 'every time you start Opera'
+    }
+
     // Set the preference values for each field
     function savePrefs (event) {
-        if (event.target.name == 'display-reports-by') widget.preferences.setItem(event.target.name, event.target.id.replace('display-reports-by-', ''));
-        else widget.preferences.setItem(event.target.name, event.target.value);
+        if (event.target.name == 'display-reports-by') {
+            widget.preferences.setItem(event.target.name, event.target.id.replace('display-reports-by-', ''));
+        } else if (event.target.name == 'update-interval') {
+            widget.preferences.setItem('update-interval', event.target.value);
+        } else if (event.target.name == 'prefixr-exclude') {            
+            var sites = $('#prefixr-exclude').val(); 
+            
+            widget.preferences.setItem('prefixr-exclude', JSON.stringify(sites.split(/\r?\n/)))            
+        } else widget.preferences.setItem(event.target.name, event.target.value);
     }
-    
+
     // Get the preference values from the widget object
     function loadPrefs() {
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             if (typeof widget.preferences[field.name] !== "undefined") {
-                if (field.name == 'display-reports-by') {
+                if (field.getAttribute('type') == 'radio') {
                     if (widget.preferences.getItem(field.name) == field.value) field.checked = 'checked';
-                } else field.value = widget.preferences.getItem(field.name);
-                
+                } else if (field.id == 'prefixr-exclude') {
+                    if ( widget.preferences.getItem('prefixr-exclude') ) {
+                        try {
+                            var excluded_sites = JSON.parse(widget.preferences.getItem('prefixr-exclude'));
+                            
+                            field.value = excluded_sites.join('\n');
+                        } catch(e) {}
+                    } else widget.preferences.setItem('prefixr-exclude', '[]')  
+                } else field.value = widget.preferences.getItem(field.name)
+
                 field.addEventListener("change", savePrefs, false);
             }
         }
-        
+
         updateIntervalValue();
     }
-    
+
     function readableInterval (minutes) {
         var minutes = parseInt(minutes),
-              readable; 
-        
+              readable,
+              prepend = 'every ';
+
         if ( minutes == 60 ) readable = 'hour';
+        else if ((minutes > 720 && minutes % 60 == 0) || minutes == 0) readable = sliderOptions[minutes], prepend = '';
         else if ( minutes == 30 ) readable = 'half hour';
         else if ( minutes % 60 == 0 ) readable = (minutes / 60) + ' hours';
-        else if ( minutes % 60 == 30 ) readable = (minutes - 30) / 60 + '-1/2 hours';
+        else if ( minutes % 60 == 30 ) readable = (minutes - 30) / 60 + '.5 hours';
         else readable = minutes + ' minutes';
-        
-        return readable;
+
+        return prepend + readable;
     }
-    
+
     // That function shows update-interval's value on a visible HTML element
     function updateIntervalValue () {
         var interval = parseInt(document.getElementById("update-interval").value);
-        
+
         document.getElementById("update-interval-value").innerText = readableInterval(interval);
     }
-    
+
     // when the page is loaded, get extension preferences and assign them into correct input elements
     window.addEventListener("load", function() {
         loadPrefs()
-        
+
         if (location.hash == '' || !document.getElementById(location.hash.replace('#', ''))) location.hash = 'preferences'
         else document.getElementById(location.hash.replace('#', '')).className = 'active';
-        
+
         var sections = document.querySelectorAll("section"),
               nav = document.getElementById('nav'),
               currentSection = document.getElementById(location.hash.replace('#', ''));
-              
+
         currentSection.className = 'active';
-        
+
         for (i = 0; i < sections.length; i++) {
             var thisID = sections[i].id;
             activeClass = ('#' + thisID == location.hash ? ' class="active"' : '');
-            
+
             nav.innerHTML += '<a href="#' +thisID + '" id="' +thisID + '-tab"' +activeClass+ '>' +thisID+ '</a>';
         }
     }, false);
-    
+
     // when update interval is changed, update the value in the isible area
     document.getElementById("update-interval").addEventListener("change", updateIntervalValue, false);
-    
-    document.getElementById('update').addEventListener('click', function() { 
+
+    document.getElementById('update').addEventListener('click', function() {
         var loading = document.createElement('img'),
               update_button = document.getElementById('update');
-        
+
         loading.src = 'images/loading.png';
         loading.id = 'loading_spinner';
-        
-        if (!document.getElementById('loading_spinner')) update_button.parentNode.insertBefore(loading, update_button.nextSibling);        
-        
+
+        if (!document.getElementById('loading_spinner')) update_button.parentNode.insertBefore(loading, update_button.nextSibling);
+
         var updated = update(function(u) {
             if (document.getElementById('loading_spinner')) loading.parentNode.removeChild(loading);
 
             if (u == 2) $.modal('The CSS patches file was successfully updated!', { overlayClose: true });
             else if (u == 1) $.modal('No changes have been made to the CSS patches file since you last updated it.', { overlayClose: true });
-            else $.modal('There was an error updating the CSS patches file' + (u != 0 ? ': \n\n' + u : '.'), { overlayClose: true });            
+            else $.modal('There was an error updating the CSS patches file' + (u != 0 ? ': \n\n' + u : '.'), { overlayClose: true });
         });
     }, false)
-    
+
     function freezeClick(e) {
         e.preventDefault()
     }
-    
+
     window.addEventListener('hashchange', function() {
         var lastTab = document.querySelector('a.active'),
               lastSection = document.querySelector('section.active'),
               currentHash = location.hash.replace('#', '') || '',
               currentTab = document.getElementById(currentHash + '-tab'),
               currentSection = document.getElementById(currentHash);
-              
+
         if (currentHash == '' || !currentSection) { // don't allow the URL to change to an empty hash
             location.hash = 'preferences';
             return;
         }
-        
+
         lastTab.className = '';
         lastSection.className = 'inactive';
         currentTab.className = 'active';
-        
+
         // cancel any click events temporarily to fix the problem of tabs not working after you click a non-active tab during animation
         window.addEventListener('click', freezeClick, false);
-        
+
         setTimeout(function() {
             lastSection.className = '';
             currentSection.className = 'active';
-            
+
             // remove the "click freeze"
             window.removeEventListener('click', freezeClick, false);
         }, 600)
     }, false);
-    
+
     // OAuth authentication
-    
+
     if ( isLoggedIn() ) {
         $('#connected').removeClass('hide');
         $('#loading').attr('class', 'hide');
@@ -492,70 +611,70 @@
         $('#auth').removeClass('hide');
         $('#loading').attr('class', 'hide');
     }
-    
+
     // disconnect from your Twitter account
     $('#disconnect').click(function(e) {
         e.preventDefault ();
-        
+
         $('#connected').fadeOut(500, function() {
             widget.preferences.access_token = ''; // remove the access token from local storage
-            
-            $('#auth').removeClass('hide');   
+
+            $('#auth').removeClass('hide');
             $('#auth').css('opacity', 0).animate({
                 opacity: 1
             }, 650);
         });
     });
-    
+
     $('#auth').bind('submit', function() {
         $.modal ('Click the "<strong>Sign in with Twitter</strong>" button before entering a PIN number.', { overlayClose: true });
-        
+
         return false;
     });
-    
+
     $('#twitter-login').click(function() { // Twitter OAuth
         oauth = new OAuth(CONFIG.twitter);
         oauth.fetchRequestToken(function(url) {
             window.open(url, 'authorise', 'width=700,height=400,resizable=no');
         }, failureHandler);
-        
+
         $.modal ('A window should appear asking you to authorize this app on Twitter. After authorizing "Fix the Web", copy the PIN number Twitter gives you and paste it into the text box below the sign in button.', {maxWidth: Math.abs(window.innerWidth - 150), overlayClose: true})
-        
+
         $('#auth').unbind('submit'); // detach the previously attached event handler
-        
+
         $('#auth').bind('submit', function() { // add new event handler
             var pin = $('#pin-number', this).val();
 
             if (!pin || !pin.length) $.modal('Please enter the PIN number you got from Twitter.', { overlayClose: true })
             else {
                 $('#auth').fadeTo(500, 0.4);
-                
+
                 oauth.setVerifier (pin);
-                
+
                 oauth.fetchAccessToken(function(data) {
                     var query_string = parseQueryString(data.text),
                           oauth_access_token = query_string.oauth_token || '',
                           oauth_access_secret = query_string.oauth_token_secret || '';
-                          
+
                     widget.preferences.access_token = oauth_access_token + '|' + oauth_access_secret;
-                    
+
                     // hide authorization form and show the "logged in" paragraph
                     $('#auth').addClass('hide');
                     $('#connected').removeClass('hide');
-                    
+
                     $.modal('You are signed in!', { overlayClose: true });
                 }, failureHandler);
             }
 
             return false;
         });
-        
+
         return false;
     });
-    
+
     function failureHandler (data) { data ? console.log(data) : console.log('Request failed') }
-    
-    // parses a query string and returns 
+
+    // parses a query string and returns
     function parseQueryString (a,b,c,d,e) {for(b=/[?&]?([^=]+)=([^&]*)/g,c={},e=decodeURIComponent;d=b.exec(a.replace(/\+/g,' '));c[e(d[1])]=e(d[2]));return c;}
     </script>
 </body>

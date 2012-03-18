@@ -159,3 +159,45 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     }
 }, false);
+    
+// run Prefixr if it is enabled in the options page (From Christoph142's CSS3 Prefixr extension (https://addons.opera.com/addons/extensions/details/css-prefixr), used with permission)
+if ( widget.preferences.getItem('prefixr') != 'false' ) {
+    window.addEventListener('DOMContentLoaded', function() { //intern CSS-code in head
+        var excluded = widget.preferences.getItem('prefixr-exclude');
+
+        if (excluded != '') {
+            var excluded_array = JSON.parse(excluded),
+                domain = window.location.hostname
+
+            if (window.location.href.indexOf('http') != 0) return; // abort the prefixr function: this is not a valid web page
+
+            for ( i = 0; i < excluded_array.length; i++ ) {
+                if ( domain.indexOf (excluded_array[i]) > -1 ) return; // abort the prefixr funtion: this site was found in the excluded sites list
+            }
+        }
+
+        var style_elements = document.getElementsByTagName("style");
+
+        for (var i=0; i < style_elements.length; i++) {
+            var style = style_elements[i].innerHTML;
+
+            if (style.search(/-(moz|ms|webkit|o)-/gim) != -1 || style.search(/(?!-o-)(transition|transform|animation)/gim) != -1) {
+                console.log('3 passed')
+                style = style.replace(/[^-](transition|transform|animation)/gim,"-o-$1"); // -o--prefix CSS3 styles without prefix
+                style = style.replace(/-(moz|ms|webkit|o)-(border-(image|radius)|box-shadow)/gim, '$2'); // create prefixfree versions for all known working properties
+                style = style.replace(/-(moz|ms|webkit)-([^:])/gim,'-o-$2'); // change prefixes to -o- for all of the remaining ones
+                style = style.replace(/(-o-[^;]+;\s*)\1+/gim,"$1"); // removes duplicates of -o-properties
+                style_elements[i].innerHTML = style;
+            }
+        }
+    }, false);
+
+    window.opera.addEventListener('BeforeCSS', function(userJSEvent){ // external CSS-files
+        if(userJSEvent.cssText.search(/(-(moz|ms|webkit|o)-)?(transition|transform|animation)/gim)!=-1){
+            userJSEvent.cssText = userJSEvent.cssText.replace(/[^-](transition|transform|animation)/,"-o-$1");
+            userJSEvent.cssText = userJSEvent.cssText.replace(/-(moz|ms|webkit|o)-(border-(radius|image)|box-shadow)/gim,'$2');
+            userJSEvent.cssText = userJSEvent.cssText.replace(/-(moz|ms|webkit)-([^:])/gim,'-o-$2');
+            userJSEvent.cssText = userJSEvent.cssText.replace(/(-o-[^;]+;\s*)\1+/gim,"$1");
+        }
+    }, false);
+}

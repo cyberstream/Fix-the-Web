@@ -224,13 +224,13 @@ function sendRequest (method, url, callback, params, useDefaultHost) {
             xhr.send(null);
         }
     } catch(error) { 
-        console.log('Error: ' + error);
+        console.log('Update error: ' + error);
         return false;
     }
 } // end sendRequest() function
 
 // the update() function pulls the patches script from Github and puts its contents in widget.preferences['patches']
-function update(callback) {    
+function update(callback) {
     var r = new XMLHttpRequest();        
     error = false,
     updated = 0;
@@ -243,6 +243,9 @@ function update(callback) {
             // Pull the last checksum from localStorage and compare it to the checksum of the most recent commit on Github.
             // If the file was updated, then update the local copy of it
             this.onload = function() {
+                widget.preferences.setItem('last-update', Math.ceil((new Date() - 0) / 1000));
+                window.sessionStorage.setItem('updated', '1');
+                
                 if ( this.responseXML && this.responseXML.getElementsByTagName("entry")[0] )
                     var checksum = this.responseXML.getElementsByTagName("entry")[0].getElementsByTagName('id')[0].firstChild.nodeValue.match(/\/([\d\w]*)/)[1]
                 else error = true
@@ -260,6 +263,7 @@ function update(callback) {
                             // store the patches script in localStorage. Will turn it into a script element in 'includes/include.js'
 
                             widget.preferences['patches'] = data.replace(/(\r\n|\n|\r)/gm, '');
+                                                        
                             console.log('Fix the Web\'s patches.json file was just updated.');
                         }, null, false);
                 } else if (checksum == 'undefined') error = true;
@@ -285,10 +289,36 @@ function update(callback) {
     }
 }
 
-if(widget.preferences.getItem("update-interval"))
+// handle how often the CSS patches are updated
+if(widget.preferences.getItem("update-interval")) {
+    if (!widget.preferences.getItem("last-update")) widget.preferences.setItem('last-update', '0');
+    
+    var update_interval = widget.preferences.getItem("update-interval"),
+          last_update = widget.preferences['last-update'];
     // "update-interval" in widget.preferences will determine how often the patches.js file is updated
     // update-interval is in minutes, but setTimeout accepts milliseconds, so convert update-interval to seconds unit
-    setTimeout(update(), (widget.preferences.getItem("update-interval") * 1000 * 60)); 
+    setTimeout(function() {
+            var current_timestamp = Math.ceil((new Date() - 0) / 1000);
+            
+            if (update_interval > 0 && update_interval <= 720) 
+                if (current_timestamp - last_update >= (update_interval * 60)) update()
+            else if (update_interval == 0) { // if the value of update interval is "0", then only update the patches file once when the browser starts
+                if (window.sessionStorage.getItem('updated') != 1) update();
+            } else if (update_interval > 720 && update_interval < 960 && update_interval % 60 == 0) { 
+                // If the value is between 720-960, then it needs special treatment. 
+                // These values don't actually mean literal minutes like they did if they passed the first if() condition. 
+                // 780 => every day, 840 => once every three days, 900 => once every week
+                
+                var convert = {
+                    '780': 60 * 60 * 24, // number of seconds in a day
+                    '840': 60 * 60 * 24 * 3, // number of seconds in three days
+                    '900': 60 * 60 * 24 * 7
+                }
+                
+                if (current_timestamp - last_update >= convert[update_interval]) update();
+            }
+        }, 1000 * 60 * 2); // this test will run every 2 minutes to see if the patches file needs to check for an update
+}
 
 function getOS () {
     sendRequest('GET', 'ajax_request_handler.php?mode=get_OS', function(data) {
