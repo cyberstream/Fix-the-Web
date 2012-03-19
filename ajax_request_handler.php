@@ -263,9 +263,9 @@ if (isset($_GET) && count($_GET)) {
         }
         
         if ( isset($_GET['id']) && settype($_GET['id'], "int") ) {
-            if ( isset($_GET['include_report']) && $_GET['include_report'] == 'true' ) // if you want the report that the comments are commenting on included, then set include_report=true 
-               $query.=" AND (id = ? OR report_id = ?)";
-            else $query.=" AND report_id = ?";
+            if ( isset($_GET['include_report']) && $_GET['include_report'] == 'false' ) // if you want the report that the comments are commenting on not included, then set include_report=false 
+               $query.=" AND report_id = ?";
+            else $query.=" AND (id = ? OR report_id = ?)";
             
             $bind_report_id=$_GET["id"];
         }
@@ -280,11 +280,13 @@ if (isset($_GET) && count($_GET)) {
             if ( isset($bind_domain) ){
                 if ( isset($bind_report_id) )
                     if ( isset($bind_user) )
-                        if ( isset($_GET['include_report']) && $_GET['include_report'] == 'true' ) $stmt->bind_param('siis', $bind_domain, $bind_report_id, $bind_report_id, $bind_user);
-                        else $stmt->bind_param('sis', $bind_domain, $bind_report_id, $bind_user);
+                        if ( isset($_GET['include_report']) && $_GET['include_report'] == 'false' ) $stmt->bind_param('sis', $bind_domain, $bind_report_id, $bind_user);
+                        else 
+                            $stmt->bind_param('siis', $bind_domain, $bind_report_id, $bind_report_id, $bind_user);
                     else
-                        if ( isset($_GET['include_report']) && $_GET['include_report'] == 'true' ) $stmt->bind_param('sii', $bind_domain, $bind_report_id, $bind_report_id);
-                        else $stmt->bind_param('si', $bind_domain, $bind_report_id);
+                        if ( isset($_GET['include_report']) && $_GET['include_report'] == 'false' ) $stmt->bind_param('si', $bind_domain, $bind_report_id);
+                        else 
+                            $stmt->bind_param('sii', $bind_domain, $bind_report_id, $bind_report_id);
                 else
                     if(isset($bind_user))
                         $stmt->bind_param('ss', $bind_domain,$bind_user);
@@ -294,11 +296,11 @@ if (isset($_GET) && count($_GET)) {
             else{
                 if(isset($bind_report_id))
                     if(isset($bind_user)) {
-                        if ( isset($_GET['include_report']) && $_GET['include_report'] == 'true' ) $stmt->bind_param('iis', $bind_report_id, $bind_report_id, $bind_user);
-                         else $stmt->bind_param('is', $bind_report_id, $bind_user);                        
+                        if ( isset($_GET['include_report']) && $_GET['include_report'] == 'false' ) $stmt->bind_param('is', $bind_report_id, $bind_user);
+                         else  $stmt->bind_param('iis', $bind_report_id, $bind_report_id, $bind_user);
                     } else {
-                        if ( isset($_GET['include_report']) && $_GET['include_report'] == 'true' ) $stmt->bind_param('ii', $bind_report_id, $bind_report_id);
-                         else $stmt->bind_param('i', $bind_report_id);  
+                        if ( isset($_GET['include_report']) && $_GET['include_report'] == 'false' ) $stmt->bind_param('i', $bind_report_id);  
+                         else $stmt->bind_param('ii', $bind_report_id, $bind_report_id);
                     }
                 else
                     $stmt->bind_param('s',$bind_user);

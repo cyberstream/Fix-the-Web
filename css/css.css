@@ -74,6 +74,9 @@
             right:5px;
             top:0px
         }
+        .tools a,.tools a:link,.tools a:hover{
+            color:#fff !important;
+        }
 
         .go-button,.follow-button,.like-button {
             background: -o-linear-gradient(top, #9ACD32, #74a412) transparent;
@@ -258,15 +261,19 @@
     text-transform: uppercase;
     top: -6px;
     border-radius: 0;
+
 }
 #loading{
    margin:0px 0px 0px 10px;
-   background: #00C4FF;
-    background: -o-linear-gradient(bottom, #D11219, #E82727 40px);
-    background: -moz-linear-gradient(bottom, #D11219, #E82727 40px);
-    background: -webkit-linear-gradient(bottom, #D11219, #E82727 40px);
-    background: -ms-linear-gradient(bottom, #D11219, #E82727 40px);
-    background: linear-gradient(bottom, #D11219, #E82727 40px);
+   display: none;
+   position: relative;
+   background: #D11219;
+   background: -o-linear-gradient(bottom, #D11219, #E82727 40px);
+   background: -moz-linear-gradient(bottom, #D11219, #E82727 40px);
+   background: -webkit-linear-gradient(bottom, #D11219, #E82727 40px);
+   background: -ms-linear-gradient(bottom, #D11219, #E82727 40px);
+   background: linear-gradient(bottom, #D11219, #E82727 40px);
+
 }
 iframe{
     border: none;
