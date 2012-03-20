@@ -131,6 +131,8 @@ if (isset($_GET) && count($_GET)) {
                 $query = "SELECT COUNT(DISTINCT id) FROM reports WHERE page = ?";
                 $bind_variable = $_GET['page'];
             } else exit ('0');
+            
+            $query .= ' AND post_type = 0'; // only count reports
 
             if ($stmt->prepare($query)) {
                 $stmt->bind_param('s', $bind_variable);                
