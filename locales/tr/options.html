@@ -41,27 +41,27 @@
                     </label>
                 </p>
                 <div class="sub_section">
-                    Make CSS3 properties coded for other browsers <strong><a href="https://addons.opera.com/addons/extensions/details/css-prefixr" title="Feature derived from Christoph142's CSS3 Prefixr extension">work in Opera too</a></strong>?
+                    Diğer tarayıcılar için kodlanmış CSS3 özelliklerini Opera'da da çalıştır?
                     <input type="radio" name="prefixr" value="true" id="prefixr-on" />
                     <label for="prefixr-on">
-                        <strong>Enable</strong>
+                        <strong>Aktifleştir</strong>
                     </label>
                     <input type="radio" name="prefixr" value="false" id="prefixr-off" />
                     <label for="prefixr-off">
-                        <strong>Disable</strong>
+                        <strong>Pasifleştir</strong>
                     </label>
 
                     <div>
-                        <label for="prefixr-exclude">Don't run Prefixr on these sites <em>(one site per line)</em>:</label>
-                        <textarea name="prefixr-exclude" id="prefixr-exclude" cols="60" rows="7" title="one site per line; don't include the protocol (e.g. http://)" placeholder="exclude.com"></textarea>
+                        <label for="prefixr-exclude">Prefixr'i şu sitelerde çalıştırma <em>(her satırda bir site)</em>:</label>
+                        <textarea name="prefixr-exclude" id="prefixr-exclude" cols="60" rows="7" title="her satırda bir site; protokolu dahil etmeyin (örneğin, http://)" placeholder="exclude.com"></textarea>
                     </div>
                 </div>
                 <div class="sub_section">
-                    Browser Identification (<abbr title="Will mask Javascript properties as the selected browser. However, the user-agent string sent in the HTTP request can not be masked by the extension. To do that, right-click the page, select Edit Site Preferences..., and go to Network &gt; Browser Identification">about</abbr>): 
+                    Tarayıcı Kimliği (<abbr title="Javascript özelliklerini seçilen tarayıcı olarak maskeleyecek. Buna rağmen, HTTP isteği ile gönderilen kullanıcı kimliği eklenti tarafından maskelenemiyor. Bunu yapmak için sayfada sağ tıklayın, Site Tercihlerini Düzenle...'yi seçin ve Ağ > Tarayıcı tanımlaması">nedir</abbr>): 
                     
                     <input type="radio" name="browser-id" value="opera" id="as-opera" />
                     <label for="as-opera">
-                        <strong>Opera (default)</strong>
+                        <strong>Opera (varsayılan)</strong>
                     </label>
                     
                     <input type="radio" name="browser-id" value="ie" id="as-ie" />
@@ -133,11 +133,11 @@
             </div>
             
             <div>
-                <h4>Thanks:</h4>
+                <h4>Teşekkürler:</h4>
                 
                 <ul>
-                    <li><strong><a href="http://my.opera.com/AntonDiaz">AntonDiaz</a></strong> (Added CSS fixes from his <strong><a href="https://addons.opera.com/addons/extensions/details/twitter-fix">Twitter Fix</a></strong> extension)</li>
-                    <li><strong><a href="http://my.opera.com/Christoph142">Christoph142</a></strong> (Based the <strong>-o- prefix</strong> feature off of his <strong><a href="https://addons.opera.com/addons/extensions/details/css-prefixr/">CSS Prefixr</a></strong> extension)</li>
+                    <li><strong><a href="http://my.opera.com/AntonDiaz">AntonDiaz</a></strong> (<strong><a href="https://addons.opera.com/addons/extensions/details/twitter-fix">Twitter Fix</a></strong> eklentisinden CSS düzeltmeleri eklendi)</li>
+                    <li><strong><a href="http://my.opera.com/Christoph142">Christoph142</a></strong> (<strong><a href="https://addons.opera.com/addons/extensions/details/css-prefixr/">CSS Prefixr</a></strong> eklentisinden <strong>-o- öneki</strong> uyarlaması yapıldı)</li>
                 </ul>
             </div>
         </div>
@@ -173,42 +173,43 @@
                         
                         switch( Math.floor ((new Date() - time) / (1000 * 60 * 60 * 24)) ) { // this is the number of days since the article was posted
                             case 0 :
-                                time = 'posted today'
+                                time = 'bugün yazıldı'
                                 break;
                             case 1 :
-                                time = 'posted yesterday'
+                                time = 'dün yazıldı'
                                 break;
                             case 2 : 
-                                time = 'posted two days ago'
+                                time = 'iki gün önce yazıldı'
                                 break;
                             case 3 :
-                                time = 'posted three days ago'
+                                time = 'üç gün önce yazıldı'
                                 break;
                             case 4 :
-                                time = 'posted four days ago'
+                                time = 'dört gün önce yazıldı'
                                 break;
                             case 5 :
-                                time = 'posted five days ago'
+                                time = 'beş gün önce yazıldı'
                                 break;
                             case 6 : 
-                                time = 'posted six days ago'
+                                time = 'altı gün önce yazıldı'
                                 break;
                             case 7 :
-                                time = 'posted a week ago'
+                                time = 'bir hafta önce yazıldı'
                                 break;
                             default:
-                                time = 'posted on ' + time.toLocaleDateString();
+                                time = time.toLocaleDateString() + ' tarihinde yazıldı';
+                                time = time.replace(/sunday/ig, 'Pazar').replace(/monday/ig, 'Pazartesi').replace(/tuesday/ig, 'Salı').replace(/wednesday/ig, 'Çarşamba').replace(/thursday/ig, 'Perşembe').replace(/friday/ig, 'Cuma').replace(/saturday/ig, 'Cumartesi').replace(/january/ig, 'Ocak').replace(/february/ig, 'Şubat').replace(/march/ig, 'Mart').replace(/april/ig, 'Nisan').replace(/may/ig, 'Mayıs').replace(/june/ig, 'Haziran').replace(/july/ig, 'Temmuz').replace(/august/ig, 'Ağustos').replace(/september/ig, 'Eylül').replace(/october/ig, 'Ekim').replace(/november/ig, 'Kasım').replace(/december/ig, 'Aralık')
                         }                         
                         
                     } catch (e) {
                         time = '';
                     }
 
-                    $('<li><a href="' +link+ '" title="Click to read this post" target="_blank">' +title+ '</a> <strong class="light">' +time+ '</strong></li>').appendTo('#recent-posts');
+                    $('<li><a href="' +link+ '" title="Bu yazıyı okumak için tıkla" target="_blank">' +title+ '</a> <strong class="light">' +time+ '</strong></li>').appendTo('#recent-posts');
                 }
 
                 if ($('#recent-posts').children().length) {
-                    $('<h3 id="blog-header"><span class="light">Latest Posts on</span> <a href="http://my.opera.com/fix-the-web/blog">Fix the Web\'s Blog</a></h3>').insertBefore('#recent-posts')
+                    $('<h3 id="blog-header"><a href="http://my.opera.com/fix-the-web/blog">Fix the Web Blogundaki</a> <span class="light">Son Yazılar</span></h3>').insertBefore('#recent-posts')
 
                     var k = -1,
                           posts = $('#recent-posts').children();
@@ -233,11 +234,11 @@
     var form = document.getElementById("prefs-form"),
           fields = form.querySelectorAll("input[type='range'], input[type='radio'], textarea");
     var sliderOptions = {
-        '780': 'every day',
-        '840': 'every three days',
-        '900': 'every week',
-        '960': 'manually only',
-        '0': 'every time you start Opera'
+        '780': 'her gün',
+        '840': 'her üç günde',
+        '900': 'her hafta',
+        '960': 'sadece elle',
+        '0': 'Opera\'nın her açılışında'
     }
 
     // Set the preference values for each field
