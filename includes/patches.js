@@ -182,7 +182,6 @@ if ( widget.preferences.getItem('prefixr') != 'false' ) {
             var style = style_elements[i].innerHTML;
 
             if (style.search(/-(moz|ms|webkit|o)-/gim) != -1 || style.search(/(?!-o-)(transition|transform|animation)/gim) != -1) {
-                console.log('3 passed')
                 style = style.replace(/[^-](transition|transform|animation)/gim,"-o-$1"); // -o--prefix CSS3 styles without prefix
                 style = style.replace(/-(moz|ms|webkit|o)-(border-(image|radius)|box-shadow)/gim, '$2'); // create prefixfree versions for all known working properties
                 style = style.replace(/-(moz|ms|webkit)-([^:])/gim,'-o-$2'); // change prefixes to -o- for all of the remaining ones

@@ -1,307 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="utf-8">
     <link rel="shortcut icon" href="images/icon-18.png" />
-    <title>Options | Fix the Web</title>
+    <title>Seçenekler | Fix the Web</title>
 
     <style type="text/css">
-        @import 'modal_styles.css';
-
-    body {
-        padding:0 0 20px 0;
-        margin:0;
-        background:rgb(245, 245, 245);
-        font-family: "arial", "lucida grande", "lucida sans unicode", "bitstream vera sans", "dejavu sans", "trebuchet ms", sans-serif;
-        color:#111;
-    }
-
-    a, a:link {
-        color: #111;
-        text-decoration: none;
-    }
-
-    section a, section a:link { color: #389CFE }
-    a:hover { text-decoration: underline }
-
-    #prefs-form h1 {
-        border-bottom:1px solid rgb(230,230,230 );
-        margin:2px 0;
-        padding:5px;
-        clear:both;
-    }
-
-    #prefs-form input[type=range] {
-        width:300px;
-    }
-
-    #update {
-        margin:10px 0 0 0;
-        padding:3px;
-        background:#dbe4ff;
-        border:1px solid #416fe2;
-        display:inline-block;
-        border-radius:5px;
-        cursor: pointer;
-        text-transform: uppercase;
-        font-size: 14px;
-        font-weight: bold;
-        -o-transition: background-color 400ms ease-in-out;
-        text-shadow:0 0 12px #fff, 0 1px 1px #ddd;
-    }
-
-    #update:hover {
-        background: #7298f7;
-    }
-
-    #loading_spinner {
-        width:28px;
-        height:28px;
-        margin-left: 5px;
-        position:relative;
-        top:8px;
-    }
-
-    #nav {
-        background:-o-linear-gradient(top, #eee, #ccc);
-        padding:10px 5px 3px 5px;
-        z-index:10;
-        border-bottom:1px solid #aaa;
-    }
-
-    #nav a:not(.active):hover {
-        background: #c1c1c1;
-        padding-bottom: 3px;
-    }
-
-    #nav a {
-        padding:5px 7px;
-        text-decoration:none;
-        font-weight:bold;
-        font-size:14px;
-        text-transform:uppercase;
-        text-shadow: 0 1px 1px #fff;
-    }
-
-    #nav a.active {
-        background:#fff;
-        border-radius: 6px 6px 0 0;
-        box-shadow: 0 -1px 1px #bbb;
-    }
-
-    section {
-        width:80%;
-        position:relative;
-        margin: 0 auto;
-        z-index:0;
-        opacity:0;
-        display:none;
-        -o-transition: opacity 0.6s ease;
-    }
-
-    section.active {
-        display: block;
-        opacity: 1;
-    }
-
-    section.inactive {
-        display:block;
-        opacity: 0;
-    }
-
-    #nav a.active:before, #nav a.active:after {
-        content:'';
-        position: absolute;
-        padding: 0px;
-        height: 7px;
-        width: 6px;
-        border: 1px solid #ff0000;
-    }
-
-    #nav a.active:before {
-        margin-left: -15px;
-        margin-top: 13px;
-        border-radius: 0 0 5px 0;
-        border-color: transparent #ccc #aaa transparent;
-        box-shadow: 5px 5px 5px #fff;
-    }
-
-    #nav a.active:after {
-        margin-left: 7px;
-        margin-top: 13px;
-        border-radius: 0 0 0 5px;
-        border-color: transparent transparent #aaa #ccc;
-        box-shadow: -5px 5px 0 #fff;
-    }
-
-    .light {color: #888}
-
-    input[type=radio] {
-        position: absolute;
-        opacity: 0;
-    }
-
-    input[type=radio] + label {
-        cursor: pointer;
-        padding: 2px 5px;
-        padding-right:0;
-        margin: 0 2px;
-        border-radius:5px;
-        border: 1px solid transparent;
-        text-transform:uppercase;
-        font-size:.8em;
-    }
-
-    input[type=radio]:checked + label {
-        background:-o-linear-gradient(top, #fff, #ccc);
-        border: 1px solid #aaa;
-        text-shadow: 0 1px 1px #fff;
-        box-shadow: 0 0 3px #bbb;
-        color:#0000cc;
-    }
-
-    #twitter-login {background-image: url('images/signin_twitter.png')}
-/*    #facebook-login {background-image: url('images/signin_facebook.png')}*/
-
-    #facebook-login, #twitter-login {
-        width: 150px;
-        height: 22px;
-        display: inline-block;
-        background-position: 0 0;
-    }
-
-    #facebook-login:hover, #twitter-login:hover {background-position:0 -24px}
-    #facebook-login:active, #twitter-login:active {background-position: 0 -48px;}
-
-    ul {
-        padding: 3px 0;
-        background: #eaeaea;
-        text-shadow: 0 1px 1px #fff;
-        border-radius: 5px;
-        border:1px solid #ddd;
-        display: inline-block;
-        margin: 0;
-    }
-
-    ul li {
-        padding: 2px 5px;
-        list-style:none;
-    }
-
-    ul li:nth-child(2n) {background: #fff; }
-
-    .hide { display: none; }
-
-    #loading img {
-        display:block;
-        margin: 0 auto;
-    }
-
-    footer {
-        text-align:center;
-        margin-top: 20px;
-    }
-
-    footer a {
-        background: -o-linear-gradient(bottom, #ddd, #fff);
-        color: #777;
-        text-transform: uppercase;
-        padding: 2px 4px;
-        border-radius: 3px;
-        border: 1px solid #ccc;
-        font-size: 12px;
-        font-weight: bold;
-    }
-
-    #recent-posts li {
-        font-weight: bold;
-        opacity: 0;
-        -o-transition: opacity 1s ease-in-out;
-        position: absolute;
-        z-index: -1;
-        padding: 4px 6px;
-        padding: 3px;
-        background: -o-linear-gradient(top, #eaeaea, #ddd);
-        border-radius: 4px;
-        box-shadow: 0 0 5px #ccc;
-        border: 1px solid #ccc
-    }
-
-    #recent-posts li.current {
-        opacity: 1;
-        z-index: 10;
-    }
-
-    #blog-header {
-        margin: 0;
-        padding: 10px 0 0 0;
-    }
-
-    #blog-header a {color: #111}
-
-    label[for=prefixr-exclude] {
-        padding: 0 0 10px 0;
-        position: relative;
-        top: 25px;
-        width: 35%;
-        display: block;
-        float: left;
-    }
-
-    textarea#prefixr-exclude{
-        height: 100px;
-        overflow-y:auto;
-        width: 50%;
-        border: 1px solid #aaa;
-        border-radius: 3px;
-        padding: 5px;
-        font-family: sans-serif;
-        margin-left: 10px;
-        margin-top: 15px;
-    }
-
-    textarea#prefixr-exclude:hover {border:1px solid rgb(51, 153, 255);}
-    textarea#prefixr-exclude:focus {box-shadow: inset 0 0 10px #aaa;}
-
-    .sub_section {
-        padding: 15px 10px;
-        margin: 0;
-        border: 1px solid transparent;
-    }
-
-    .sub_section:hover, form.sub_section:hover {
-        background: #fff;
-        border:1px solid #FFB062;
-        box-shadow: 0 0 7px #ccc;
-        border-radius: 5px;
-    }
-
-    form.sub_section {padding-top: 0}
-
-    .sub_section:first-child {
-        margin-top: 0;
-        padding-top: 10px;
-    }
-    
-    #columnize div:nth-child(2) {
-        float:left; 
-        margin-left: 10px;
-        max-width: 70%;
-    }
-    
-    #columnize div:nth-child(1) {
-        float:left; 
-        max-width: 30%; 
-    } 
-    
-    #columnize {
-        min-height:190px;
-    }
-    
-    label[for=as-opera], input:checked + label[for=as-opera] {color: red}
-    label[for=as-ie], input:checked + label[for=as-ie] {color: blue}
-    label[for=as-firefox], input:checked + label[for=as-firefox] {color: orange}
-    label[for=as-chrome], input:checked + label[for=as-chrome] {color: green}
+    @import 'styles/modal_styles.css';
+    @import 'styles/options_styles.css';
     </style>
 </head>
 <body>
@@ -309,29 +15,29 @@
 
     <!-- To create a new tab, simply create a new <section> element with an ID. The ID will be the title of the tab. -->
     <section id="preferences">
-        <h1>Fix the Web <span class="light"> Options</span></h1>
+        <h1>Fix the Web <span class="light"> Seçenekler</span></h1>
 
         <form id="prefs-form">
                 <div class="sub_section">
-                    <label>Check for updates to the CSS patches file
+                    <label>CSS yamaları için güncellemeleri denetleme aralığı
                         <input type="range" min="0" max="960" step="60" name="update-interval" id="update-interval" />
                         <em><span id="update-interval-value"></span></em>
                     </label>
 
                     <div>
-                        <div id="update">check for updates now</div>
+                        <div id="update">CSS yamaları için güncellemeleri şimdi denetle</div>
                     </div>
                 </div>
 
                 <p class="sub_section">
-                    Show reports count in the toolbar icon badge by
+                    Araç çubuğu simgesindeki hata sayısını şuna göre göster:
                     <input type="radio" id="display-reports-by-domain" name="display-reports-by" value="domain" />
                     <label for="display-reports-by-domain">
-                        <strong>domain</strong>
+                        <strong>alan adı</strong>
                     </label>
                     <input type="radio" id="display-reports-by-page" name="display-reports-by" value="page" />
                     <label for="display-reports-by-page">
-                        <strong>page</strong>
+                        <strong>sayfa</strong>
                     </label>
                 </p>
                 <div class="sub_section">
@@ -386,42 +92,42 @@
 
             <p>
                 <input type="text" placeholder="PIN number" size="30" id="pin-number" required="required" />
-                <button type="submit">Connect</button>
+                <button type="submit">Bağlan</button>
             </p>
 
-            <button disabled="disabled">Connect with your Opera Account</button>
-            <em>(Opera's API is not capable of doing this yet. In the meanwhile, login with Twitter.)</em>
+            <button disabled="disabled">Opera hesabınızla bağlanın</button>
+            <em>(Opera API'si henüz bunu desteklemiyor. Twitter ile bağlanabilirsiniz.)</em>
         </form>
 
-        <p id="loading"><img src="images/loading-circle.png" alt="loading" title="Loading..." /></p>
+        <p id="loading"><img src="images/loading-circle.png" alt="Yükleniyor" title="Yükleniyor..." /></p>
 
-        <p id="connected" class="hide">You are connected to your Twitter account right now. <strong><a href="#" id="disconnect">disconnect</a></strong></p>
+        <p id="connected" class="hide">Şu anda Twitter hesabınıza bağlı durumdasınız.<strong><a href="#" id="disconnect">disconnect</a></strong></p>
 
         <ul id="recent-posts"></ul><!--populated by Javascript-->
     </section>
     <section id="about">
-        <h1>Fix the Web <span class="light"> About</span></h1>
+        <h1>Fix the Web <span class="light"> Hakkında</span></h1>
 
-        <p>Fix the Web is open source. You can contribute to the project on Github:</p>
+        <p>Fix the Web açık kaynaklıdır. Projeye Github üzerinden katkıda bulunabilirsiniz:</p>
 
         <ul>
-            <li><strong><a href="http://my.opera.com/fix-the-web">My Opera <em>Fix the Web</em> Group</a></strong> (support, blog, forums, etc.)</li>
-            <li><strong><a href="http://www.operaturkiye.net/fix-the-web">Home Page</a></strong> (still under construction)</li>
-            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web">Main extension files repository</a></strong></li>
-            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-Server-Side">Server-side repository</a></strong></li>
-            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-CSS-Patches">CSS Patches</a></strong> (If a website just needs CSS to be patched, then add the patch to the <em><strong>patches.json</strong></em> file in this repo. If the problematic website needs JS for the patch, place it in <em><strong>includes/</strong>patches.js</em> in the <a title="Fix the Web's Repository" href="http://github.com/cyberstream/Fix-the-Web">extension repo</a>.)</li>
+            <li><strong><a href="http://my.opera.com/fix-the-web">My Opera <em>Fix the Web</em> Grubu</a></strong> (destek, blog, forumlar vb.)</li>
+            <li><strong><a href="http://www.operaturkiye.net/fix-the-web">Ana Sayfa</a></strong> (yapım aşamasında)</li>
+            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web">Temel eklenti dosyaları deposu</a></strong></li>
+            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-Server-Side">Sunucu tarafı deposu</a></strong></li>
+            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-CSS-Patches">CSS Yamaları</a></strong> (Eğer bir web sitesi yalnızca CSS yaması gerektiriyorsa, yamayı depodaki <em><strong>patches.json</strong></em> dosyasına ekleyin. Sorunlu web sitesi yama için JS'e ihtiyaç duyuyorsa, <em><strong>patch.js</strong> dosyasını içerecek şekilde</em> <a title="Fix the Web's Repository" href="http://github.com/cyberstream/Fix-the-Web">eklenti deposu</a>na yerleştirin.)</li>
         </ul>
             
         <div id="columnize">            
             <div>
-                <h4>Contributors:</h4>
+                <h4>Katkıda bulunanlar:</h4>
             
                 <ul>
-                    <li><strong><a href="http://my.opera.com/cyberstream">cyberstream</a></strong> <a href="mailto:cyberstream@myopera.com">(email)</a></li>
-                    <li><strong><a href="http://my.opera.com/greench">greench</a></strong> <a href="mailto:greench@myopera.com">(email)</a></li>
-                    <li><strong><a href="http://my.opera.com/inbuster">inbuster</a></strong> <a href="mailto:inbuster@myopera.com">(email)</a></li>
-                    <li><strong><a href="http://my.opera.com/metude">metude</a></strong> <a href="mailto:metude@myopera.com">(email)</a></li>
-                    <li><strong><a href="http://my.opera.com/zahek">zahek</a></strong> <a href="mailto:zahek@myopera.com">(email)</a></li>
+                    <li><strong><a href="http://my.opera.com/cyberstream">cyberstream</a></strong> <a href="mailto:cyberstream@myopera.com">(e-posta)</a></li>
+                    <li><strong><a href="http://my.opera.com/greench">greench</a></strong> <a href="mailto:greench@myopera.com">(e-posta)</a></li>
+                    <li><strong><a href="http://my.opera.com/inbuster">inbuster</a></strong> <a href="mailto:inbuster@myopera.com">(e-posta)</a></li>
+                    <li><strong><a href="http://my.opera.com/metude">metude</a></strong> <a href="mailto:metude@myopera.com">(e-posta)</a></li>
+                    <li><strong><a href="http://my.opera.com/zahek">zahek</a></strong> <a href="mailto:zahek@myopera.com">(e-posta)</a></li>
                     <li><strong><a href="http://my.opera.com/BS-Harou">BS-Harou</a></strong></li>
                 </ul>
             </div>
@@ -438,7 +144,7 @@
     </section>
 
     <footer>
-        <a href="index.html">Recent Reports List</a>
+        <a href="index.html">Son Raporlar Listesi</a>
     </footer>
 
     <script type="text/javascript" src="scripts/background.js"></script>
@@ -576,12 +282,12 @@
               readable,
               prepend = 'every ';
 
-        if ( minutes == 60 ) readable = 'hour';
+        if ( minutes == 60 ) readable = 'saat';
         else if ((minutes > 720 && minutes % 60 == 0) || minutes == 0) readable = sliderOptions[minutes], prepend = '';
-        else if ( minutes == 30 ) readable = 'half hour';
-        else if ( minutes % 60 == 0 ) readable = (minutes / 60) + ' hours';
-        else if ( minutes % 60 == 30 ) readable = (minutes - 30) / 60 + '.5 hours';
-        else readable = minutes + ' minutes';
+        else if ( minutes == 30 ) readable = 'yarım saat';
+        else if ( minutes % 60 == 0 ) readable = (minutes / 60) + ' saat';
+        else if ( minutes % 60 == 30 ) readable = (minutes - 30) / 60 + '.5 saat';
+        else readable = minutes + ' dakika';
 
         return prepend + readable;
     }
@@ -629,9 +335,9 @@
         var updated = update(function(u) {
             if (document.getElementById('loading_spinner')) loading.parentNode.removeChild(loading);
 
-            if (u == 2) $.modal('The CSS patches file was successfully updated!', { overlayClose: true });
-            else if (u == 1) $.modal('No changes have been made to the CSS patches file since you last updated it.', { overlayClose: true });
-            else $.modal('There was an error updating the CSS patches file' + (u != 0 ? ': \n\n' + u : '.'), { overlayClose: true });
+            if (u == 2) $.modal('CSS yamaları dosyası başarıyla güncellendi!', { overlayClose: true });
+            else if (u == 1) $.modal('Son güncellemeden beri CSS yamalarında herhangi bir değişiklik yapılmadı.', { overlayClose: true });
+            else $.modal('CSS yamaları dosyası güncellenirken bir hata oluştu' + (u != 0 ? ': \n\n' + u : '.'), { overlayClose: true });
         });
     }, false)
 
@@ -692,7 +398,7 @@
     });
 
     $('#auth').bind('submit', function() {
-        $.modal ('Click the "<strong>Sign in with Twitter</strong>" button before entering a PIN number.', { overlayClose: true });
+        $.modal ('Bir PIN numarası girmeden önce "<strong>Sign in with Twitter</strong>" düğmesine tıklayın.', { overlayClose: true });
 
         return false;
     });
@@ -703,14 +409,14 @@
             window.open(url, 'authorise', 'width=700,height=400,resizable=no');
         }, failureHandler);
 
-        $.modal ('A window should appear asking you to authorize this app on Twitter. After authorizing "Fix the Web", copy the PIN number Twitter gives you and paste it into the text box below the sign in button.', {maxWidth: Math.abs(window.innerWidth - 150), overlayClose: true})
+        $.modal ('Bu uygulamayı Twitter üzerinde yetkilendirmenizi isteyen bir pencere açılmalıldır. "Fix the Web" uygulamasını yetkilendirdikten sonra, Twitter tarafından verilen PIN numarasını kopyalayın ve oturum açma düğmesinin altındaki metin kutusuna yapıştırın.', {maxWidth: Math.abs(window.innerWidth - 150), overlayClose: true})
 
         $('#auth').unbind('submit'); // detach the previously attached event handler
 
         $('#auth').bind('submit', function() { // add new event handler
             var pin = $('#pin-number', this).val();
 
-            if (!pin || !pin.length) $.modal('Please enter the PIN number you got from Twitter.', { overlayClose: true })
+            if (!pin || !pin.length) $.modal('Lütfen Twitter tarafından verilen PIN numarasını girin.', { overlayClose: true })
             else {
                 $('#auth').fadeTo(500, 0.4);
 
@@ -727,7 +433,7 @@
                     $('#auth').addClass('hide');
                     $('#connected').removeClass('hide');
 
-                    $.modal('You are signed in!', { overlayClose: true });
+                    $.modal('Oturum açtınız!', { overlayClose: true });
                 }, failureHandler);
             }
 
@@ -737,7 +443,7 @@
         return false;
     });
 
-    function failureHandler (data) { data ? console.log(data) : console.log('Request failed') }
+    function failureHandler (data) { data ? console.log(data) : console.log('İstek gerçekleştirilemedi') }
 
     // parses a query string and returns
     function parseQueryString (a,b,c,d,e) {for(b=/[?&]?([^=]+)=([^&]*)/g,c={},e=decodeURIComponent;d=b.exec(a.replace(/\+/g,' '));c[e(d[1])]=e(d[2]));return c;}
