@@ -1,4 +1,4 @@
-CONFIG = {
+var CONFIG = {
     defaultHost: 'http://www.operaturkiye.net/fix-the-web/', // the default domain to make AJAX post requests to; *must have* the trailing slash "/"
     twitter: {
         consumerKey: "frKRutacGx6VUkMhwQeJ6Q",
@@ -9,65 +9,62 @@ CONFIG = {
     }
 }
 
-ToolbarIcon = {    
+var ToolbarIcon = {    
     initButton: function() {
-                ToolbarIcon.button = opera.contexts.toolbar.createItem({
-                    disabled: false,
-                    title: widget.name,
-                    icon: 'images/icon-18.png',
-                    popup: {
-                        href: 'popup.html',
-                        width: 325,
-                        height: 450
-                    },
-                    badge: {} // need to create an empty object now so it can be potentially modified later
-               })
-        },
+            ToolbarIcon.button = opera.contexts.toolbar.createItem({
+                disabled: false,
+                title: widget.name,
+                icon: 'images/icon-18.png',
+                popup: {
+                    href: 'popup.html',
+                    width: 325,
+                    height: 450
+                },
+                badge: {} // need to create an empty object now so it can be potentially modified later
+           })
+    },
     
     // creates a title for the icon based on the number of error reports
     title: function(c) {
-        var count = parseInt(c)
+        var count = parseInt(c);
         
         if (count > 0) {
             return count == 1 ? 
                 'A bug was reported on this ' + (widget.preferences['display-reports-by'] || 'website') : 
                 count + ' bugs were reported on this ' + (widget.preferences['display-reports-by'] || 'domain');
-        } return 'Report a problem on this website';
+        }
+        return 'Report a problem on this website';
     },
     
     create: function(badgeProperties) {
-        if (opera.contexts) {
+        if (opera.hasOwnProperty('contexts')) {
             // Set the properties of the button
 
             var icon = opera.contexts.toolbar[0];
 
-            // if the button already was created and there is badge information passed to this function, then edit the icon's badge
-            if (typeof icon != 'undefined' && icon instanceof UIItem && typeof badgeProperties == 'object') {
-                icon.title = ToolbarIcon.title(badgeProperties.textContent); // create a title for the button based on the number of reports
-
-                for (i in badgeProperties) { // loop through the badgeProperties object and assign each key: val to a key: val in the toolbar icon badge
-                    icon.badge[i] = badgeProperties[i]
-                }
-            } else {
+            if (!window.hasOwnProperty('UIItem') || !(icon instanceof UIItem))  {
                 // Create the button and add it to the toolbar
-                ToolbarIcon.initButton()
-                
-                // if there was data passed representing a badge, then add the badge to the icon
-                if (typeof badgeProperties == 'object') {
-                    ToolbarIcon.button.title = ToolbarIcon.title(badgeProperties.textContent); // create a title for the button based on the number of reports
+                ToolbarIcon.initButton();
+                icon = ToolbarIcon.button;
 
-                    for (i in badgeProperties) { // loop through the badgeProperties object and assign each key: val to a key: val in the toolbar icon badge
-                        ToolbarIcon.button.badge[i] = badgeProperties[i]
-                    }
-                }
-                
                 // put the button in the proper state
-                if (opera.extension.tabs.getFocused()) ToolbarIcon.button.disabled = false
-                else ToolbarIcon.button.disabled = true
+                ToolbarIcon.button.disabled = !opera.extension.tabs.getFocused();
                 
                 // add the icon to the toolbar
                 opera.contexts.toolbar.addItem(ToolbarIcon.button);
             }
+
+            // if there was data passed representing a badge, then add the badge to the icon
+            if (typeof badgeProperties == 'object') {
+                // create a title for the button based on the number of reports
+                icon.title = ToolbarIcon.title(badgeProperties.textContent); 
+
+                // loop through the badgeProperties object and assign each key: val to a key: val in the toolbar icon badge
+                for (i in badgeProperties) { 
+                    icon.badge[i] = badgeProperties[i]
+                }
+            }
+
         }
     },
     
@@ -91,12 +88,11 @@ ToolbarIcon = {
                       }
                 
                 // add a title to the button
-                ToolbarIcon.button.title = ToolbarIcon.title(count)
+                ToolbarIcon.button.title = ToolbarIcon.title(count);
 
                 // create the badge              
                 ToolbarIcon.create(badge);
-            }
-            else {
+            } else {
                 // display a "?" badge to show that the actual reports count is loading
                 var loadingBadge = {
                     display: 'block',
@@ -108,7 +104,7 @@ ToolbarIcon = {
                 
                 ToolbarIcon.create(loadingBadge);
                 
-                sendRequest ('GET', 'ajax_request_handler.php?mode=get_reports_count&method=' + mode + '&page=' + encodeURIComponent(page_address) + '&domain=' + encodeURIComponent(domain_name), function(data) {
+                sendRequest('GET', 'ajax_request_handler.php?mode=get_reports_count&method=' + mode + '&page=' + encodeURIComponent(page_address) + '&domain=' + encodeURIComponent(domain_name), function(data) {
                     if (data) {
                         var badge = {
                                 display: 'block',
@@ -128,7 +124,7 @@ ToolbarIcon = {
     
     // select the right state for the button
     init: function() {     
-        if (typeof ToolbarIcon.button == 'undefined') ToolbarIcon.initButton()
+        if (typeof ToolbarIcon.button == 'undefined') ToolbarIcon.initButton();
         
         var tab = opera.extension.tabs.getFocused();
         if (tab) {
@@ -143,28 +139,26 @@ ToolbarIcon = {
 
 // button is enabled when tab is ready
 if (opera.extension.tabs) {
-    opera.extension.tabs.onfocus = ToolbarIcon.init
-    opera.extension.tabs.onblur = ToolbarIcon.init
+    opera.extension.tabs.onfocus = ToolbarIcon.init;
+    opera.extension.tabs.onblur = ToolbarIcon.init;
 }
 opera.extension.onconnect = function() {
     var tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : '',
           page_address = tab ? tab.url.replace(/#(.*)/, '').replace(/\/$/ig, '') : '' // remove trailing slashes and the hash segment of the URL
     
-    sessionStorage.removeItem(page_address) // Erase the cached error report count for the current page if it is set. It is updated when the page loads
-    ToolbarIcon.init()
+    sessionStorage.removeItem(page_address); // Erase the cached error report count for the current page if it is set. It is updated when the page loads
+    ToolbarIcon.init();
 }
-window.onload = ToolbarIcon.create()
+window.onload = ToolbarIcon.create;
 
 // detect if the user is authenticated
 function isLoggedIn () {
     var access_token = widget.preferences.access_token || '';
-    
-    if ( !access_token.length || access_token == '|' || access_token == 'none') return false;
-    else return true;
+    return !(!access_token.length || access_token == '|' || access_token == 'none');
 }
 
 function getUserName (callback) {
-    if ( isLoggedIn() && typeof OAuth != 'undefined') {
+    if (isLoggedIn() && typeof OAuth != 'undefined') {
         var r,
              access_token = widget.preferences.access_token || '';
              oauth = new OAuth (CONFIG.twitter);
@@ -179,7 +173,7 @@ function getUserName (callback) {
         
         oauth.setAccessToken(access_token.split('|'));
         oauth.get ('https://api.twitter.com/1/account/verify_credentials.json', callback, function(data) {
-            console.log('Error: ' + data)
+            console.log('Error: ' + data);
         });
     } else return false;
 }
@@ -196,7 +190,7 @@ function sendRequest (method, url, callback, params, useDefaultHost) {
     var xhr = new XMLHttpRequest();
     
     // if useDefaultHost is undefined or true, then use the hostname specified in CONFIG
-    if (typeof useDefaultHost == 'undefined' || useDefaultHost) url = CONFIG.defaultHost + url
+    if (typeof useDefaultHost == 'undefined' || useDefaultHost) url = CONFIG.defaultHost + url;
    
     xhr.onreadystatechange = function() {
         if (this.status == 200 && this.readyState == 4) {
@@ -216,10 +210,13 @@ function sendRequest (method, url, callback, params, useDefaultHost) {
             } else // we need to add an ampersand (&) at the beginning if there are already parameters in the query string
                 serialized_data += '&' + i + '=' + encodeURIComponent(params[i]); 
         }
-    } else serialized_data = false;    
+    } else {
+        serialized_data = false;    
+    }
     try {
-        if (method.toLowerCase() != 'get') throw 'Invalid method "' + method + '" was specified. AJAX request could not be completed.' ;
-        else {            
+        if (method.toLowerCase() != 'get') {
+            throw 'Invalid method "' + method + '" was specified. AJAX request could not be completed.' ;
+        } else {            
             xhr.open(method, url + (serialized_data && serialized_data.length ? '?' + serialized_data : ''), true)
             xhr.send(null);
         }
