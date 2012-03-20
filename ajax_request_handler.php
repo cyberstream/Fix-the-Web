@@ -217,6 +217,8 @@ if (isset($_GET) && count($_GET)) {
             $stmt->store_result();
         
             if ($q && $stmt->num_rows) {
+                $resultQuery = '';
+                
                 $stmt->bind_result($id, $username, $language, $category, $report, $page, $domain_db, $version, $build, $OS, $misc, $date_time);
                 foreach ($_GET as $key => $value) {
                     $resultQuery.=$key."=".$value."&";
@@ -310,6 +312,8 @@ if (isset($_GET) && count($_GET)) {
             $stmt->store_result();
         
             if ($q && $stmt->num_rows) {
+                $resultQuery = '';
+                
                 $stmt->bind_result($id, $username, $language, $category, $report, $page, $domain_db, $version, $build, $OS, $misc, $date_time);
                 foreach ($_GET as $key => $value) {
                     $resultQuery.=$key."=".$value."&";
