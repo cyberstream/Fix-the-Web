@@ -22,13 +22,15 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 $data = curl_exec($ch);
 $data = json_decode($data);
 foreach($data->list as $row){
+    $row->page = strlen($row->page) > 50 ? substr($row->page, 0, 50) . '...' : $row->page; 
+    
     echo "<article><h6><a href='?mode=get_comment_list&include_report=true&user=".$row->username."'>".$row->username."</a> said on ".$row->date_time.":</h6><div class='tools'>";
     //if(!isComment)
     echo "<button data-id=".$row->id." class='go-button'> &gt; </button>";
     echo "<button data-id=".$row->id." class='follow-button'> follow </button>";
     echo "<button data-id=".$row->id." class='like-button'> like </button></div><p>";
     echo $row->report;
-    echo "</p><span class='small'><a href=".$row->page." title='".$row->page."'>".$row->page."</a> on ".$row->domain."</a><span class='additional-information'>".$row->operaVersion.".".$row->operaBuildNumber." on ".$row->OS."</span></article>";
+    echo "</p><span class='small'><a href=".$row->page." title='".$row->page."'>".$row->page."</a> on ".$row->domain."</a><span class='additional-information'>".$row->Opera.".".$row->build." on ".$row->OS."</span></article>";
 }
 
 // close cURL resource, and free up system resources
