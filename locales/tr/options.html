@@ -14,7 +14,7 @@
     <div id="nav"></div><!--This tab bar is automatically filled with JS.-->
 
     <!-- To create a new tab, simply create a new <section> element with an ID. The ID will be the title of the tab. -->
-    <section id="preferences">
+    <section id="seçenekler">
         <h1>Fix the Web <span class="light"> Seçenekler</span></h1>
 
         <form id="prefs-form">
@@ -101,11 +101,11 @@
 
         <p id="loading"><img src="../images/loading-circle.png" alt="Yükleniyor" title="Yükleniyor..." /></p>
 
-        <p id="connected" class="hide">Şu anda Twitter hesabınıza bağlı durumdasınız.<strong><a href="#" id="disconnect">disconnect</a></strong></p>
+        <p id="connected" class="hide">Şu anda Twitter hesabınıza bağlı durumdasınız.<strong><a href="#" id="disconnect">bağlantıyı kes</a></strong></p>
 
         <ul id="recent-posts"></ul><!--populated by Javascript-->
     </section>
-    <section id="about">
+    <section id="hakkında">
         <h1>Fix the Web <span class="light"> Hakkında</span></h1>
 
         <p>Fix the Web açık kaynaklıdır. Projeye Github üzerinden katkıda bulunabilirsiniz:</p>
@@ -305,7 +305,7 @@
     window.addEventListener("load", function() {
         loadPrefs()
 
-        if (location.hash == '' || !document.getElementById(location.hash.replace('#', ''))) location.hash = 'preferences'
+        if (location.hash == '' || !document.getElementById(location.hash.replace('#', ''))) location.hash = 'Seçenekler'
         else document.getElementById(location.hash.replace('#', '')).className = 'active';
 
         var sections = document.querySelectorAll("section"),
@@ -355,7 +355,7 @@
               currentSection = document.getElementById(currentHash);
 
         if (currentHash == '' || !currentSection) { // don't allow the URL to change to an empty hash
-            location.hash = 'preferences';
+            location.hash = 'Seçenekler';
             return;
         }
 
