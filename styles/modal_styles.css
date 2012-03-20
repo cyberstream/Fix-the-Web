@@ -1,5 +1,5 @@
 #simplemodal-container a.modalCloseImg {
-    background: url(images/x.png) no-repeat;
+    background: url(../images/x.png) no-repeat;
     width: 25px;
     height: 29px;
     display: inline;

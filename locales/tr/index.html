@@ -3,8 +3,8 @@
     <head>
       <meta charset="utf-8">
       <style type="text/css">
-        @import 'styles/modal_styles.css';
-        @import 'styles/index_styles.css';
+        @import '../styles/modal_styles.css';
+        @import '../styles/index_styles.css';
         
         .pagination #page-number:before {content:'Sayfa ';}
     </style>
@@ -39,7 +39,7 @@
         <p>Bu liste, herhangi bir web sitesi için gönderilen hata raporlarını içerir. Hata hakkında daha ayrıntılı bilgi için üzerine tıklayın.</p>
 
         <ul id="recent-reports">
-            <li id="loading-img"><img src="images/loading-circle.png" alt="Yükleniyor" title="Değişiklikler yükleniyor..." /></li>
+            <li id="loading-img"><img src="../images/loading-circle.png" alt="Yükleniyor" title="Değişiklikler yükleniyor..." /></li>
         </ul>
         
         <div class="pagination hidden">
@@ -87,7 +87,7 @@
                 
                 history.pushState(data, '', 'index.html?page=' +data.page+ '&count=' +data.count+ '&order=' + data.order);
                 
-                $('#recent-reports').html('<li id="loading-img"><img src="images/loading-circle.png" alt="Yükleniyor" title="Değişiklikler yükleniyor..." /></li>')
+                $('#recent-reports').html('<li id="loading-img"><img src="../images/loading-circle.png" alt="Yükleniyor" title="Değişiklikler yükleniyor..." /></li>')
                 outputReports (data.page, data.count, data.order); // update the reports
                 
                 changeButtonState();
@@ -96,7 +96,7 @@
             // load reports from previous history state when the user clicks the back button            
             window.addEventListener ('popstate', function(data) {
                 // display the loading animation icon
-                $('#recent-reports').html('<li id="loading-img"><img src="images/loading-circle.png" alt="Loading" title="Loading changes..." /></li>');
+                $('#recent-reports').html('<li id="loading-img"><img src="../images/loading-circle.png" alt="Loading" title="Loading changes..." /></li>');
                 
                 $('#change-count a.active').removeClass('active');
                 $('#change-count a[data-count=' + data.state.count + ']').addClass('active');
@@ -164,10 +164,10 @@
                             if (current.OS.length) {
                                 var os_image;
 
-                                if ( /windows/i.test(current.OS) ) os_image = 'images/windows.png'
-                                else if ( /mac/i.test(current.OS) ) os_image = 'images/mac.png'
-                                else if ( /linux/i.test(current.OS) ) os_image = 'images/linux.png'
-                                else os_image = 'images/unidentified.png'
+                                if ( /windows/i.test(current.OS) ) os_image = '../images/windows.png'
+                                else if ( /mac/i.test(current.OS) ) os_image = '../images/mac.png'
+                                else if ( /linux/i.test(current.OS) ) os_image = '../images/linux.png'
+                                else os_image = '../images/unidentified.png'
                             }
                             
                             output += '<li title="Bildirimi genişletmek için tıklayın" data-id="' +current.id+ '" data-username="' +current.username+ '" data-category="' +current.category+ '" data-datetime="' +current.date_time+ '" data-url="' +current.page+ '" data-report="' +current.report+ '" data-version="' +current.Opera+ '" data-build="' +current.build+ '" data-platform="' +current.OS+ '" data-platform-icon="' +os_image+ '" data-plugins="' +encodeURIComponent(current.misc)+ '">'

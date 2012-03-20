@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <link rel="shortcut icon" href="images/icon-18.png" />
+    <link rel="shortcut icon" href="../images/icon-18.png" />
     <title>Options | Fix the Web</title>
 
     <style type="text/css">
-    @import 'styles/modal_styles.css';
-    @import 'styles/options_styles.css';
+    @import '../styles/modal_styles.css';
+    @import '../styles/options_styles.css';
     </style>
 </head>
 <body>
@@ -99,7 +99,7 @@
             <em>(Opera's API is not capable of doing this yet. In the meanwhile, login with Twitter.)</em>
         </form>
 
-        <p id="loading"><img src="images/loading-circle.png" alt="loading" title="Loading..." /></p>
+        <p id="loading"><img src="../images/loading-circle.png" alt="loading" title="Loading..." /></p>
 
         <p id="connected" class="hide">You are connected to your Twitter account right now. <strong><a href="#" id="disconnect">disconnect</a></strong></p>
 
@@ -327,7 +327,7 @@
         var loading = document.createElement('img'),
               update_button = document.getElementById('update');
 
-        loading.src = 'images/loading.png';
+        loading.src = '../images/loading.png';
         loading.id = 'loading_spinner';
 
         if (!document.getElementById('loading_spinner')) update_button.parentNode.insertBefore(loading, update_button.nextSibling);

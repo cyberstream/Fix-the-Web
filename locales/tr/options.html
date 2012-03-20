@@ -2,12 +2,12 @@
 <html lang="tr">
 <head>
     <meta charset="utf-8">
-    <link rel="shortcut icon" href="images/icon-18.png" />
+    <link rel="shortcut icon" href="../images/icon-18.png" />
     <title>Seçenekler | Fix the Web</title>
 
     <style type="text/css">
-    @import 'styles/modal_styles.css';
-    @import 'styles/options_styles.css';
+    @import '../styles/modal_styles.css';
+    @import '../styles/options_styles.css';
     </style>
 </head>
 <body>
@@ -99,7 +99,7 @@
             <em>(Opera API'si henüz bunu desteklemiyor. Twitter ile bağlanabilirsiniz.)</em>
         </form>
 
-        <p id="loading"><img src="images/loading-circle.png" alt="Yükleniyor" title="Yükleniyor..." /></p>
+        <p id="loading"><img src="../images/loading-circle.png" alt="Yükleniyor" title="Yükleniyor..." /></p>
 
         <p id="connected" class="hide">Şu anda Twitter hesabınıza bağlı durumdasınız.<strong><a href="#" id="disconnect">disconnect</a></strong></p>
 
@@ -327,7 +327,7 @@
         var loading = document.createElement('img'),
               update_button = document.getElementById('update');
 
-        loading.src = 'images/loading.png';
+        loading.src = '../images/loading.png';
         loading.id = 'loading_spinner';
 
         if (!document.getElementById('loading_spinner')) update_button.parentNode.insertBefore(loading, update_button.nextSibling);

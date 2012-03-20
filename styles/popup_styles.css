@@ -120,8 +120,8 @@ div.pad_bottom {padding-bottom:10px}
     position:relative;
 }
 
-#error:before {content:url(images/errors.png)}
-#success:before {content:url(images/success.png)}
+#error:before {content:url(../images/errors.png)}
+#success:before {content:url(../images/success.png)}
 
 label[for^=category] {
     width: 29%; 
@@ -177,7 +177,7 @@ h1 {
 }
 
 body.loading {
-    background-image: url('images/loading-circle.png'); 
+    background-image: url('../images/loading-circle.png'); 
     background-position: 50% 5%;
     background-repeat: no-repeat;
     padding-top: 85px;

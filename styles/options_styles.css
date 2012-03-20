@@ -150,7 +150,7 @@ input[type=radio]:checked + label {
     color:#0000cc;
 }
 
-#twitter-login {background-image: url('images/signin_twitter.png')}
+#twitter-login {background-image: url('../images/signin_twitter.png')}
 /*    #facebook-login {background-image: url('images/signin_facebook.png')}*/
 
 #facebook-login, #twitter-login {
