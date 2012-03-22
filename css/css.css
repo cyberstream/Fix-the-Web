@@ -80,7 +80,7 @@
             color:#fff !important;
         }
 
-        .go-button,.follow-button,.like-button {
+        .go-button,.follow-button,.like-button, .login-button {
             background: -o-linear-gradient(top, #9ACD32, #74a412) transparent;
             background: -webkit-linear-gradient(top, #9ACD32, #74a412) transparent;
             background: -ms-linear-gradient(top, #9ACD32, #74a412) transparent;
@@ -253,7 +253,7 @@
 }
 
 #user strong {color: #222;}
-#user a.go-button,span.go-button {
+#user a.login-button,span.go-button {
     box-shadow: -1px 0px 1px #BBBBBB, inset 1px 0px 1px #666666;
     color: #FFFFFF;
     font-size: 14px;

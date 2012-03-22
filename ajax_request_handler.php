@@ -386,6 +386,12 @@ if (isset($_GET) && count($_GET)) {
         
         // if the data is processed and inserted into the database successfully then echo "true":
         exit;
+    } else if($_GET["mode"]=="follow"){
+        if (!isset($_GET['id']) || !(settype($_GET['id'],"int"))) 
+             exit ("Please make sure what you want to follow is on the web site");
+    } else if($_GET["mode"]=="like"){
+        if (!isset($_GET['id']) || !(settype($_GET['id'],"int"))) 
+             exit ("Please make sure what you want to like is on the web site");
     }
 
 } else echo 'Page not found!';

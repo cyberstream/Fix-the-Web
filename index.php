@@ -29,8 +29,8 @@ if ($logged_in) {
 <body>
     <div id="user">
     <?php
-        if ($logged_in) echo 'You are logged in as @<strong>' . $twitter_name . '</strong>. <a href="?logout" title="Logout of Fix the Web" class="go-button">logout</a>';
-            else echo '<strong>You are not logged in.</strong> <a href="?login" title="Login to Fix the Web with your Twitter Account" class="go-button">login with Twitter</a>';            
+        if ($logged_in) echo 'You are logged in as @<strong>' . $twitter_name . '</strong>. <a href="?logout" title="Logout of Fix the Web" class="login-button">logout</a>';
+            else echo '<strong>You are not logged in.</strong> <a href="?login" title="Login to Fix the Web with your Twitter Account" class="login-button">login with Twitter</a>';            
         ?>
         <span id="loading" class="go-button">Loading</span>
     </div>
@@ -42,7 +42,7 @@ if ($logged_in) {
             </h2>
             <p>
                 <strong>Fix the Web</strong> is an Opera Web Browser extension. As hinted by its name, its goal is to promote a
-                <em>World Wide Web</em> built on solid, standards-conforming web development practices.  
+                <em>World Wide Web</em> built on solid, standards-conforming web development practices. <a href="http://my.opera.com/fix-the-web" target="_blank">Follow the FTW blog</a>, <a href="https://addons.opera.com/en/addons/extensions/details/fix-the-web/" target="_blank">Install Opera Extension to report web sites</a>, <a href="https://github.com/cyberstream/Fix-the-Web" target="_blank">Contribute it</a>
             </p>
             
             <p>
@@ -53,6 +53,7 @@ if ($logged_in) {
                 The goal of Fix the Web is to provide a solution to these problems by allowing users to report site problems they encounter, 
                 reply to others' bug reports, and, most importantly, apply patches to broken web pages.
             </p>
+
         </div>
         <div id="more-detail-about-project">More</div>
         <p style="clear:both;"></p>

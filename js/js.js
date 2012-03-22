@@ -6,8 +6,8 @@ function reportTemplate(id,username,date_time,report,operaVersion,operaBuildNumb
     content="<article><h6><a href='?mode=get_comment_list&include_report=true&user="+username+"'>"+username+"</a> said on "+date_time+":</h6><div class='tools'>";
     if(!isComment)
     content+="<a href='?mode=get_comment&id="+id+"' data-id="+id+" class='go-button'> &gt; </a>";
-    content+="<a href='' data-id="+id+" class='follow-button'> follow </a>";
-    content+="<a href='' data-id="+id+" class='like-button'> like </a></div><p>";
+    content+="<a href='?mode=follow&id="+id+"' data-id="+id+" class='follow-button'> follow </a>";
+    content+="<a href='?mode=like&id="+id+"' data-id="+id+" class='like-button'> like </a></div><p>";
 
     content+=report+"</p><span class='small'><a href="+page+" target='_blank' title=\"" + page + "\">"+(page.length > 40 ? page.substr(0, 40) + '...' : page)+"</a> on "+domain+"</a><span class='additional-information'>"+operaVersion+"."+operaBuildNumber+" on "+OS+"</span></article>";
     return content;
@@ -209,6 +209,7 @@ window.addEventListener("DOMContentLoaded",function(){
         event.preventDefault();
         
         // join domain value into query
+        var query='';
         if(document.getElementById("domain").value)
             query+="&domain="+document.getElementById("domain").value;
         
