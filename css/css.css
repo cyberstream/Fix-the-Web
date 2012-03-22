@@ -44,6 +44,8 @@
             height:100px;
         }
 
+        #explanation-about-the-extension.closed p~p {visibility: hidden}
+
         section {
             -moz-box-sizing:border-box;
             box-sizing:border-box;

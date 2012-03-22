@@ -36,7 +36,7 @@ if ($logged_in) {
     </div>
     <header>
         <h1><a href="<?php echo "?mode=get_report_list";?>">Fix the Web</a></h1>
-        <div id="explanation-about-the-extension">
+        <div id="explanation-about-the-extension" class="closed">
             <h2>
                 What is Fix the Web?
             </h2>

@@ -34,6 +34,40 @@ function commentWriter(data,hist){
             // TODO misc information will be editeable and its style will be added into css.css file.
     document.getElementsByTagName("section")[0].innerHTML       = resultArea+form;
 
+    
+    if(window.localStorage==null || (window.localStorage!=null && localStorage.getItem("clientOS")==null)){
+        sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_OS",function(data){
+           document.getElementById("OS").value=data; 
+           localStorage.setItem("clientOS",data);
+        },null);
+
+    }
+    else
+        document.getElementById("OS").value=localStorage.getItem("clientOS");
+    
+    document.getElementById("comment-form").addEventListener("submit",function(event){
+        event.preventDefault();
+        var commentQuery='';
+        for (i=0,formElements=document.getElementById("comment-form").children;i<6;i++){
+            commentQuery+="&"+formElements[i].dataset["fid"]+"="+formElements[i].value;
+        }
+        sendRequest("GET",HOST+"ajax_request_handler.php?mode=write_a_comment&id="+result.id+commentQuery,function(data){
+            if(data!="true")
+                alert(data);
+            else{
+                if(window.history){
+                    sendRequest("GET",HOST+"ajax_request_handler.php?+"+history.state.query,commentWriter,null);
+                }else{
+                    sendRequest("GET",HOST+"ajax_request_handler.php"+document.location.search,commentWriter,null);
+                }
+
+                alert("Your comment is sent");
+            }
+        },null);
+
+
+    },false);
+    
     if ((window.opera) && (opera.buildNumber)){
             // learn and write version into hidden element (#opera-version)
             document.getElementById("opera-version").value      =   opera.version();
@@ -73,28 +107,6 @@ function commentWriter(data,hist){
     
     document.getElementById('additional-information').innerHTML = bug;
 
-    sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_OS",function(data){
-       document.getElementById("OS").value=data; 
-    },null);
-    
-    document.getElementById("comment-form").addEventListener("submit",function(event){
-        event.preventDefault();
-        var commentQuery='';
-        for (i=0,formElements=document.getElementById("comment-form").children;i<6;i++){
-            commentQuery+="&"+formElements[i].dataset["fid"]+"="+formElements[i].value;
-        }
-        sendRequest("GET",HOST+"ajax_request_handler.php?mode=write_a_comment&id="+result.id+commentQuery,function(data){
-            if(data!="true")
-                alert(data);
-            else{
-                // TODO Edit this area
-                alert("sent");
-            }
-        },null);
-
-
-    },false);
-    
     if(!hist)
         history.pushState(
             {
@@ -122,8 +134,9 @@ function reportWriter(data,hist){
         a=result.list[i];
         resultArea+=reportTemplate(a.id,a.username,a.date_time,a.report,a.Opera,a.build,a.OS,a.domain,a.page,false);
     }
-    // TODO links are broken
-    resultArea+="<a href='' id='prev' onclick='go2page(-1)'>&lt;</a> <input type='number' onchange='go2page(this.value)' id='page' value='"+(result.page)+"'><a href='' id='forw' onclick='go2page(0)'>&gt;</a>";
+    prevLink=result.query.replace('page='+result.page,'page='+(result.page-1));
+    nextLink=result.query.replace('page='+result.page,'page='+(result.page+1));
+    resultArea+="<a href='?"+prevLink+"' id='prev'>&lt;</a> <input type='number' onchange='go2page(this.value)' id='page' value='"+(result.page)+"'><a href='?"+nextLink+"' id='forw'>&gt;</a>";
     document.querySelector("section").innerHTML=resultArea;
     if(!hist)
         history.pushState(
@@ -151,6 +164,8 @@ function reportWriter(data,hist){
             return false;
         },false);
     }
+    document.getElementById("prev").addEventListener("click",reportPaging,false);
+    document.getElementById("forw").addEventListener("click",reportPaging,false);
 }
 
 window.addEventListener('popstate', function (event) {
@@ -170,20 +185,23 @@ function goHomePage(){
     sendRequest("GET",HOST+"ajax_request_handler.php?mode=get_report_list",reportWriter,null);
 }
 
-window.addEventListener("DOMContentLoaded",function(){
-    // index page operations
-    //if you have a hash you will be redirecting exact page that you requested
-    if(location.search.length>1){
-        // load comment list
-        if(location.search.search("get_report_list")>0){
-            sendRequest("GET",HOST+"ajax_request_handler.php"+location.search,reportWriter,null);
-        // or load report list
-        }else if(location.search.search("get_comment_list")>0){
-            sendRequest("GET",HOST+"ajax_request_handler.php"+location.search,commentWriter,null);
-        }
+// TODO: Test it whether this scope cause breaking of loading page
+// index page operations
+//if you have a hash you will be redirecting exact page that you requested
+if(location.search.length>1){
+    // load comment list
+    if(location.search.search("get_report_list")>0){
+        sendRequest("GET",HOST+"ajax_request_handler.php"+location.search,reportWriter,null);
+    // or load report list
+    }else if(location.search.search("get_comment_list")>0){
+        sendRequest("GET",HOST+"ajax_request_handler.php"+location.search,commentWriter,null);
     }
-    else // otherwise you will see lastest reports on home screen
-        goHomePage();
+}
+else // otherwise you will see lastest reports on home screen
+    goHomePage();
+
+window.addEventListener("DOMContentLoaded",function(){
+    // OLD Location of index page operations
 
     // Search form sent event
     document.getElementById("form").addEventListener("submit",function(){
@@ -232,14 +250,23 @@ window.addEventListener("DOMContentLoaded",function(){
                 case "100px":
                     explanation.style.height="auto";
                     event.target.innerText="Less";
+                    explanation.className="";
                 break;
                 case "auto":
                     explanation.style.height="100px";
                     event.target.innerText="More";
+                    explanation.className="closed";
                 break;
             }
         },false);
+
+    
 },false);
+
+function reportPaging(event){
+    event.preventDefault();
+    sendRequest("GET",HOST+"ajax_request_handler.php"+event.target.href.match(/\?.*/)[0],reportWriter,null);
+}
 
 function sendRequest (method, url, callback, params) {
     var xhr = new XMLHttpRequest();
