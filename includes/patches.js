@@ -184,7 +184,7 @@ window.addEventListener('DOMContentLoaded', function() {
     
 // run Prefixr if it is enabled in the options page (From Christoph142's CSS3 Prefixr extension (https://addons.opera.com/addons/extensions/details/css-prefixr), used with permission)
 if ( widget.preferences.getItem('prefixr') != 'false' ) {
-    window.addEventListener('DOMContentLoaded', function() { //intern CSS-code in head
+    window.addEventListener('load', function() { //intern CSS-code in head
         var excluded = widget.preferences.getItem('prefixr-exclude');
 
         if (excluded != '') {

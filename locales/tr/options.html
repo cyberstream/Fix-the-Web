@@ -304,10 +304,12 @@
     // when the page is loaded, get extension preferences and assign them into correct input elements
     window.addEventListener("load", function() {
         loadPrefs()
+        location.hash = location.hash.toLowerCase();
 
-        if (location.hash == '' || !document.getElementById(location.hash.replace('#', ''))) location.hash = 'Seçenekler'
-        else document.getElementById(location.hash.replace('#', '')).className = 'active';
-
+        if (location.hash == '' || !document.getElementById(location.hash.replace('#', ''))) location.hash = 'seçenekler'
+        
+        document.getElementById(location.hash.replace('#', '')).className = 'active';
+        
         var sections = document.querySelectorAll("section"),
               nav = document.getElementById('nav'),
               currentSection = document.getElementById(location.hash.replace('#', ''));
