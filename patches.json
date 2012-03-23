@@ -58,5 +58,15 @@
       "status": "patch added",
       "comment": "Fixes for Twitter sites (from Twitter Fix extension by AntonDiaz)",
       "css_patch": "body {background-attachment: scroll !important;} body.logged-in > #doc > .topbar {position: absolute !important;} body.home-page > #top-stuff > .topbar {position: absolute !important;} body#settings > #top-stuff {position: absolute !important;}"
+  },
+  {
+      "patch_target": {
+          "domain": "c-and-e.com",
+          "path": "shop/product.html"
+      },
+      "opera_version": "11.62",
+      "status": "patch added",
+      "comment": "Fixed problem with the red cross not displayin over the icons for unavailable sizes",
+      "css_patch": "#ProductSizeButtons > .button > span[style*='background-image: url(\"http://www.c-and-a.com/de/de/shop/_/img/Product/redcross.png\")'] {top: 0}"
   }
 ]
