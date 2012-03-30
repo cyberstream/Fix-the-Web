@@ -11,7 +11,7 @@ Before you apply a patch to a web page, determine how it needs to be fixed. If i
 **This project is open source, so your contributions will help it grow. Fork the project and contribute!**
 
 ##Links
-Install the lastest stable version in the [Opera addons catalog](https://addons.opera.com/en/addons/extensions/details/fix-the-web/)
+[Install](https://addons.opera.com/addons/extensions/download/fix-the-web/) the lastest stable version in the [Opera addons catalog](https://addons.opera.com/en/addons/extensions/details/fix-the-web/)
 
 [Offical blog](http://my.opera.com/fix-the-web/blog/) - [Official forums](http://my.opera.com/fix-the-web/forums/)
 
