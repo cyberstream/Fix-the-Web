@@ -5,7 +5,7 @@
 <!--    <description xml:lang="en">A tool to report and fix web pages that have aesthetic or functional problems due to poor coding practices</description>-->
     <description xml:lang="tr">Hatalı kodlama teknikleri nedeniyle görünümünde veya işlevlerinde sorunlar oluşan web sayfalarını bildirmek ve düzeltmek için bir araç</description>
     <author href="http://my.opera.com/cyberstream/about" email="dev@cyberstream.us">cyberstream</author>
-    <icon src="images/icon-64.png" /> 
+    <icon src="images/icon-64.png" />
     
     <!--default values for preferences-->
     <preference name="patches" value="[]" />

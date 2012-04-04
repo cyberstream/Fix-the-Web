@@ -3,12 +3,13 @@
     <head>
       <meta charset="utf-8">
       <style type="text/css">
-        @import '../styles/modal_styles.css';
-        @import '../styles/index_styles.css';
+          @import '../styles/styles.css';
+/*        @import '../styles/modal_styles.css';*/
+/*        @import '../styles/index_styles.css';*/
     </style>
       <title>Fix the Web</title>
     </head>
-    <body>
+    <body class="reports_page">
       <div id="container">
         <ul id="controls">
             <li>                
@@ -52,11 +53,19 @@
         </footer>
     </div>
     <script src="scripts/jquery-1.6.4.min.js"></script>
-    <script type="text/javascript" src="scripts/jsOAuth-1.3.3.min.js"></script>
+    <script src="scripts/jsOAuth-1.3.3.min.js"></script>
     <script src="scripts/jquery.simplemodal.1.4.2.min.js"></script>
-    <script src="scripts/background.js"></script>
+    <script src="scripts/misc.js"></script>
     <script>
-        $(function() {            
+        $(function() {        
+            function highlightCountOfItemsPerPage(data) {
+                $('#change-count a.active').removeClass('active');
+                $('#change-count a[data-count="' + data.count + '"]').addClass('active');
+                
+                $('#order-by a.active').removeClass('active');
+                $('#order-by a[data-order=' + data.order + ']').addClass('active');
+            }
+            
             $('.change_state').click(function(e) {
                 
                 // prevent page from following the link
@@ -77,13 +86,9 @@
                             order: $(this).data('order') || list_order
                         }
                         
-                $('#change-count a.active').removeClass('active');
-                $('#change-count a[data-count=' + data.count + ']').addClass('active');
+                highlightCountOfItemsPerPage(data)
                 
-                $('#order-by a.active').removeClass('active');
-                $('#order-by a[data-order=' + data.order + ']').addClass('active');
-                
-                history.pushState(data, '', 'index.html?page=' +data.page+ '&count=' +data.count+ '&order=' + data.order);
+                history.pushState(data, '', 'reports.html?page=' +data.page+ '&count=' +data.count+ '&order=' + data.order);
                 
                 $('#recent-reports').html('<li id="loading-img"><img src="../images/loading-circle.png" alt="Loading" title="Loading changes..." /></li>')
                 outputReports (data.page, data.count, data.order); // update the reports
@@ -96,15 +101,11 @@
                 // display the loading animation icon
                 $('#recent-reports').html('<li id="loading-img"><img src="../images/loading-circle.png" alt="Loading" title="Loading changes..." /></li>');
                 
-                $('#change-count a.active').removeClass('active');
-                $('#change-count a[data-count=' + data.state.count + ']').addClass('active');
-                
-                $('#order-by a.active').removeClass('active');
-                $('#order-by a[data-order=' + data.state.order + ']').addClass('active');
+                highlightCountOfItemsPerPage(data)
                 
                 // load reports into the page
                 outputReports(data.state.page, data.state.count, data.state.order);
-                changeButtonState()      
+                changeButtonState()
             }, false);
             
             jQuery.support.cors = true; // enable cross-domain jQuery requests; if you don't do this, then you will get a "No Transport" error
@@ -182,7 +183,7 @@
                             $.modal('<div id="report" data-id="' + $(this).data('id') + '"><span style="float: right;" class="severity_' +$(this).data('category')+ '" title="' +(severity[$(this).data('category')] || 'unknown')+ '"></span><strong>' +$(this).data('username')+ '</strong> reported a problem on ' +page_url + ':' 
                                 + '<p class="report">"' + $(this).data('report').replace(/\\/g, '') + '"</p>Reported on <strong>' +$(this).data('datetime') + '</strong>'
                                 + '<p><img class="os_icon" src="' +$(this).data('platform-icon') + '" title="' +$(this).data('platform')+ '" alt="' +$(this).data('platform')+ '" /> <em title="Opera version: ' + $(this).data('version') + ' Build number: ' + $(this).data('build') + '">' + $(this).data('version') + '.' + $(this).data('build') + '</em>'
-                                + ' <a title="Click to see the reporting user\'s plugins and screen information." href="data:text/plain;charset=utf-8,' +$(this).data('plugins')+ '" target="_blank">plugins and screen</a></p></div>', 
+                                + ' | <a title="Click to see the reporting user\'s plugins and screen information." href="data:text/plain;charset=utf-8,' +$(this).data('plugins')+ '" target="_blank">plugins and screen</a> | <a href="' + CONFIG.defaultHost + '?mode=get_comment_list&id=' + $(this).data('id') + '">comment thread</a></p></div>', 
                             { onOpen: function (dialog) {
                                     dialog.overlay.fadeIn('medium', function () {
                                             dialog.container.slideDown('medium', function () {
@@ -222,7 +223,7 @@
                   list_order = queryString.order && /^(most_followed|popularity|time_desc|time_asc)$/i.test(queryString.order) ? queryString.order : 'time_desc';
             
             $('#change-count a.active').removeClass('active');
-            $('#change-count a[data-count=' + reports_count + ']').addClass('active');
+            $('#change-count a[data-count="' + reports_count + '"]').addClass('active');
 
             $('#order-by a.active').removeClass('active');
             $('#order-by a[data-order=' + list_order + ']').addClass('active');

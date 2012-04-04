@@ -3,80 +3,79 @@
 <head>
     <meta charset="utf-8">
     <link rel="shortcut icon" href="../images/icon-18.png" />
-    <title>Options | Fix the Web</title>
+    <title>{{options}} | Fix the Web</title>
 
     <style type="text/css">
-    @import '../styles/modal_styles.css';
-    @import '../styles/options_styles.css';
+        @import '../styles/styles.css';
     </style>
 </head>
 <body>
     <div id="nav"></div><!--This tab bar is automatically filled with JS.-->
 
     <!-- To create a new tab, simply create a new <section> element with an ID. The ID will be the title of the tab. -->
-    <section id="preferences">
-        <h1>Fix the Web <span class="light"> Options</span></h1>
+    <section id="options">
+        <h1>Fix the Web <span class="light"> {{options}}</span></h1>
 
         <form id="prefs-form">
                 <div class="sub_section">
-                    <label>Check for updates to the CSS patches file
+                    <label>{{check_for_updates}}
                         <input type="range" min="0" max="960" step="60" name="update-interval" id="update-interval" />
                         <em><span id="update-interval-value"></span></em>
                     </label>
 
                     <div>
-                        <div id="update">check for updates now</div>
+                        <div id="update">{{check_for_updates_now}}</div>
                     </div>
                 </div>
 
                 <p class="sub_section">
-                    Show reports count in the toolbar icon badge by
+                    {{show_reports_count_by}}:
                     <input type="radio" id="display-reports-by-domain" name="display-reports-by" value="domain" />
                     <label for="display-reports-by-domain">
-                        <strong>domain</strong>
+                        <strong>{{domain}}</strong>
                     </label>
                     <input type="radio" id="display-reports-by-page" name="display-reports-by" value="page" />
                     <label for="display-reports-by-page">
-                        <strong>page</strong>
+                        <strong>{{page}}</strong>
                     </label>
                 </p>
                 <div class="sub_section">
-                    Make CSS3 properties coded for other browsers <strong><a href="https://addons.opera.com/addons/extensions/details/css-prefixr" title="Feature derived from Christoph142's CSS3 Prefixr extension">work in Opera too</a></strong>?
+                    {{css_prefixr}}
                     <input type="radio" name="prefixr" value="true" id="prefixr-on" />
                     <label for="prefixr-on">
-                        <strong>Enable</strong>
+                        <strong>{{enable}}</strong>
                     </label>
                     <input type="radio" name="prefixr" value="false" id="prefixr-off" />
                     <label for="prefixr-off">
-                        <strong>Disable</strong>
+                        <strong>{{disable}}</strong>
                     </label>
 
                     <div>
-                        <label for="prefixr-exclude">Don't run Prefixr on these sites <em>(one site per line)</em>:</label>
+                        <label for="prefixr-exclude">{{prefixr_exclude}}:</label>
                         <textarea name="prefixr-exclude" id="prefixr-exclude" cols="60" rows="7" title="one site per line; don't include the protocol (e.g. http://)" placeholder="exclude.com"></textarea>
                     </div>
                 </div>
                 <div class="sub_section">
-                    Browser Identification (<abbr title="Will mask Javascript properties as the selected browser. However, the user-agent string sent in the HTTP request can not be masked by the extension. To do that, right-click the page, select Edit Site Preferences..., and go to Network &gt; Browser Identification">about</abbr>): 
+                    {{browser_id}} (<abbr title="{{browser_id_info}}">{{about}}</abbr>): 
                     
                     <input type="radio" name="browser-id" value="opera" id="as-opera" />
                     <label for="as-opera">
-                        <strong>Opera (default)</strong>
+                        <strong>{{as_opera}}</strong>
                     </label>
                     
                     <input type="radio" name="browser-id" value="ie" id="as-ie" />
                     <label for="as-ie">
-                        <strong>Internet Explorer</strong>
+                        <strong>{{as_ie}}</strong>
                     </label>
                     
                     <input type="radio" name="browser-id" value="firefox" id="as-firefox" />
                     <label for="as-firefox">
-                        <strong>Firefox</strong>
+                        <strong>{{as_ff}}</strong>
                     </label>
                     
                     <input type="radio" name="browser-id" value="chrome" id="as-chrome" />
                     <label for="as-chrome">
-                        <strong>Chrome</strong>
+                        <strong>{{as_chrome}}</strong>
                     </label>
                 </div>
         </form>
@@ -87,70 +86,71 @@
         <form id="auth" class="hide sub_section">
             <p>
                 <a href="#" id="twitter-login"></a>
-<!--                <a href="#" id="facebook-login"></a>-->
             </p>
 
             <p>
                 <input type="text" placeholder="PIN number" size="30" id="pin-number" required="required" />
-                <button type="submit">Connect</button>
+                <button type="submit">{{connect}}</button>
             </p>
 
-            <button disabled="disabled">Connect with your Opera Account</button>
-            <em>(Opera's API is not capable of doing this yet. In the meanwhile, login with Twitter.)</em>
+            <button disabled="disabled">{{connect_with_opera_account}}</button>
+            <em>({{not_possible_yet}})</em>
         </form>
 
-        <p id="loading"><img src="../images/loading-circle.png" alt="loading" title="Loading..." /></p>
+        <p id="loading"><img src="../images/loading-circle.png" alt="{{loading}}" title="{{loading}}..." /></p>
 
-        <p id="connected" class="hide">You are connected to your Twitter account right now. <strong><a href="#" id="disconnect">disconnect</a></strong></p>
+        <p id="connected" class="hide">{{you_are_connected}} <strong><a href="#" id="disconnect">{{disconnect}}</a></strong></p>
 
         <ul id="recent-posts"></ul><!--populated by Javascript-->
     </section>
     <section id="about">
-        <h1>Fix the Web <span class="light"> About</span></h1>
+        <h1>Fix the Web <span class="light"> {{about}}</span></h1>
 
-        <p>Fix the Web is open source. You can contribute to the project on Github:</p>
+        <p>{{contribute_to_the_project}}:</p>
 
         <ul>
-            <li><strong><a href="http://my.opera.com/fix-the-web">My Opera <em>Fix the Web</em> Group</a></strong> (support, blog, forums, etc.)</li>
-            <li><strong><a href="http://www.operaturkiye.net/fix-the-web">Home Page</a></strong> (still under construction)</li>
-            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web">Main extension files repository</a></strong></li>
-            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-Server-Side">Server-side repository</a></strong></li>
-            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-CSS-Patches">CSS Patches</a></strong> (If a website just needs CSS to be patched, then add the patch to the <em><strong>patches.json</strong></em> file in this repo. If the problematic website needs JS for the patch, place it in <em><strong>includes/</strong>patches.js</em> in the <a title="Fix the Web's Repository" href="http://github.com/cyberstream/Fix-the-Web">extension repo</a>.)</li>
+            <li><strong><a href="http://my.opera.com/fix-the-web">{{opera_ftw_group}}</a></strong> ({{opera_ftw_group_info}})</li>
+            <li><strong><a href="http://www.operaturkiye.net/fix-the-web">{{home_page}}</a></strong> ({{home_page_info}})</li>
+            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web">{{main_repo}}</a></strong></li>
+            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-Server-Side">{{server_side_repo}}</a></strong></li>
+            <li><strong><a href="http://github.com/cyberstream/Fix-the-Web-CSS-Patches">{{css_patches}}</a></strong> ({{css_patches_info}})</li>
         </ul>
             
         <div id="columnize">            
             <div>
-                <h4>Contributors:</h4>
+                <h4>{{contributors}}:</h4>
             
                 <ul>
-                    <li><strong><a href="http://my.opera.com/cyberstream">cyberstream</a></strong> <a href="mailto:cyberstream@myopera.com">(email)</a></li>
-                    <li><strong><a href="http://my.opera.com/greench">greench</a></strong> <a href="mailto:greench@myopera.com">(email)</a></li>
-                    <li><strong><a href="http://my.opera.com/inbuster">inbuster</a></strong> <a href="mailto:inbuster@myopera.com">(email)</a></li>
-                    <li><strong><a href="http://my.opera.com/metude">metude</a></strong> <a href="mailto:metude@myopera.com">(email)</a></li>
-                    <li><strong><a href="http://my.opera.com/zahek">zahek</a></strong> <a href="mailto:zahek@myopera.com">(email)</a></li>
+                    <li><strong><a href="http://my.opera.com/cyberstream">cyberstream</a></strong> <a href="mailto:cyberstream@myopera.com">({{email}})</a></li>
+                    <li><strong><a href="http://my.opera.com/greench">greench</a></strong> <a href="mailto:greench@myopera.com">({{email}})</a></li>
+                    <li><strong><a href="http://my.opera.com/inbuster">inbuster</a></strong> <a href="mailto:inbuster@myopera.com">({{email}})</a></li>
+                    <li><strong><a href="http://my.opera.com/metude">metude</a></strong> <a href="mailto:metude@myopera.com">({{email}})</a></li>
+                    <li><strong><a href="http://my.opera.com/zahek">zahek</a></strong> <a href="mailto:zahek@myopera.com">({{email}})</a></li>
                     <li><strong><a href="http://my.opera.com/BS-Harou">BS-Harou</a></strong></li>
                 </ul>
             </div>
             
             <div>
-                <h4>Thanks:</h4>
+                <h4>{{thanks}}:</h4>
                 
                 <ul>
-                    <li><strong><a href="http://my.opera.com/AntonDiaz">AntonDiaz</a></strong> (Added CSS fixes from his <strong><a href="https://addons.opera.com/addons/extensions/details/twitter-fix">Twitter Fix</a></strong> extension)</li>
-                    <li><strong><a href="http://my.opera.com/Christoph142">Christoph142</a></strong> (Based the <strong>-o- prefix</strong> feature off of his <strong><a href="https://addons.opera.com/addons/extensions/details/css-prefixr">CSS Prefixr</a></strong> extension)</li>
-                    <li><strong><a href="http://my.opera.com/celeborn1">Yiğit Ateş</a></strong> (Added Turkish translation)</li>
+                    <li><strong><a href="http://my.opera.com/AntonDiaz">AntonDiaz</a></strong> ({{anton_diaz_info}})</li>
+                    <li><strong><a href="http://my.opera.com/Christoph142">Christoph142</a></strong> ({{christoph_info}})</li>
+                    <li><strong><a href="http://my.opera.com/celeborn1">Yiğit Ateş</a></strong> ({{celeborn_info}})</li>
                 </ul>
             </div>
         </div>
     </section>
 
     <footer>
-        <a href="index.html">Recent Reports List</a>
+        <a href="reports.html">{{recent_reports}}</a>
     </footer>
 
-    <script type="text/javascript" src="scripts/background.js"></script>
     <script type="text/javascript" src="scripts/jsOAuth-1.3.3.min.js"></script>
     <script type="text/javascript" src="scripts/jquery-1.6.4.min.js"></script>
+    <script type="text/javascript" src="scripts/locale.js"></script>
+    <script type="text/javascript" src="scripts/translate.js"></script>
+    <script type="text/javascript" src="scripts/misc.js"></script>
     <script type="text/javascript" src="scripts/jquery.simplemodal.1.4.2.min.js"></script>
     <script type="text/javascript">
         $.support.cors = true;
@@ -174,42 +174,42 @@
                         
                         switch( Math.floor ((new Date() - time) / (1000 * 60 * 60 * 24)) ) { // this is the number of days since the article was posted
                             case 0 :
-                                time = 'posted today'
+                                time = i18n.posted_today
                                 break;
                             case 1 :
-                                time = 'posted yesterday'
+                                time = i18n.posted_yesterday
                                 break;
                             case 2 : 
-                                time = 'posted two days ago'
+                                time = i18n.posted_two_days_ago
                                 break;
                             case 3 :
-                                time = 'posted three days ago'
+                                time = i18n.posted_three_days_ago
                                 break;
                             case 4 :
-                                time = 'posted four days ago'
+                                time = i18n.posted_four_days_ago
                                 break;
                             case 5 :
-                                time = 'posted five days ago'
+                                time = i18n.posted_five_days_ago
                                 break;
                             case 6 : 
-                                time = 'posted six days ago'
+                                time = i18n.posted_six_days_ago
                                 break;
                             case 7 :
-                                time = 'posted a week ago'
+                                time = i18n.posted_a_week_ago
                                 break;
                             default:
-                                time = 'posted on ' + time.toLocaleDateString();
+                                time = time.toLocaleDateString();
                         }                         
                         
                     } catch (e) {
                         time = '';
                     }
 
-                    $('<li><a href="' +link+ '" title="Click to read this post" target="_blank">' +title+ '</a> <strong class="light">' +time+ '</strong></li>').appendTo('#recent-posts');
+                    $('<li><a href="' +link+ '" title="' + i18n.click_to_read_more + '" target="_blank">' +title+ '</a> <strong class="light">' +time+ '</strong></li>').appendTo('#recent-posts');
                 }
-
+                
                 if ($('#recent-posts').children().length) {
-                    $('<h3 id="blog-header"><span class="light">Latest Posts on</span> <a href="http://my.opera.com/fix-the-web/blog">Fix the Web\'s Blog</a></h3>').insertBefore('#recent-posts')
+                    $('<h3 id="blog-header">' + i18n.latest_posts + '</h3>').insertBefore('#recent-posts')
 
                     var k = -1,
                           posts = $('#recent-posts').children();
@@ -234,11 +234,11 @@
     var form = document.getElementById("prefs-form"),
           fields = form.querySelectorAll("input[type='range'], input[type='radio'], textarea");
     var sliderOptions = {
-        '780': 'every day',
-        '840': 'every three days',
-        '900': 'every week',
-        '960': 'manually only',
-        '0': 'every time you start Opera'
+        '780': i18n.every_day,
+        '840': i18n.every_three_days,
+        '900': i18n.every_week,
+        '960': i18n.manually_only,
+        '0': i18n.browser_start
     }
 
     // Set the preference values for each field
@@ -280,17 +280,16 @@
 
     function readableInterval (minutes) {
         var minutes = parseInt(minutes),
-              readable,
-              prepend = 'every ';
+              readable;
 
-        if ( minutes == 60 ) readable = 'hour';
-        else if ((minutes > 720 && minutes % 60 == 0) || minutes == 0) readable = sliderOptions[minutes], prepend = '';
-        else if ( minutes == 30 ) readable = 'half hour';
-        else if ( minutes % 60 == 0 ) readable = (minutes / 60) + ' hours';
-        else if ( minutes % 60 == 30 ) readable = (minutes - 30) / 60 + '.5 hours';
-        else readable = minutes + ' minutes';
+        if ( minutes == 60 ) readable = i18n.every_hour;
+        else if ((minutes > 720 && minutes % 60 == 0) || minutes == 0) readable = sliderOptions[minutes];
+        else if ( minutes == 30 ) readable = i18n.every_half_hour;
+        else if ( minutes % 60 == 0 ) readable = (minutes / 60) + ' ' + i18n.hours;
+        else if ( minutes % 60 == 30 ) readable = (minutes - 30) / 60 + '.5 ' + i18n.hours;
+        else readable = minutes + ' ' + i18n.minutes;
 
-        return prepend + readable;
+        return readable;
     }
 
     // That function shows update-interval's value on a visible HTML element
@@ -304,7 +303,7 @@
     window.addEventListener("load", function() {
         loadPrefs()
 
-        if (location.hash == '' || !document.getElementById(location.hash.replace('#', ''))) location.hash = 'preferences'
+        if (location.hash == '' || !document.getElementById(location.hash.replace('#', ''))) location.hash = 'options'
         else document.getElementById(location.hash.replace('#', '')).className = 'active';
 
         var sections = document.querySelectorAll("section"),
@@ -317,7 +316,7 @@
             var thisID = sections[i].id;
             activeClass = ('#' + thisID == location.hash ? ' class="active"' : '');
 
-            nav.innerHTML += '<a href="#' +thisID + '" id="' +thisID + '-tab"' +activeClass+ '>' +thisID+ '</a>';
+            nav.innerHTML += '<a href="#' +thisID + '" id="' +thisID + '-tab"' +activeClass+ '>' +i18n[thisID.toLowerCase()]+ '</a>';
         }
     }, false);
 
@@ -336,9 +335,9 @@
         var updated = update(function(u) {
             if (document.getElementById('loading_spinner')) loading.parentNode.removeChild(loading);
 
-            if (u == 2) $.modal('The CSS patches file was successfully updated!', { overlayClose: true });
-            else if (u == 1) $.modal('No changes have been made to the CSS patches file since you last updated it.', { overlayClose: true });
-            else $.modal('There was an error updating the CSS patches file' + (u != 0 ? ': \n\n' + u : '.'), { overlayClose: true });
+            if (u == 2) $.modal(i18n.css_patches_was_updated, { overlayClose: true });
+            else if (u == 1) $.modal(i18n.css_patches_file_unchanged, { overlayClose: true });
+            else $.modal(i18n.css_patches_update_error + (u != 0 ? ': \n\n' + u : '.'), { overlayClose: true });
         });
     }, false)
 
@@ -354,7 +353,7 @@
               currentSection = document.getElementById(currentHash);
 
         if (currentHash == '' || !currentSection) { // don't allow the URL to change to an empty hash
-            location.hash = 'preferences';
+            location.hash = 'options';
             return;
         }
 
@@ -365,13 +364,13 @@
         // cancel any click events temporarily to fix the problem of tabs not working after you click a non-active tab during animation
         window.addEventListener('click', freezeClick, false);
 
-        setTimeout(function() {
+        /*setTimeout*/(function() {
             lastSection.className = '';
             currentSection.className = 'active';
 
             // remove the "click freeze"
             window.removeEventListener('click', freezeClick, false);
-        }, 600)
+        })()
     }, false);
 
     // OAuth authentication
@@ -399,7 +398,7 @@
     });
 
     $('#auth').bind('submit', function() {
-        $.modal ('Click the "<strong>Sign in with Twitter</strong>" button before entering a PIN number.', { overlayClose: true });
+        $.modal (i18n.sign_in_error, { overlayClose: true });
 
         return false;
     });
@@ -410,14 +409,14 @@
             window.open(url, 'authorise', 'width=700,height=400,resizable=no');
         }, failureHandler);
 
-        $.modal ('A window should appear asking you to authorize this app on Twitter. After authorizing "Fix the Web", copy the PIN number Twitter gives you and paste it into the text box below the sign in button.', {maxWidth: Math.abs(window.innerWidth - 150), overlayClose: true})
+        $.modal (i18n.sign_in_info, {maxWidth: Math.abs(window.innerWidth - 150), overlayClose: true})
 
         $('#auth').unbind('submit'); // detach the previously attached event handler
 
         $('#auth').bind('submit', function() { // add new event handler
             var pin = $('#pin-number', this).val();
 
-            if (!pin || !pin.length) $.modal('Please enter the PIN number you got from Twitter.', { overlayClose: true })
+            if (!pin || !pin.length) $.modal(i18n.no_pin_error, { overlayClose: true })
             else {
                 $('#auth').fadeTo(500, 0.4);
 
@@ -434,7 +433,7 @@
                     $('#auth').addClass('hide');
                     $('#connected').removeClass('hide');
 
-                    $.modal('You are signed in!', { overlayClose: true });
+                    $.modal(i18n.signed_in, { overlayClose: true });
                 }, failureHandler);
             }
 
@@ -444,7 +443,7 @@
         return false;
     });
 
-    function failureHandler (data) { data ? console.log(data) : console.log('Request failed') }
+    function failureHandler (data) { data ? console.log(data) : console.log(i18n.request_failed) }
 
     // parses a query string and returns
     function parseQueryString (a,b,c,d,e) {for(b=/[?&]?([^=]+)=([^&]*)/g,c={},e=decodeURIComponent;d=b.exec(a.replace(/\+/g,' '));c[e(d[1])]=e(d[2]));return c;}

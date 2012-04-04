@@ -45,7 +45,7 @@
     else if ( hostname.indexOf('goldas.com') > -1 ) {       
         window.addEventListener('DOMContentLoaded', function() {            
             var new_function = function P7AniMagic(el,x,y,a,b,c,s) { //v2.9 PVII-Project Seven Development
-                    var xx,yy,i,g,elo=el,f="",m=false,d="",pa='px';if(document.layers){pa='';}
+                    var xx,yy,i,g,elo=el,f="",m=false,d="",pa='px';
                     x=parseInt(x);y=parseInt(y);var t='g.p7Magic=setTimeout("P7AniMagic(\''+elo+'\','; 
                     if((g=MM_findObj(el))!=null){d=(document.layers)?g:g.style;}else{return;}
                     if(parseInt(s)>0){eval(t+x+','+y+','+a+','+b+','+c+',0)",' + s+')');return;}
@@ -104,7 +104,7 @@ function addCSS ( css ) {
 
 // get the patches.js script from localStorage and create a script element on the page with its contents
 
-window.addEventListener('DOMContentLoaded', function() {       
+window.addEventListener('DOMContentLoaded', function() {
     var domain = window.location.hostname,
           url = window.location.href, 
           path = window.location.pathname;
@@ -115,7 +115,6 @@ window.addEventListener('DOMContentLoaded', function() {
     
     // loop through the patches if there are any in the array
     if ( typeof patches == 'object' && patches instanceof Array && patches.length ) {
-        
         // loop through the object (the loop is labeled "main" so that we can send commands to it from a sub-loop)
         main: for ( i in patches ) {
             var patch = patches[i],
@@ -127,55 +126,51 @@ window.addEventListener('DOMContentLoaded', function() {
                   css = patch.css_patch;
             
             // ensure this is a valid patch before parsing it
-            if (typeof target == 'undefined' || typeof version == 'undefined' || typeof status == 'undefined' || typeof comment == 'undefined' || typeof css == 'undefined') continue;
+            if (typeof target == 'undefined' || typeof version == 'undefined' || typeof status == 'undefined' || typeof comment == 'undefined' || typeof css == 'undefined') {
+                continue;
+            }
                               
             if (target) {
                 
-                // if the target is a regular expression and the hostname does not match it, then continue
-                if ( typeof target == 'object' && target instanceof RegExp )
-                    if ( domain.search(target) == -1 ) continue;
-                
                 // if the target is an object, then parse it and test the values
-                else if ( typeof target == 'object' ) {
-                    j = 0;
-                    for ( k in target ) {                        
-                        var string_to_search;
-                        j++;
+                if ( typeof target == 'object' ) {
+                    for ( k in target ) {
+                        var regex, search_string;
                         
-                        if ( k == 'href' || k == 'url' ) string_to_search = url;
-                        else if ( k == 'pathname' || k == 'path' ) string_to_search = path;
-                        else if ( k == 'hostname' || k == 'host' || k == 'domain' ) string_to_search = domain;
-                        else if ( typeof target[k] == 'object' && target[k] instanceof Array ) {
-                            var regex, search_string;
+                        // convert strings to lowercase                                                
+                        if ( k.search(/(href|url|path(name)?|host(name)?|domain)/i) ) {
+                            if ( k == 'href' || k == 'url' ) string_to_search = url;
+                            else if ( k == 'pathname' || k == 'path' ) string_to_search = path;
+                            else if ( k == 'hostname' || k == 'host' || k == 'domain' ) string_to_search = domain;
+                            else continue; // invalid identifier
                             
+                            // if the specified string doesn't successfully get matched, then make the main loop continue to the next iteration
+                            if ( string_to_search.toLowerCase().search(target[k].toLowerCase()) == -1 ) continue main;
+                        }
+                        
+                        else if ( k.search(/(href|url|path(name)?|host(name)?|domain)_regex/i) ) { 
                             if ( target[k].length == 1 ) regex = new RegExp( target[k][0] );
                             else if ( target[k].length == 2 ) regex = new RegExp( target[k][0], target[k][1] );
+                            else continue;
                             
                             if ( k == 'href_regex' || k == 'url_regex' ) search_string = url;
                             else if ( k == 'pathname_regex' || k == 'path_regex' ) search_string = path;
                             else if ( k == 'hostname_regex' || k == 'host_regex' || k == 'domain_regex' ) search_string = domain; 
-                            else continue;
+                            else continue; // invalid identifier
                             
                             if ( !regex.test(search_string) ) continue main;
                         }
-                        else continue; // ignore the rule if it isn't valid
                         
-                        // convert strings to lowercase                                                
-                        if (target[k] instanceof String) {
-                            string_to_search == string_to_search.toLowerCase();
-                            target[k] = target[k].toLowerCase()
-                            
-                            // if the specified string doesn't successfully get matched, then make the main loop continue to the next iteration
-                            if ( string_to_search.search(target[k]) == -1 ) continue main;
-                        }
+                        else continue; // ignore the rule if it isn't valid
                     }
                 }
                 
                 // if this is a string and it does not match anything in the hostname, then continue to the next iteration in the loop
-                else if ( hostname.toLowerCase().indexOf(target.toLowerCase()) == -1 ) continue;
+                else if ( domain.toLowerCase().indexOf(target.toLowerCase()) == -1 ) continue;
                 
-                // If the loop *continued*, then it will not make it to this code in the current iteration.
-                // Add the css in the patch to the current page.
+                // If the loop had *continued*, then it would not have made it to this code during this current iteration
+                // Add the css in the patch to the current page
+                console.log('Patching: ' + css)
                 addCSS (css);
             }
         }
