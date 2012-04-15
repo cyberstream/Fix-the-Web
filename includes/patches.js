@@ -104,7 +104,7 @@ function addCSS ( css ) {
 
 // get the patches.js script from localStorage and create a script element on the page with its contents
 
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('load', function() {
     var domain = window.location.hostname,
           url = window.location.href, 
           path = window.location.pathname;

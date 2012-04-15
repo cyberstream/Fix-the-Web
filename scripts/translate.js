@@ -1,4 +1,4 @@
-docElements = document.querySelectorAll('*:not(html):not(script):not(body):not(head):not(meta):not(link):not(style), style.translate')
+docElements = document.querySelectorAll('[data-i18n], [data-i18n-attr]')
 
 if ( typeof i18n != 'undefined' && typeof $ != 'undefined' ) {
     addEventListener('load', function() {
@@ -13,14 +13,17 @@ if ( typeof i18n != 'undefined' && typeof $ != 'undefined' ) {
             
             if (i18n[thisPlaceholder] != 'undefined') {
                 for ( j = 0; j < docElements.length; j++ ) {
-                    var thisElement = docElements[j];
-//                    console.log([thisElement.innerHTML, docElements[j].innerHTML.replace(thisPhRegex, i18n[thisPlaceholder])])
+                    var thisElement = docElements[j],
+                          translateAttr = thisElement.getAttribute('data-i18n-attr')
                     
-                    $(thisElement).html(docElements[j].innerHTML.replace(thisPhRegex, i18n[thisPlaceholder]))
+                    thisElement.innerHTML = docElements[j].innerHTML.replace(thisPhRegex, i18n[thisPlaceholder])
+                    
+                    // translate the specified attribute node
+                    if ( translateAttr && thisElement.getAttribute(translateAttr) ) {
+                        thisElement.setAttribute(translateAttr, thisElement.getAttribute(translateAttr).replace(thisPhRegex, i18n[thisPlaceholder]))
+                    }
                 }
             }
         }
-        
-//        document.getElementsByTagName('html')[0].innerHTML = domText;
     });
 }

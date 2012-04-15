@@ -153,7 +153,7 @@ function getOS () {
 function getPageAddress () {
     var tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : ''
     
-    return tab ? tab.url.replace(/\/$/ig, '') : '' // remove trailing slashes
+    return tab && tab.url ? tab.url.replace(/\/$/ig, '') : '' // remove trailing slashes
 }
 
 function getDomainName () {

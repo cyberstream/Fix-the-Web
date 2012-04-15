@@ -3,10 +3,11 @@
 <head>
     <meta charset="utf-8">
     <link rel="shortcut icon" href="../images/icon-18.png" />
-    <title>{{options}} | Fix the Web</title>
+    <title data-i18n>{{options}} | Fix the Web</title>
 
     <style type="text/css">
-        @import '../styles/styles.css';
+        @import 'styles/styles.css';
+        @import 'styles/special.css';
     </style>
 </head>
 <body>
@@ -14,68 +15,68 @@
 
     <!-- To create a new tab, simply create a new <section> element with an ID. The ID will be the title of the tab. -->
     <section id="options">
-        <h1>Fix the Web <span class="light"> {{options}}</span></h1>
+        <h1>Fix the Web <span class="light" data-i18n> {{options}}</span></h1>
 
         <form id="prefs-form">
                 <div class="sub_section">
-                    <label>{{check_for_updates}}
+                    <label><span data-i18n>{{check_for_updates}}</span>
                         <input type="range" min="0" max="960" step="60" name="update-interval" id="update-interval" />
                         <em><span id="update-interval-value"></span></em>
                     </label>
 
                     <div>
-                        <div id="update">{{check_for_updates_now}}</div>
+                        <div id="update" data-i18n>{{check_for_updates_now}}</div>
                     </div>
                 </div>
 
                 <p class="sub_section">
-                    {{show_reports_count_by}}:
+                    <span data-i18n>{{show_reports_count_by}}:</span>
                     <input type="radio" id="display-reports-by-domain" name="display-reports-by" value="domain" />
                     <label for="display-reports-by-domain">
-                        <strong>{{domain}}</strong>
+                        <strong data-i18n>{{domain}}</strong>
                     </label>
                     <input type="radio" id="display-reports-by-page" name="display-reports-by" value="page" />
                     <label for="display-reports-by-page">
-                        <strong>{{page}}</strong>
+                        <strong data-i18n>{{page}}</strong>
                     </label>
                 </p>
                 <div class="sub_section">
-                    {{css_prefixr}}
+                    <span data-i18n>{{css_prefixr}}</span>
                     <input type="radio" name="prefixr" value="true" id="prefixr-on" />
                     <label for="prefixr-on">
-                        <strong>{{enable}}</strong>
+                        <strong data-i18n>{{enable}}</strong>
                     </label>
                     <input type="radio" name="prefixr" value="false" id="prefixr-off" />
                     <label for="prefixr-off">
-                        <strong>{{disable}}</strong>
+                        <strong data-i18n>{{disable}}</strong>
                     </label>
 
                     <div>
-                        <label for="prefixr-exclude">{{prefixr_exclude}}:</label>
-                        <textarea name="prefixr-exclude" id="prefixr-exclude" cols="60" rows="7" title="one site per line; don't include the protocol (e.g. http://)" placeholder="exclude.com"></textarea>
+                        <label for="prefixr-exclude" data-i18n>{{prefixr_exclude}}:</label>
+                        <textarea data-i18n-attr="title" name="prefixr-exclude" id="prefixr-exclude" cols="60" rows="7" title="{{one_site_per_line}}" placeholder="exclude.com"></textarea>
                     </div>
                 </div>
                 <div class="sub_section">
-                    {{browser_id}} (<abbr title="{{browser_id_info}}">{{about}}</abbr>): 
+                    <span data-i18n>{{browser_id}}</span> (<abbr data-i18n data-i18n-attr="title" title="{{browser_id_info}}">{{about}}</abbr>): 
                     
                     <input type="radio" name="browser-id" value="opera" id="as-opera" />
                     <label for="as-opera">
-                        <strong>{{as_opera}}</strong>
+                        <strong data-i18n>{{as_opera}}</strong>
                     </label>
                     
                     <input type="radio" name="browser-id" value="ie" id="as-ie" />
                     <label for="as-ie">
-                        <strong>{{as_ie}}</strong>
+                        <strong data-i18n>{{as_ie}}</strong>
                     </label>
                     
                     <input type="radio" name="browser-id" value="firefox" id="as-firefox" />
                     <label for="as-firefox">
-                        <strong>{{as_ff}}</strong>
+                        <strong data-i18n>{{as_ff}}</strong>
                     </label>
                     
                     <input type="radio" name="browser-id" value="chrome" id="as-chrome" />
                     <label for="as-chrome">
-                        <strong>{{as_chrome}}</strong>
+                        <strong data-i18n>{{as_chrome}}</strong>
                     </label>
                 </div>
         </form>
@@ -90,25 +91,25 @@
 
             <p>
                 <input type="text" placeholder="PIN number" size="30" id="pin-number" required="required" />
-                <button type="submit">{{connect}}</button>
+                <button type="submit" data-i18n>{{connect}}</button>
             </p>
 
-            <button disabled="disabled">{{connect_with_opera_account}}</button>
-            <em>({{not_possible_yet}})</em>
+            <button disabled="disabled" data-i18n>{{connect_with_opera_account}}</button>
+            <em data-i18n>({{not_possible_yet}})</em>
         </form>
 
         <p id="loading"><img src="../images/loading-circle.png" alt="{{loading}}" title="{{loading}}..." /></p>
 
-        <p id="connected" class="hide">{{you_are_connected}} <strong><a href="#" id="disconnect">{{disconnect}}</a></strong></p>
+        <p id="connected" class="hide" data-i18n>{{you_are_connected}} <strong><a href="#" id="disconnect" data-i18n>{{disconnect}}</a></strong></p>
 
         <ul id="recent-posts"></ul><!--populated by Javascript-->
     </section>
     <section id="about">
-        <h1>Fix the Web <span class="light"> {{about}}</span></h1>
+        <h1>Fix the Web <span class="light" data-i18n> {{about}}</span></h1>
 
-        <p>{{contribute_to_the_project}}:</p>
+        <p data-i18n>{{contribute_to_the_project}}:</p>
 
-        <ul>
+        <ul data-i18n>
             <li><strong><a href="http://my.opera.com/fix-the-web">{{opera_ftw_group}}</a></strong> ({{opera_ftw_group_info}})</li>
             <li><strong><a href="http://www.operaturkiye.net/fix-the-web">{{home_page}}</a></strong> ({{home_page_info}})</li>
             <li><strong><a href="http://github.com/cyberstream/Fix-the-Web">{{main_repo}}</a></strong></li>
@@ -118,32 +119,32 @@
             
         <div id="columnize">            
             <div>
-                <h4>{{contributors}}:</h4>
+                <h4 data-i18n>{{contributors}}:</h4>
             
                 <ul>
-                    <li><strong><a href="http://my.opera.com/cyberstream">cyberstream</a></strong> <a href="mailto:cyberstream@myopera.com">({{email}})</a></li>
-                    <li><strong><a href="http://my.opera.com/greench">greench</a></strong> <a href="mailto:greench@myopera.com">({{email}})</a></li>
-                    <li><strong><a href="http://my.opera.com/inbuster">inbuster</a></strong> <a href="mailto:inbuster@myopera.com">({{email}})</a></li>
-                    <li><strong><a href="http://my.opera.com/metude">metude</a></strong> <a href="mailto:metude@myopera.com">({{email}})</a></li>
-                    <li><strong><a href="http://my.opera.com/zahek">zahek</a></strong> <a href="mailto:zahek@myopera.com">({{email}})</a></li>
+                    <li><strong><a href="http://my.opera.com/cyberstream">cyberstream</a></strong> <a href="mailto:cyberstream@myopera.com" data-i18n>({{email}})</a></li>
+                    <li><strong><a href="http://my.opera.com/greench">greench</a></strong> <a href="mailto:greench@myopera.com" data-i18n>({{email}})</a></li>
+                    <li><strong><a href="http://my.opera.com/inbuster">inbuster</a></strong> <a href="mailto:inbuster@myopera.com" data-i18n>({{email}})</a></li>
+                    <li><strong><a href="http://my.opera.com/metude">metude</a></strong> <a href="mailto:metude@myopera.com" data-i18n>({{email}})</a></li>
+                    <li><strong><a href="http://my.opera.com/zahek">zahek</a></strong> <a href="mailto:zahek@myopera.com" data-i18n>({{email}})</a></li>
                     <li><strong><a href="http://my.opera.com/BS-Harou">BS-Harou</a></strong></li>
                 </ul>
             </div>
             
             <div>
-                <h4>{{thanks}}:</h4>
+                <h4 data-i18n>{{thanks}}:</h4>
                 
                 <ul>
-                    <li><strong><a href="http://my.opera.com/AntonDiaz">AntonDiaz</a></strong> ({{anton_diaz_info}})</li>
-                    <li><strong><a href="http://my.opera.com/Christoph142">Christoph142</a></strong> ({{christoph_info}})</li>
-                    <li><strong><a href="http://my.opera.com/celeborn1">Yiğit Ateş</a></strong> ({{celeborn_info}})</li>
+                    <li data-i18n><strong><a href="http://my.opera.com/AntonDiaz">AntonDiaz</a></strong> ({{anton_diaz_info}})</li>
+                    <li data-i18n><strong><a href="http://my.opera.com/Christoph142">Christoph142</a></strong> ({{christoph_info}})</li>
+                    <li data-i18n><strong><a href="http://my.opera.com/celeborn1">Yiğit Ateş</a></strong> ({{celeborn_info}})</li>
                 </ul>
             </div>
         </div>
     </section>
 
     <footer>
-        <a href="reports.html">{{recent_reports}}</a>
+        <a href="reports.html" data-i18n>{{recent_reports}}</a>
     </footer>
 
     <script type="text/javascript" src="scripts/jsOAuth-1.3.3.min.js"></script>

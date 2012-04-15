@@ -1,0 +1,6 @@
+/* Add CSS rules to this file that should only be applied in Turkish mode */
+
+label[for=category-1] {width: 25%} 
+label[for=category-3] {width: 35%}
+
+.pagination #page-number:before {content:'Sayfa ';}

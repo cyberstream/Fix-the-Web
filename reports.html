@@ -2,60 +2,62 @@
   <html lang="en">
     <head>
       <meta charset="utf-8">
+
       <style type="text/css">
-          @import '../styles/styles.css';
-/*        @import '../styles/modal_styles.css';*/
-/*        @import '../styles/index_styles.css';*/
-    </style>
-      <title>Fix the Web</title>
+          @import 'styles/styles.css';
+          @import 'styles/special.css';
+      </style>
+      <title data-i18n>{{recent_reports}} | Fix the Web</title>
     </head>
     <body class="reports_page">
       <div id="container">
         <ul id="controls">
             <li>                
-                <strong>Order by</strong>
+                <strong data-i18n>{{order_by}}</strong>
                 <ul id="order-by" class="dropdown">
-                    <li><a href="#" data-order="time_desc" class="active change_state">newest first</a></li>
-                    <li><a href="#" data-order="time_asc" class="change_state">oldest first</a></li>
+                    <li><a href="#" data-order="time_desc" class="active change_state" data-i18n>{{newest_first}}</a></li>
+                    <li><a href="#" data-order="time_asc" class="change_state" data-i18n>{{oldest_first}}</a></li>
                     <!--TODO add "most followed" and "popular" as options when comment ratings system is implemented-->
                 </ul>
             </li>
         
             <li>                
-                <strong>Reports per page</strong>
+                <strong data-i18n>{{reports_per_page}}</strong>
                 <ul id="change-count" class="dropdown">
-                    <li><a href="#" data-count="5" data-page="1" class="change_state">5 reports</a></li>
-                    <li><a href="#" data-count="15" data-page="1" class="active change_state">15 reports</a></li>
-                    <li><a href="#" data-count="25" data-page="1" class="change_state">25 reports</a></li>
-                    <li><a href="#" data-count="50" data-page="1" class="change_state">50 reports</a></li>
-                    <li><a href="#" data-count="100" data-page="1" class="change_state">100 reports</a></li>
+                    <li><a href="#" data-count="5" data-page="1" class="change_state" data-i18n>5 {{reports}}</a></li>
+                    <li><a href="#" data-count="15" data-page="1" class="active change_state" data-i18n>15 {{reports}}</a></li>
+                    <li><a href="#" data-count="25" data-page="1" class="change_state" data-i18n>25 {{reports}}</a></li>
+                    <li><a href="#" data-count="50" data-page="1" class="change_state" data-i18n>50 {{reports}}</a></li>
+                    <li><a href="#" data-count="100" data-page="1" class="change_state" data-i18n>100 {{reports}}</a></li>
                 </ul>
             </li>
         </ul>
           
-        <h1>Recent Reports</h1>
+        <h1 data-i18n>{{recent_reports}}</h1>
         
-        <p>This is a list of everyone's bug reports from any website. Click on a report to see more about it.</p>
+        <p data-i18n>{{reports_info}}</p>
         
         <ul id="recent-reports">
-            <li id="loading-img"><img src="../images/loading-circle.png" alt="Loading" title="Loading changes..." /></li>
+            <li id="loading-img"><img src="../images/loading-circle.png" alt="{{loading}}" data-18n-attr="alt" /></li>
         </ul>
         
         <div class="pagination hidden">
-            <a href="#" data-page="0" class="disabled previous change_state" title="Go back">Previous Page</a>
+            <a href="#" data-page="0" class="disabled previous change_state" title="{{go_back}}" data-i18n data-i18n-attr="title">{{previous_page}}</a>
             <span id="page-number">1</span>
-            <a href="#" data-page="2" class="next change_state" title="Go to the next page">Next Page</a>
+            <a href="#" data-page="2" class="next change_state" title="{{go_to_next_page}}" data-i18n data-i18n-attr="title">{{next_page}}</a>
         </div>
         
         <footer>
-            <a href="http://www.operaturkiye.net/fix-the-web">Web Interface</a>
-            <a href="options.html#about">About Fix the Web</a>         
+            <a href="http://www.operaturkiye.net/fix-the-web" data-i18n>{{web_interface}}</a>
+            <a href="options.html#about" data-i18n>{{about_ftw}}</a>         
         </footer>
     </div>
-    <script src="scripts/jquery-1.6.4.min.js"></script>
-    <script src="scripts/jsOAuth-1.3.3.min.js"></script>
-    <script src="scripts/jquery.simplemodal.1.4.2.min.js"></script>
-    <script src="scripts/misc.js"></script>
+    <script type="text/javascript" src="scripts/jsOAuth-1.3.3.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery-1.6.4.min.js"></script>
+    <script type="text/javascript" src="scripts/locale.js"></script>
+    <script type="text/javascript" src="scripts/translate.js"></script>
+    <script type="text/javascript" src="scripts/misc.js"></script>
+    <script type="text/javascript" src="scripts/jquery.simplemodal.1.4.2.min.js"></script>
     <script>
         $(function() {        
             function highlightCountOfItemsPerPage(data) {
@@ -90,7 +92,7 @@
                 
                 history.pushState(data, '', 'reports.html?page=' +data.page+ '&count=' +data.count+ '&order=' + data.order);
                 
-                $('#recent-reports').html('<li id="loading-img"><img src="../images/loading-circle.png" alt="Loading" title="Loading changes..." /></li>')
+                $('#recent-reports').html('<li id="loading-img"><img src="../images/loading-circle.png" alt="' +i18n.loading+ '" title="' +i18n.loading+ '..." /></li>')
                 outputReports (data.page, data.count, data.order); // update the reports
                 
                 changeButtonState();
@@ -99,7 +101,7 @@
             // load reports from previous history state when the user clicks the back button            
             window.addEventListener ('popstate', function(data) {
                 // display the loading animation icon
-                $('#recent-reports').html('<li id="loading-img"><img src="../images/loading-circle.png" alt="Loading" title="Loading changes..." /></li>');
+                $('#recent-reports').html('<li id="loading-img"><img src="../images/loading-circle.png" alt="' +i18n.loading+ '" title="' +i18n.loading+ '" /></li>');
                 
                 highlightCountOfItemsPerPage(data)
                 
@@ -145,7 +147,7 @@
                       reports_per_page = reports_per_page && reports_per_page > 0 ? reports_per_page : 15;
                 
                 $.getJSON(CONFIG.defaultHost + 'ajax_request_handler.php?mode=get_report_list&order=' +order+ '&count=' + reports_per_page + '&page=' + page_number, function(data) {
-                    if (!data || data == '') $('#recent-reports').html('<li>Oops, there are no reports for this page! <em><a href="#" class="change_state" onclick="history.go(-1); return false;">go back</a></em></li>')
+                    if (!data || data == '') $('#recent-reports').html('<li>' +i18n.no_reports+ ' <em><a href="#" class="change_state" onclick="history.go(-1); return false;">' +i18n.go_back+ '</a></em></li>')
                     else {
                         var output = '',
                               data = data.list;
@@ -155,9 +157,9 @@
                                   page_url = '<a href="' +current.page+ '" title="Page: ' +current.page+ '" target="_blank">'
                                     + (current.page.length > 40 ? current.page.substr(0, 40) + '...' : current.page) + '</a>',
                                   severity = {
-                                      1 : 'minor annoyance',
-                                      2 : 'major problem',
-                                      3 : 'site unusable'
+                                      1 : i18n.minor_annoyance,
+                                      2 : i18n.major_problem,
+                                      3 : i18n.site_unusable
                                     }
                                   
                             if (current.OS.length) {
@@ -169,8 +171,8 @@
                                 else os_image = '../images/unidentified.png'
                             }
                             
-                            output += '<li title="Click to expand report" data-id="' +current.id+ '" data-username="' +current.username+ '" data-category="' +current.category+ '" data-datetime="' +current.date_time+ '" data-url="' +current.page+ '" data-report="' +current.report+ '" data-version="' +current.Opera+ '" data-build="' +current.build+ '" data-platform="' +current.OS+ '" data-platform-icon="' +os_image+ '" data-plugins="' +encodeURIComponent(current.misc)+ '">'
-                                + '<span class="severity_' +current.category+ '" title="' +(severity[current.category] || 'unknown')+ '"></span> <strong class="username">' +current.username+ '</strong> reported a problem on ' +page_url+ ' <span class="date_time">(' +current.date_time+ ')</span></li>';
+                            output += '<li title="' +i18n.click_to_expand_report+ '" data-id="' +current.id+ '" data-username="' +current.username+ '" data-category="' +current.category+ '" data-datetime="' +current.date_time+ '" data-url="' +current.page+ '" data-report="' +current.report+ '" data-version="' +current.Opera+ '" data-build="' +current.build+ '" data-platform="' +current.OS+ '" data-platform-icon="' +os_image+ '" data-plugins="' +encodeURIComponent(current.misc)+ '">'
+                                + '<span class="severity_' +current.category+ '" title="' +(severity[current.category] || 'unknown')+ '"></span> <strong class="username">' +current.username+ '</strong> ' +i18n.reported_a_problem_on+ ' ' +page_url+ ' <span class="date_time">(' +current.date_time+ ')</span></li>';
                         }
                         
                         $('#recent-reports').html(output)
@@ -180,10 +182,10 @@
                             page_url = '<a href="' +url+ '" title="Page: ' +url+ '" target="_blank">'
                                 + (url.length > 40 ? url.substr(0, 40) + '...' : url) + '</a>';
                             
-                            $.modal('<div id="report" data-id="' + $(this).data('id') + '"><span style="float: right;" class="severity_' +$(this).data('category')+ '" title="' +(severity[$(this).data('category')] || 'unknown')+ '"></span><strong>' +$(this).data('username')+ '</strong> reported a problem on ' +page_url + ':' 
-                                + '<p class="report">"' + $(this).data('report').replace(/\\/g, '') + '"</p>Reported on <strong>' +$(this).data('datetime') + '</strong>'
-                                + '<p><img class="os_icon" src="' +$(this).data('platform-icon') + '" title="' +$(this).data('platform')+ '" alt="' +$(this).data('platform')+ '" /> <em title="Opera version: ' + $(this).data('version') + ' Build number: ' + $(this).data('build') + '">' + $(this).data('version') + '.' + $(this).data('build') + '</em>'
-                                + ' | <a title="Click to see the reporting user\'s plugins and screen information." href="data:text/plain;charset=utf-8,' +$(this).data('plugins')+ '" target="_blank">plugins and screen</a> | <a href="' + CONFIG.defaultHost + '?mode=get_comment_list&id=' + $(this).data('id') + '">comment thread</a></p></div>', 
+                            $.modal('<div id="report" data-id="' + $(this).data('id') + '"><span style="float: right;" class="severity_' +$(this).data('category')+ '" title="' +(severity[$(this).data('category')] || 'unknown')+ '"></span><strong>' +$(this).data('username')+ '</strong> ' + i18n.reported_a_problem_on + ' ' +page_url + ':' 
+                                + '<p class="report">"' + $(this).data('report').replace(/\\/g, '') + '"</p>' + i18n.reported_on + ': <strong>' +$(this).data('datetime') + '</strong>'
+                                + '<p><img class="os_icon" src="' +$(this).data('platform-icon') + '" title="' +$(this).data('platform')+ '" alt="' +$(this).data('platform')+ '" /> <em title="Opera ' +i18n.version+ ': ' + $(this).data('version') + ' ' +i18n.build_number+ ': ' + $(this).data('build') + '">' + $(this).data('version') + '.' + $(this).data('build') + '</em>'
+                                + ' | <a title="' +i18n.click_to_see_plugins+ '" href="data:text/plain;charset=utf-8,' +$(this).data('plugins')+ '" target="_blank">' +i18n.plugins_and_screen+ '</a> | <a href="' + CONFIG.defaultHost + '?mode=get_comment_list&id=' + $(this).data('id') + '">' +i18n.comments+ '</a></p></div>', 
                             { onOpen: function (dialog) {
                                     dialog.overlay.fadeIn('medium', function () {
                                             dialog.container.slideDown('medium', function () {
