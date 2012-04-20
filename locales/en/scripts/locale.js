@@ -35,6 +35,7 @@ i18n = {
     home_page: 'Home Page',
     home_page_info: 'still under construction',
     main_repo: 'Main extension files repository',
+    server_side_repo: 'Server-side repository',
     css_patches: 'CSS Patches',
     css_patches_info: 'If a website just needs CSS to be patched, then add the patch to the <em><strong>patches.json</strong></em> file in this repo. If the problematic website needs JS for the patch, place it in <em><strong>includes/</strong>patches.js</em> in the <a title="Fix the Web\'s Repository" href="http://github.com/cyberstream/Fix-the-Web">extension repo</a>.',
     contributors: 'Contributors',
