@@ -1,6 +1,6 @@
 /*global widget, OAuth*/
 var CONFIG = {
-	defaultHost: 'http://www.operaturkiye.net/fix-the-web/', // the default domain to make AJAX requests to; *must have* the trailing slash "/"
+	defaultHost: 'http://localhost/Fix-the-Web-Server-Side/', // the default domain to make AJAX requests to; *must have* the trailing slash "/"
 	twitter: {
 		consumerKey: "frKRutacGx6VUkMhwQeJ6Q",
 		consumerSecret: "aUEFth57HGgRQC0pYjkCwrIZUpROLCVvPBZsM4dg",

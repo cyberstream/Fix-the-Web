@@ -170,83 +170,9 @@ window.addEventListener('load', function() {
                 
                 // If the loop had *continued*, then it would not have made it to this code during this current iteration
                 // Add the css in the patch to the current page
-                console.log('Patching: ' + css)
+//                console.log('Patching: ' + css)
                 addCSS (css);
             }
         }
     }
 }, false);
-    
-// run Prefixr if it is enabled in the options page (From Christoph142's CSS3 Prefixr extension (https://addons.opera.com/addons/extensions/details/css-prefixr), used with permission)
-if ( widget.preferences.getItem('prefixr') != 'false' ) {
-    window.addEventListener('load', function() { //intern CSS-code in head
-        var excluded = widget.preferences.getItem('prefixr-exclude');
-
-        if (excluded != '') {
-            var excluded_array = JSON.parse(excluded),
-                domain = window.location.hostname
-
-            if (window.location.href.indexOf('http') != 0) return; // abort the prefixr function: this is not a valid web page
-
-            for ( i = 0; i < excluded_array.length; i++ ) {
-                if ( domain.indexOf (excluded_array[i]) > -1 ) return; // abort the prefixr funtion: this site was found in the excluded sites list
-            }
-        }
-
-        var style_elements = document.getElementsByTagName("style");
-
-        for (var i=0; i < style_elements.length; i++) {
-            var style = style_elements[i].innerHTML;
-
-            if (style.search(/-(moz|ms|webkit|o)-/gim) != -1 || style.search(/(?!-o-)(transition|transform|animation)/gim) != -1) {
-                style = style.replace(/[^-](transition|transform|animation)/gim,"-o-$1"); // -o--prefix CSS3 styles without prefix
-                style = style.replace(/-(moz|ms|webkit|o)-(border-(image|radius)|box-shadow)/gim, '$2'); // create prefixfree versions for all known working properties
-                style = style.replace(/-(moz|ms|webkit)-([^:])/gim,'-o-$2'); // change prefixes to -o- for all of the remaining ones
-                style = style.replace(/(-o-[^;]+;\s*)\1+/gim,"$1"); // removes duplicates of -o-properties
-                style_elements[i].innerHTML = style;
-            }
-        }
-    }, false);
-
-    window.opera.addEventListener('BeforeCSS', function(userJSEvent){ // external CSS-files
-        if(userJSEvent.cssText.search(/(-(moz|ms|webkit|o)-)?(transition|transform|animation)/gim)!=-1){
-            userJSEvent.cssText = userJSEvent.cssText.replace(/[^-](transition|transform|animation)/,"-o-$1");
-            userJSEvent.cssText = userJSEvent.cssText.replace(/-(moz|ms|webkit|o)-(border-(radius|image)|box-shadow)/gim,'$2');
-            userJSEvent.cssText = userJSEvent.cssText.replace(/-(moz|ms|webkit)-([^:])/gim,'-o-$2');
-            userJSEvent.cssText = userJSEvent.cssText.replace(/(-o-[^;]+;\s*)\1+/gim,"$1");
-        }
-    }, false);
-}
-
-(function() {
-    if (widget.preferences.getItem('browser-id') && typeof window.navigator != 'undefined') {
-        if (widget.preferences.getItem('browser-id').search(/(ie|firefox|chrome)/i) > -1) {
-            var navigator = window.navigator,
-                  platform = navigator.userAgent.match(/\((.*?);/);
-            
-            if (platform.length > 1) platform = platform[1];
-            else platform = 'Windows NT 6.1';
-
-            switch (widget.preferences.getItem('browser-id')) {
-                case 'ie' : // mask as IE
-                    navigator.appName = 'Microsoft Internet Explorer'
-                    navigator.appVersion = '5.0 (compatible; MSIE 9.0; ' +platform+ '; Trident/5.0;)'
-                    navigator.userAgent = 'Mozilla/5.0 (compatible; MSIE 9.0; ' +platform+ '; Trident/5.0)'
-                    break;
-                case 'firefox' : // mask as Firefox
-                    navigator.appName = 'Netscape'
-                    navigator.appVersion = '5.0 (' +platform+ ')'
-                    navigator.product = 'Gecko'
-                    navigator.userAgent = 'Mozilla/5.0 (' +platform+ '; rv:10.0.2) Gecko/20100101 Firefox/10.0.2'
-                    break;
-                case 'chrome' : 
-                    navigator.appName = 'Netscape'
-                    navigator.appVersion = '5.0 (' +platform+ ') AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1068.1 Safari/536.3'
-                    navigator.product = 'Gecko'
-                    navigator.vendor = 'Google Inc.'
-                    navigator.userAgent = 'Mozilla/5.0 (' +platform+ ') AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1068.1 Safari/536.3'
-                    break;
-            }
-        }
-    }
-})();
