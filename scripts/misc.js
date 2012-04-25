@@ -2,11 +2,11 @@
 var CONFIG = {
 	defaultHost: 'http://localhost/Fix-the-Web-Server-Side/', // the default domain to make AJAX requests to; *must have* the trailing slash "/"
 	twitter: {
-		consumerKey: "frKRutacGx6VUkMhwQeJ6Q",
-		consumerSecret: "aUEFth57HGgRQC0pYjkCwrIZUpROLCVvPBZsM4dg",
-		requestTokenUrl: "https://api.twitter.com/oauth/request_token",
-		authorizationUrl: "https://api.twitter.com/oauth/authenticate",
-		accessTokenUrl: "https://api.twitter.com/oauth/access_token"
+		consumerKey: 'frKRutacGx6VUkMhwQeJ6Q',
+		consumerSecret: 'aUEFth57HGgRQC0pYjkCwrIZUpROLCVvPBZsM4dg',
+		requestTokenUrl: 'https://api.twitter.com/oauth/request_token',
+		authorizationUrl: 'https://api.twitter.com/oauth/authenticate',
+		accessTokenUrl: 'https://api.twitter.com/oauth/access_token'
 	}
 };
 
@@ -88,8 +88,8 @@ function update(callback) {
 		updated = 0
 	;
 	
-	if (typeof widget.preferences["patches-checksum"] === 'undefined') {
-		widget.preferences["patches-checksum"] = '0';
+	if (typeof widget.preferences['patches-checksum'] === 'undefined') {
+		widget.preferences['patches-checksum'] = '0';
 	}
 	
 	r.onreadystatechange = function() {
@@ -101,19 +101,17 @@ function update(callback) {
 				widget.preferences.setItem('last-update', Math.ceil(Date.now() / 1000));
 				window.sessionStorage.setItem('updated', '1');
 				
-				if ( this.responseXML && this.responseXML.getElementsByTagName("entry")[0] ) {
-					// can't we use querySelector here? it could be much shorter
-					// like this: checksum = this.responseXML.querySelector('entry id > *').nodeValue.match(/\/([\d\w]*)/)[1];
-					// or xpath: checksum = this.responseXML.selectNodes('//entry//id/*[0]')[0].nodeValue.match(/\/([\d\w]*)/)[1];
-					checksum = this.responseXML.getElementsByTagName("entry")[0].getElementsByTagName('id')[0].firstChild.nodeValue.match(/\/([\d\w]*)/)[1];
+				if ( this.responseXML && this.responseXML.getElementsByTagName('entry')[0] ) {
+					checksum = this.responseXML.querySelector('entry id').textContent.match(/\/([\w]*)/)[1];
+					//checksum = this.responseXML.getElementsByTagName('entry')[0].getElementsByTagName('id')[0].firstChild.nodeValue.match(/\/([\d\w]*)/)[1];
 				} else {
 					error = true;	
 				}
 
-				updated = (checksum === widget.preferences["patches-checksum"] ? 1 : 0);
+				updated = (checksum === widget.preferences['patches-checksum'] ? 1 : 0);
 
-				if (typeof checksum !== 'undefined' && checksum !== widget.preferences["patches-checksum"]) {
-					widget.preferences["patches-checksum"] = checksum;
+				if (typeof checksum !== 'undefined' && checksum !== widget.preferences['patches-checksum']) {
+					widget.preferences['patches-checksum'] = checksum;
 					updated = 2;
 					
 					sendRequest('GET', 'https://raw.github.com/cyberstream/Fix-the-Web-CSS-Patches/master/patches.json', 
@@ -156,16 +154,16 @@ function update(callback) {
 }
 
 // handle how often the CSS patches are updated
-if (widget.preferences.getItem("update-interval")) {
-	if (!widget.preferences.getItem("last-update")) {
+if (widget.preferences.getItem('update-interval')) {
+	if (!widget.preferences.getItem('last-update')) {
 		widget.preferences.setItem('last-update', '0');
 	}
 	
 	var
-		update_interval = widget.preferences.getItem("update-interval"),
+		update_interval = widget.preferences.getItem('update-interval'),
 		last_update = widget.preferences['last-update']
 	;
-	// "update-interval" in widget.preferences will determine how often the patches.js file is updated
+	// 'update-interval' in widget.preferences will determine how often the patches.js file is updated
 	// update-interval is in minutes, but setTimeout accepts milliseconds, so convert update-interval to seconds unit
 	setTimeout(function() {
 		"use strict";
