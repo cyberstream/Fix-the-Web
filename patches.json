@@ -14,11 +14,11 @@
     "css_patch":"div.Box ul { padding-left:22px; margin-left:0px !important } div.Box a.ListItem { padding-left:22px !important; }"
   },
   {
-    "patch_target":"trtspor.com",
+    "patch_target":"trtspor.com.tr",
     "opera_version":"11.62",
-    "status":"patch added",
-    "comment":"Fixed invisible content of body",
-    "css_patch":"#main{content: inherit;}"
+    "status":"patch removed",
+    "comment":"Fixed invisible content of body (trtspor.com.tr fixed the problem)",
+    "css_patch":""
   },
   {
     "patch_target":{
