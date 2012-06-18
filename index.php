@@ -18,7 +18,6 @@ if ($logged_in) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -79,11 +78,11 @@ if ($logged_in) {
             </form>
             <div>
                 <ul>
-                    <li><a href="?mode=get_report_list&order=popularity" id="most-popular-reports">Most Popular Reports</a></li>
-                    <li><a href="?mode=get_report_list&order=most_followed" id="most-followed-reports">Most Followed Reports</a></li>
+                    <li><a href="?mode=get_report_list&amp;order=popularity" id="most-popular-reports">Most Popular Reports</a></li>
+                    <li><a href="?mode=get_report_list&amp;order=most_followed" id="most-followed-reports">Most Followed Reports</a></li>
                 </ul>
             </div>
         </aside>
-        <script type="text/javascript" src="js/js.js"></script>
+        <script type="text/javascript" src="js/js.min.js"></script>
     </body>
 </html>
