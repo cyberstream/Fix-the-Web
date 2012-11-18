@@ -1,5 +1,5 @@
 
-var HOST="http://localhost/Fix-the-Web-Server-Side/"; // TODO edit this for your system
+var HOST=""+location.protocol+"//"+location.hostname+location.pathname;//localhost/Fix-the-Web-Server-Side/"; // TODO edit this for your system
 
 function reportTemplate(id,username,date_time,report,operaVersion,operaBuildNumber,OS,domain,page,isComment){
     var content='';
@@ -134,8 +134,13 @@ function reportWriter(data,hist){
         a=result.list[i];
         resultArea+=reportTemplate(a.id,a.username,a.date_time,a.report,a.Opera,a.build,a.OS,a.domain,a.page,false);
     }
-    prevLink=result.query.replace('page='+result.page,'page='+(result.page-1));
-    nextLink=result.query.replace('page='+result.page,'page='+(result.page+1));
+    if(result.page==1) {
+        prevLink=result.query;
+        nextLink=result.query+'&page=2';
+    }else{
+        prevLink=result.query.replace('page='+result.page,'page='+(result.page-1));
+        nextLink=result.query.replace('page='+result.page,'page='+(result.page+1));
+    }
     resultArea+="<a href='?"+prevLink+"' id='prev'>&lt;</a> <input type='number' onchange='go2page(this.value)' id='page' value='"+(result.page)+"'><a href='?"+nextLink+"' id='forw'>&gt;</a>";
     document.querySelector("section").innerHTML=resultArea;
     if(!hist)
