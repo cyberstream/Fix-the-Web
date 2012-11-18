@@ -45,7 +45,9 @@ if (isset($_GET) && count($_GET)) {
         }
 
         exit ($OS); // echo this for the AJAX request to get
-    } elseif ($_GET['mode'] == 'submit error') { 
+    } 
+    
+    elseif ($_GET['mode'] == 'submit error') { 
         // validate the form fields
         if (!isset($_GET['category']) || !preg_match('/^(1|2|3)$/', trim($_GET['category']))) 
             exit ('Please select a valid category for the error report.');
