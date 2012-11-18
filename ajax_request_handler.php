@@ -73,49 +73,10 @@ if (isset($_GET) && count($_GET)) {
         
         // if the data is processed and inserted into the database successfully then echo "true":
         exit;
-    } elseif ($_GET['mode'] == 'get_frame_content') { // TODO this section can be removed once the extension versions dependent upon it are updated
-        $stmt = $db->stmt_init();
-        
-        if ($_GET['method'] == 'domain' && isset($_GET['domain'])) {
-            $query = "SELECT 
-            username, language, category, report, page, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
-            FROM reports WHERE post_type = 0 AND domain = ?";
-            $bind_variable = $_GET['domain'];
-        } elseif ($_GET['method'] == 'page' && isset($_GET['page'])) {
-            $query = "SELECT 
-            username, language, category, report, page, opera_version, opera_build, operating_system, additional_information, DATE_FORMAT(time, '%M %e, %Y at %l:%i%p')
-            FROM reports WHERE post_type = 0 AND page = ?";
-            $bind_variable = $_GET['page'];
-        } else exit ('There was an error fetching the bug reports for this website.');
-
-        if ($stmt->prepare($query . ' ORDER BY id DESC')) {
-            $stmt->bind_param('s', $bind_variable);
-            $q = $stmt->execute();
-            $stmt->store_result();
-            
-            if (!$stmt->errno && $stmt->num_rows) {
-                $stmt->bind_result ($username, $language, $category, $report, $page, $version, $build, $OS, $misc, $date_time);
-                
-                $JSON = array();
-                
-                while ($stmt->fetch()) {
-                    $JSON[] = array("username" => htmlentities ($username),
-                                        "language" => htmlentities ($language),
-                                        "category" => $category,
-                                        "report" => htmlentities ($report),                                            
-                                        "date_time" => htmlentities ($date_time),
-                                        "Opera" => htmlentities ($version),
-                                        "build" => htmlentities ($build),
-                                        "page" => htmlentities ($page),
-                                        "misc" => htmlentities ($misc),
-                                        "OS" => htmlentities ($OS)
-                                    );
-                }
-                
-                exit (json_encode($JSON));
-            } else exit ('{}');
-        }
-    } elseif ($_GET['mode'] == 'get_reports_count' && isset($_GET['method']) && (isset($_GET['page']) || isset($_GET['domain']))) {
+    } 
+    
+    // TODO remove
+    elseif ($_GET['mode'] == 'get_reports_count' && isset($_GET['method']) && (isset($_GET['page']) || isset($_GET['domain']))) {
         if ($_GET['method'] == 'domain' || $_GET['method'] == 'page') {
             $stmt = $db->stmt_init();
             
@@ -149,7 +110,45 @@ if (isset($_GET) && count($_GET)) {
         }
         
         exit ('0');
-    } elseif ($_GET['mode'] == 'get_report_list') {
+    } 
+    
+    // output a complete list of all of the reports for use by the extension's badge
+    elseif ( $_GET['mode'] == 'get_reports_summary' && isset($_GET['last_summary_count']) && $_GET['last_summary_count'] >= 0) { 
+        $stmt = $db->stmt_init();
+        $summary_output = array('total_number', 'by_domain', 'by_page'); // initialize the array for outputting the summary 
+        
+        $query = 'SELECT COUNT(id) FROM `reports` WHERE post_type = 0 LIMIT 1';
+        
+        if ( $stmt->prepare($query) ) {
+            $stmt->execute();
+            $stmt->bind_result($current_summary_count);
+            $stmt->fetch();
+            
+            if ( $current_summary_count > $_GET['last_summary_count'] ) { // if there were new reports submitted since the last update, then send the updated reports list
+                $summary_output['total_number'] = $current_summary_count; // update the summary output array with the current total count of reports
+                
+                $queries = array('by_domain' => 'SELECT domain, COUNT(page) FROM `reports` WHERE post_type = 0 GROUP BY domain LIMIT 0, 3000',
+                                           'by_page' => 'SELECT page, COUNT(page) FROM `reports` WHERE post_type = 0 GROUP BY page LIMIT 0, 3000');
+                
+                foreach ( $queries as $key => $query ) {
+                    if ( $stmt->prepare($query) ) {
+                        $stmt->execute();
+                        $stmt->bind_result($item_summary, $report_count);
+
+                        while ( $stmt->fetch() ) {
+                            $summary_output[$key][$item_summary] = $report_count; // add to the main output array items: domain => number of reports for that domain
+                        }
+                    } else exit ('current'); // if the retrieval is unsuccessful, then just output "current"
+                }
+                
+                exit (json_encode($summary_output));
+            } // END report summary retrieval
+        }
+        
+        exit ('current'); // if nothing has been output yet, then output "current" to indicate that the downloaded URL list is current
+    }
+    
+    elseif ($_GET['mode'] == 'get_report_list') {
         // TODO control $_GET variable health
         $stmt = $db->stmt_init();
         
