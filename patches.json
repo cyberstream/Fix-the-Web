@@ -1,0 +1,72 @@
+[
+  {
+    "patch_target":"newsminer.com",
+    "opera_version":"11.62",
+    "status":"patch added",
+    "comment":"Fixed the cramped links in the lists under National News, International News, and Entertainment News",
+    "css_patch":".ap_table_styles li { padding: 7px 4px}"
+  },
+  {
+    "patch_target":"memurlar.net",
+    "opera_version":"11.62",
+    "status":"patch added",
+    "comment":"Fix the overflowed ul tag section in .Box",
+    "css_patch":"div.Box ul { padding-left:22px; margin-left:0px !important } div.Box a.ListItem { padding-left:22px !important; }"
+  },
+  {
+    "patch_target":"trtspor.com.tr",
+    "opera_version":"11.62",
+    "status":"patch removed",
+    "comment":"Fixed invisible content of body (trtspor.com.tr fixed the problem)",
+    "css_patch":""
+  },
+  {
+    "patch_target":{
+      "domain_regex":[
+        "(sanalgsm\\\\.com|netgsm\\\\.com\\\\.tr)",
+        "i"
+      ],
+      "path":"gresim.asp"
+    },
+    "opera_version":"11.61",
+    "status":"patch added",
+    "comment":"Fixed too small captcha images",
+    "css_patch":".contain{padding:0 !important}"
+  },
+  {
+    "patch_target":{
+      "url_regex":[
+        "(invisionzone\\\\.com/index.php?showuser=|invisionpower\\\\.com/user/)",
+        "i"
+      ]
+    },
+    "opera_version":"11.62",
+    "status":"patch added",
+    "comment":"Fixed color fade in annoyance when hovering over sidebar items",
+    "css_patch":".ipsVerticalTabbed_tabs li a {background: #F6F8FB;}"
+  },
+  {
+    "patch_target":"kramerelectronics.com",
+    "opera_version":"11.62",
+    "status":"patch added",
+    "comment":"Fix for layout",
+    "css_patch":"BODY > TABLE#container {table-layout: auto;}"
+  },
+  {
+      "patch_target": "twitter.com",
+      "opera_version": "11.62",
+      "status": "patch added",
+      "comment": "Fixes for Twitter sites (from Twitter Fix extension by AntonDiaz)",
+      "css_patch": "body {background-attachment: scroll !important;} body.logged-in > #doc > .topbar {position: absolute !important;} body.home-page > #top-stuff > .topbar {position: absolute !important;} body#settings > #top-stuff {position: absolute !important;}"
+  },
+  {
+      "patch_target": {
+          "domain": "c-and-e.com",
+          "path": "shop/product.html"
+      },
+      "opera_version": "11.62",
+      "status": "patch added",
+      "comment": "Fixed problem with the red cross not displayin over the icons for unavailable sizes",
+      "css_patch": "#ProductSizeButtons > .button > span[style*='background-image: url(\"http://www.c-and-a.com/de/de/shop/_/img/Product/redcross.png\")'] {top: 0}"
+  }
+]
