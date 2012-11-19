@@ -117,7 +117,7 @@ if (isset($_GET) && count($_GET)) {
     // output a complete list of all of the reports for use by the extension's badge
     elseif ( $_GET['mode'] == 'get_reports_summary' && isset($_GET['last_summary_count']) && $_GET['last_summary_count'] >= 0) { 
         $stmt = $db->stmt_init();
-        $summary_output = array('total_number', 'by_domain', 'by_page'); // initialize the array for outputting the summary 
+        $summary_output = array('by_domain' => array(), 'by_page' => array()); // initialize the array for outputting the summary 
         
         $query = 'SELECT COUNT(id) FROM `reports` WHERE post_type = 0 LIMIT 1';
         
