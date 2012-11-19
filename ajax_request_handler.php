@@ -126,7 +126,7 @@ if (isset($_GET) && count($_GET)) {
             $stmt->bind_result($current_summary_count);
             $stmt->fetch();
             
-            if ( $current_summary_count > $_GET['last_summary_count'] ) { // if there were new reports submitted since the last update, then send the updated reports list
+            if ( $current_summary_count != $_GET['last_summary_count'] ) { // if there were new reports submitted since the last update, then send the updated reports list
                 $summary_output['total_number'] = $current_summary_count; // update the summary output array with the current total count of reports
                 
                 $queries = array('by_domain' => 'SELECT domain, COUNT(page) FROM `reports` WHERE post_type = 0 GROUP BY domain LIMIT 0, 3000',
