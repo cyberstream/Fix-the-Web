@@ -11,12 +11,31 @@
     </style>
 </head>
 <body>
-    <div id="nav"></div><!--This tab bar is automatically filled with JS.-->
+    <div id="nav"><span class="version_number" title="{{version}}" data-i18n-attr="title"></span></div><!--This tab bar is automatically filled with JS.-->
 
     <!-- To create a new tab, simply create a new <section> element with an ID. The ID will be the title of the tab. -->
     <section id="options">
         <h1>Fix the Web <span class="light" data-i18n> {{options}}</span></h1>
 
+<!--        <h1>Fix the Web <span class="light"> Authentication</span></h1>-->
+        <form id="auth" class="hide sub_section">
+            <p>
+                <a href="#" id="twitter-login"></a>
+            </p>
+
+            <p>
+                <input type="text" placeholder="PIN number" size="30" id="pin-number" required="required" />
+                <button type="submit" data-i18n>{{connect}}</button>
+            </p>
+
+            <button disabled="disabled" data-i18n>{{connect_with_opera_account}}</button>
+            <em data-i18n>({{not_possible_yet}})</em>
+        </form>
+
+        <p id="loading"><img src="../images/loading-circle.png" alt="{{loading}}" title="{{loading}}..." /></p>
+
+        <p id="connected" class="hide" data-i18n>{{you_are_connected}} <strong><a href="#" id="disconnect" data-i18n>{{disconnect}}</a></strong></p>
+        
         <form id="prefs-form">
                 <div class="sub_section">
                     <label><span data-i18n>{{check_for_updates}}</span>
@@ -25,12 +44,13 @@
                     </label>
 
                     <div>
-                        <div id="update" data-i18n>{{check_for_updates_now}}</div>
+                        <div id="update" class="update_button" data-i18n>{{check_for_updates_now}}</div>
                     </div>
                 </div>
 
-                <p class="sub_section">
-                    <span data-i18n>{{show_reports_count_by}}:</span>
+                <div class="sub_section">
+                    <span data-i18n>{{show_reports_count_by}}</span>
+                        
                     <input type="radio" id="display-reports-by-domain" name="display-reports-by" value="domain" />
                     <label for="display-reports-by-domain">
                         <strong data-i18n>{{domain}}</strong>
@@ -39,8 +59,15 @@
                     <label for="display-reports-by-page">
                         <strong data-i18n>{{page}}</strong>
                     </label>
-                </p>
-                <div class="sub_section">
+                        
+                    <div>
+                        <span id="update-list" class="update_button" data-i18n>{{update_list_now}}</span> (<abbr title="{{about_badge_list}}" data-i18n-attr="title" data-i18n>{{about}}</abbr>):
+                    </div>
+                </div>
+                
+                <!--BEGIN PREFIXR
+                    feature is disabled-->
+                <!--<div class="sub_section">
                     <span data-i18n>{{css_prefixr}}</span>
                     <input type="radio" name="prefixr" value="true" id="prefixr-on" />
                     <label for="prefixr-on">
@@ -55,7 +82,9 @@
                         <label for="prefixr-exclude" data-i18n>{{prefixr_exclude}}:</label>
                         <textarea data-i18n-attr="title" name="prefixr-exclude" id="prefixr-exclude" cols="60" rows="7" title="{{one_site_per_line}}" placeholder="exclude.com"></textarea>
                     </div>
-                </div>
+                </div>-->
+                <!--END prefixr-->
+                
                 <div class="sub_section">
                     <span data-i18n>{{browser_id}}</span> (<abbr data-i18n data-i18n-attr="title" title="{{browser_id_info}}">{{about}}</abbr>): 
                     
@@ -83,25 +112,7 @@
         <!--
     </section>
     <section id="authenticate">-->
-<!--        <h1>Fix the Web <span class="light"> Authentication</span></h1>-->
-        <form id="auth" class="hide sub_section">
-            <p>
-                <a href="#" id="twitter-login"></a>
-            </p>
-
-            <p>
-                <input type="text" placeholder="PIN number" size="30" id="pin-number" required="required" />
-                <button type="submit" data-i18n>{{connect}}</button>
-            </p>
-
-            <button disabled="disabled" data-i18n>{{connect_with_opera_account}}</button>
-            <em data-i18n>({{not_possible_yet}})</em>
-        </form>
-
-        <p id="loading"><img src="../images/loading-circle.png" alt="{{loading}}" title="{{loading}}..." /></p>
-
-        <p id="connected" class="hide" data-i18n>{{you_are_connected}} <strong><a href="#" id="disconnect" data-i18n>{{disconnect}}</a></strong></p>
-
+        
         <ul id="recent-posts"></ul><!--populated by Javascript-->
     </section>
     <section id="about">
@@ -136,7 +147,7 @@
                 
                 <ul>
                     <li data-i18n><strong><a href="http://my.opera.com/AntonDiaz">AntonDiaz</a></strong> ({{anton_diaz_info}})</li>
-                    <li data-i18n><strong><a href="http://my.opera.com/Christoph142">Christoph142</a></strong> ({{christoph_info}})</li>
+                    <!--<li data-i18n><strong><a href="http://my.opera.com/Christoph142">Christoph142</a></strong> ({{christoph_info}})</li>-->
                     <li data-i18n><strong><a href="http://my.opera.com/celeborn1">Yiğit Ateş</a></strong> ({{celeborn_info}})</li>
                 </ul>
             </div>
@@ -152,7 +163,7 @@
     <script type="text/javascript" src="scripts/locale.js"></script>
     <script type="text/javascript" src="scripts/translate.js"></script>
     <script type="text/javascript" src="scripts/misc.js"></script>
-    <script type="text/javascript" src="scripts/jquery.simplemodal.1.4.2.min.js"></script>
     <script type="text/javascript" src="scripts/options.js"></script>
+    <script type="text/javascript" src="scripts/jquery.simplemodal.1.4.2.min.js"></script>
 </body>
 </html>

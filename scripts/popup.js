@@ -71,15 +71,22 @@ window.addEventListener("DOMContentLoaded", function() {
             try {
                 opera.extension.bgProcess.getUserName(function(data) {
                     var parsedResponse = data && data.text && data.text != '' && JSON.parse(data.text) ? JSON.parse(data.text) : {}
-
+                    
                     params.username = parsedResponse.screen_name;
-
-                    if (!params.username || !params.username.length) show_message ( 'There was an error retrieving your username.', 'error' );
-                    else {                            
-                        opera.extension.bgProcess.sendRequest('GET', 'ajax_request_handler.php', function(message) {
-                            $('#report-site-form').fadeTo(600, 1);
-
-                            if (message == 'true') show_message (i18n.report_submitted_message, 'success');
+                    
+                    $('#report-site-form').stop().fadeTo(600, 1); // fade form back to full opacity
+                    
+                    if ( !params.username || !params.username.length ) 
+                        show_message ( i18n.report_connect_error, 'error' ); // error retrieving username
+                    else { 
+                        
+                        // send off the bug report!
+                        opera.extension.bgProcess.sendRequest('get', 'ajax_request_handler.php', function(message) {
+                            if ( message == 'true' ) {
+                                show_message (i18n.report_submitted_message, 'success');
+                                opera.extension.bgProcess.updateReportSummary();
+                            }
+                            
                             else if (message.length > 0) show_message (message, 'error');
                             else show_message (i18n.report_submission_error, 'error');
                         }, params, true);

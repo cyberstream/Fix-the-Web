@@ -92,9 +92,9 @@ function savePrefs (event) {
         widget.preferences.setItem(event.target.name, event.target.id.replace('display-reports-by-', ''));
     } else if (event.target.name == 'update-interval') {
         widget.preferences.setItem('update-interval', event.target.value);
-    } else if (event.target.name == 'prefixr-exclude') {            
+    } else if (event.target.name == 'prefixr-exclude') { // PREFIXR is disabled
         var sites = $('#prefixr-exclude').val(); 
-
+        
         widget.preferences.setItem('prefixr-exclude', JSON.stringify(sites.split(/\r?\n/)))            
     } else widget.preferences.setItem(event.target.name, event.target.value);
 }
@@ -110,7 +110,7 @@ function loadPrefs() {
                 if ( widget.preferences.getItem('prefixr-exclude') ) {
                     try {
                         var excluded_sites = JSON.parse(widget.preferences.getItem('prefixr-exclude'));
-
+                        
                         field.value = excluded_sites.join('\n');
                     } catch(e) {}
                 } else widget.preferences.setItem('prefixr-exclude', '[]')  
@@ -137,7 +137,7 @@ function readableInterval (minutes) {
     return readable;
 }
 
-// That function shows update-interval's value on a visible HTML element
+// That function shows update-interval's value in a visible HTML element
 function updateIntervalValue () {
     var interval = parseInt(document.getElementById("update-interval").value);
 
@@ -146,14 +146,17 @@ function updateIntervalValue () {
 
 // when the page is loaded, get extension preferences and assign them into correct input elements
 window.addEventListener("load", function() {
-    loadPrefs()
+    loadPrefs();
 
     if (location.hash == '' || !document.getElementById(location.hash.replace('#', ''))) location.hash = 'options'
     else document.getElementById(location.hash.replace('#', '')).className = 'active';
 
     var sections = document.querySelectorAll("section"),
             nav = document.getElementById('nav'),
-            currentSection = document.getElementById(location.hash.replace('#', ''));
+            currentSection = document.getElementById(location.hash.replace('#', '')),
+            versionLabel = document.querySelector('.version_number');
+
+    versionLabel.innerText = widget.version;
 
     currentSection.className = 'active';
 
@@ -165,29 +168,25 @@ window.addEventListener("load", function() {
     }
 }, false);
 
-// when update interval is changed, update the value in the isible area
+// when update interval is changed, update the value in the visible area
 document.getElementById("update-interval").addEventListener("change", updateIntervalValue, false);
 
-document.getElementById('update').addEventListener('click', function() {
-    var loading = document.createElement('img'),
-            update_button = document.getElementById('update');
-
-    loading.src = '../images/loading.png';
-    loading.id = 'loading_spinner';
-
-    if (!document.getElementById('loading_spinner')) update_button.parentNode.insertBefore(loading, update_button.nextSibling);
+$('#update').click(function() {
+    if ( !$('#update + .loading_spinner').length )
+        $('<img src="../images/loading.png" class="loading_spinner" />').insertAfter('#update');
 
     var updated = update(function(u) {
-        if (document.getElementById('loading_spinner')) loading.parentNode.removeChild(loading);
-
+        $('#update + .loading_spinner').remove();
+        
+        // Display the appropriate message since the update was completed
         if (u == 2) $.modal(i18n.css_patches_was_updated, { overlayClose: true });
         else if (u == 1) $.modal(i18n.css_patches_file_unchanged, { overlayClose: true });
         else $.modal(i18n.css_patches_update_error + (u != 0 ? ': \n\n' + u : '.'), { overlayClose: true });
     });
-}, false)
+});
 
 function freezeClick(e) {
-    e.preventDefault()
+    e.preventDefault();
 }
 
 window.addEventListener('hashchange', function() {
@@ -229,16 +228,19 @@ if ( isLoggedIn() ) {
 }
 
 // disconnect from your Twitter account
-$('#disconnect').click(function(e) {
-    e.preventDefault ();
+$(function() {
+    $('#disconnect').click(function(e) {
+        alert('hi')
+        e.preventDefault();
 
-    $('#connected').fadeOut(500, function() {
-        widget.preferences.access_token = ''; // remove the access token from local storage
+        $('#connected').fadeOut(500, function() {
+            widget.preferences.access_token = ''; // remove the access token from local storage
 
-        $('#auth').removeClass('hide');
-        $('#auth').css('opacity', 0).animate({
-            opacity: 1
-        }, 650);
+            $('#auth').removeClass('hide');
+            $('#auth').css('opacity', 0).animate({
+                opacity: 1
+            }, 650);
+        });
     });
 });
 
@@ -292,3 +294,23 @@ function failureHandler (data) { data ? console.log(data) : console.log(i18n.req
 
 // parses a query string and returns
 function parseQueryString (a,b,c,d,e) {for(b=/[?&]?([^=]+)=([^&]*)/g,c={},e=decodeURIComponent;d=b.exec(a.replace(/\+/g,' '));c[e(d[1])]=e(d[2]));return c;}
+
+// Update the error reports summary list when the button is clicked
+$('#update-list').click(function() {
+    if ( !$('#update-list + .loading_spinner').length )
+        $('<img src="../images/loading.png" class="loading_spinner" />').insertAfter('#update-list');
+    
+    updateReportSummary (function(message) {
+        $('#update-list + .loading_spinner').remove();
+        
+        // Display the appropriate message since the update was completed
+        if ( message === 'updated' ) 
+            $.modal(i18n.badge_list_was_updated, { overlayClose: true });
+        else if ( message === 'current' ) 
+            $.modal(i18n.badge_list_file_unchanged, { overlayClose: true });
+        else if ( message === 'connect-error' )
+            $.modal(i18n.badge_list_connect_error, { overlayClose: true });
+        else
+            $.modal(i18n.badge_list_error, { overlayClose: true });
+    });
+});

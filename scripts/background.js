@@ -60,63 +60,55 @@ var ToolbarIcon = {
 
 		}
 	},
+                 
+                  // returns a count of error reports for the badge for the current tab's url or domain (depending on the preference)
+                  getBadgeCount: function() {
+                      var mode = widget.preferences['display-reports-by'] || 'domain',                                          
+                            tab_info = {
+                                page: getPageAddress(),
+                                domain: getDomainName()
+                            },
+                                    
+                            mode_id = tab_info[mode];
+                
+                      // Attempt to parse the summary object
+                      try {
+                          var summary_object = JSON.parse(widget.preferences['reports-summary']);
+                      } catch (e) {
+                          
+                          // output and error message and abort the function by returning "0"
+                          console.log('[FtW error] Error parsing reports summary');
+                          return 0;
+                      }
+                      
+                      // make sure the summary_object array is populated before continuing
+                      if ( summary_object.length != 0 ) {
+                            var reports_list  = summary_object['by_' + mode];                            
+                            
+                            if ( mode_id in reports_list ) 
+                                return reports_list[mode_id];           
+                      }
+                      
+                      return 0; // if no value has been returned yet, then return 0
+                  },
 
 	// update the badge on the toolbar icon with the right reports count
 	updateBadge: function() {
-		var
-			mode         = widget.preferences['display-reports-by'] || 'domain',
-			tab          = opera.extension.tabs ? opera.extension.tabs.getFocused() : '',
-			page_address = getPageAddress(),
-			domain_name  = getDomainName() // get the second item in the result's array (the matched text in the parentheses)
-		;
-		
-		if (tab) {
-			ToolbarIcon.button.disabled = false;
-			
-			if (sessionStorage.getItem(page_address)) {
-				var 
-					count = sessionStorage.getItem(page_address),
-					badge = {
-						display: 'block',
-						textContent: count,
-						color: 'white',
-						backgroundColor: '#c12a2a'
-					}
-				;
-				
-				// add a title to the button
-				ToolbarIcon.button.title = ToolbarIcon.title(count);
-
-				// create the badge 
-				ToolbarIcon.create(badge);
-			} else {
-				// display a "?" badge to show that the actual reports count is loading
-				var loadingBadge = {
-					display: 'block',
-					textContent: ' ? ',
-					color: 'white',
-					title: 'Loading reports count...',
-					backgroundColor: '#c12a2a'
-				};
-
-				ToolbarIcon.create(loadingBadge);
-
-				sendRequest('GET', 'ajax_request_handler.php?mode=get_reports_count&method=' + mode + '&page=' + encodeURIComponent(page_address) + '&domain=' + encodeURIComponent(domain_name), function(data) {
-					if (data) {
-						var badge = {
-							display: 'block',
-							textContent: data,
-							color: 'white',
-							backgroundColor: '#c12a2a'
-						};
-
-						// create the badge
-						ToolbarIcon.create(badge);
-						sessionStorage.setItem(page_address, data);
-					}
-				}, null, true);
-			}
-		}
+                      var tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : '';
+                      
+                      if ( tab ) {
+                          ToolbarIcon.button.disabled = false;
+                          
+                          var badge = {
+                                display: 'block',
+                                textContent: ' ' + (ToolbarIcon.getBadgeCount() || 0) + ' ', // get badge count and put padding around it
+                                color: 'white',
+                                backgroundColor: '#c12a2a'
+                          };
+              
+                          // create the badge
+                          ToolbarIcon.create(badge);
+                      }
 	},
 
 	// select the right state for the button
@@ -147,7 +139,6 @@ if (opera.extension.tabs) {
 opera.extension.onconnect = function() {
 	var page_address = getPageAddress();
 
-	sessionStorage.removeItem(page_address); // Erase the cached error report count for the current page if it is set. It is updated when the page loads
 	ToolbarIcon.init();
 };
 
@@ -170,21 +161,19 @@ function getDomainName () {
 }
 
 opera.extension.onconnect = function(e) {
-	try {
-		e.source.postMessage('reply');
-	} catch (err) {
-		// handle error
-	}
+    try {
+        e.source.postMessage('reply');
+    } catch (err) {
+        // handle error
+    }
 };
 
 // Handle incoming messages
 opera.extension.onmessage = function(event) {
-	var
-		mode         = widget.preferences['display-reports-by'] || 'domain',
-		page_address = getPageAddress(),
-		tab          = opera.extension.tabs ? opera.extension.tabs.getFocused() : '',
-		domain_name  = getDomainName()
-	;
+	var mode = widget.preferences['display-reports-by'] || 'domain',
+                        page_address = getPageAddress(),
+                        tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : '',
+	      domain_name = getDomainName();
 
 	if (event.data === 'get_frame_content') {    
 		if (tab) {
@@ -193,6 +182,6 @@ opera.extension.onmessage = function(event) {
 			}, null, true);
 		}
 	} else if (event.data === 'initialize badge') {
-		ToolbarIcon.updateBadge();
+                        ToolbarIcon.init();
 	}
-};
+}
