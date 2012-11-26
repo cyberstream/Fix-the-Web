@@ -1,14 +1,15 @@
 /*global i18n */
-var docElements = document.querySelectorAll('[data-i18n], [data-i18n-attr]');
-
-if ( typeof i18n !== 'undefined' && typeof $ !== 'undefined' ) {
+if ( typeof i18n !== 'undefined') {
 	document.addEventListener('DOMContentLoaded', function() {
 		"use strict";
+                
 		var 
+                                                      docElements = document.querySelectorAll('[data-i18n], [data-i18n-attr]'),
 			domText = document.querySelector('html').innerHTML,
 			placeholders = domText.match(/\{\{(.*?)\}\}/igm).map(function(v) {
 				return v.replace(/(\{|\})/igm, '').toLowerCase();
 			}),
+                        
 			i, j, imax, jmax,
 			thisPlaceholder, thisPhRegex,
 			thisElement, translateAttr
@@ -29,8 +30,8 @@ if ( typeof i18n !== 'undefined' && typeof $ !== 'undefined' ) {
 					if ( translateAttr && thisElement.getAttribute(translateAttr) ) {
 						thisElement.setAttribute(translateAttr, thisElement.getAttribute(translateAttr).replace(thisPhRegex, i18n[thisPlaceholder]));
 					}
-				}
+				} // end loop through the elements to be translated
 			}
-		}
-	});
+		} // end loop through placeholders
+	}); // end DOMContentLoaded function
 }
