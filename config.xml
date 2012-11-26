@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" version="1.0-b2" defaultlocale="en">
+<widget xmlns="http://www.w3.org/ns/widgets" version="1.0-B4" defaultlocale="en">
     <name short="Fix the Web">Fix the Web</name>
     <description xml:lang="en">Report broken, incompatible, or browser-sniffing websites and create and apply site fixes</description>
 <!--    <description xml:lang="en">A tool to report and fix web pages that have aesthetic or functional problems due to poor coding practices</description>-->
@@ -9,12 +9,15 @@
     
     <!--default values for preferences-->
     <preference name="patches" value="[]" />
-    <preference name="patches-checksum" value="0" />
+    <preference name="last-patches-update" value="0" />
+    <preference name="reports-summary" value="[]" />
     <preference name="update-interval" value="30" />
     <preference name="display-reports-by" value="domain" /> <!--either "domain" or "page"-->
-    <preference name="prefixr" value="true" />
-    <preference name="prefixr-exclude" value="[]" />
     <preference name="browser-id" value="opera" />
+    
+    <!--PREFIXR disabled-->
+    <!--<preference name="prefixr" value="true" />
+    <preference name="prefixr-exclude" value="[]" />-->    
     
     <access origin="*" subdomains="true" />
 </widget>

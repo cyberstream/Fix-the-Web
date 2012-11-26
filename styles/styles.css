@@ -36,10 +36,10 @@ section a, section a:link { color: #389CFE }
     width:300px;
 }
 
-#update {
+.update_button {
     margin:10px 0 0 0;
     padding:3px;
-    background:#dbe4ff;
+    background: #dbe4ff;
     border:1px solid #416fe2;
     display:inline-block;
     border-radius:5px;
@@ -47,15 +47,15 @@ section a, section a:link { color: #389CFE }
     text-transform: uppercase;
     font-size: 14px;
     font-weight: bold;
-    -o-transition: background-color 400ms ease-in-out;
+    transition: all 400ms ease-in-out;
     text-shadow:0 0 12px #fff, 0 1px 1px #ddd;
 }
 
-#update:hover {
+.update_button:hover {
     background: #7298f7;
 }
 
-#loading_spinner {
+#loading_spinner, .loading_spinner {
     width:28px;
     height:28px;
     margin-left: 5px;
@@ -73,6 +73,7 @@ section a, section a:link { color: #389CFE }
 #nav a:not(.active):hover {
     background: #c1c1c1;
     padding-bottom: 3px;
+    border-radius: 5px 5px 0 0;
 }
 
 #nav a {
@@ -90,6 +91,20 @@ section a, section a:link { color: #389CFE }
     box-shadow: 0 -1px 1px #bbb;
 }
 
+/* TODO fix radial gradient */
+span.version_number {
+    float: right;
+    font-weight: bold;
+    position: relative;
+    color: #666;
+    top: -11px;
+    padding: 8px 10px 2px 9px;
+    height: 22px; 
+    background: radial-gradient(ellipse 4% 50% at 1% 50%, rgba(0, 0, 0, 0.3), transparent), radial-gradient(ellipse 4% 50% at 100% 50%, rgba(0, 0, 0, 0.3), transparent);
+    box-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff;
+    text-shadow: 0 1px 1px #fff;
+}
+
 section {
     width:80%;
     position:relative;
@@ -97,7 +112,7 @@ section {
     z-index:0;
     opacity:0;
     display:none;
-/*    -o-transition: opacity 0.6s ease;*/
+/*    transition: opacity 0.6s ease;*/
 }
 
 section.active {
@@ -323,7 +338,7 @@ label[for=as-chrome], input:checked + label[for=as-chrome] {color: green}
     text-shadow: 1px 1px 1px #ccc; 
     color:#333; 
     cursor:pointer;
-    display: inline-block;
+    display: block;
 } 
 
 #recent-reports li:hover {background:#E6E6E6}
@@ -664,8 +679,9 @@ label[for^=category] {
     display: inline-block; 
     color: #444; 
     font-weight: bold; 
-    background: -o-linear-gradient(top, #fff, #ddd); 
-    border-radius: 5px; 
+    background-image: -o-linear-gradient(top, #fff, #ccc);
+    background-size: 100% 150%;
+    border-radius: 5px;
     box-shadow: 0 0 2px #aaa; 
     padding: 5px 2px; 
     text-align: center; 
@@ -673,12 +689,13 @@ label[for^=category] {
     cursor: pointer;
     text-shadow: 0 1px 1px #fff;            
     border:1px solid #bbb;
-    -o-transition: color 800ms ease-in-out;
+    -o-transition: all 500ms ease-in-out;
 }
 
 label[for^=category]:hover {
     color:#111;
     border:1px solid #888;
+    background-size: 100% 100%;
 }        
 
 label[for='category-1'] {width: 35%}
@@ -691,6 +708,7 @@ input.category {
 }        
 input.category:checked + label {
     border:1px solid rgb(51, 153, 255);
+    background-size: 100% 100%;
 }
 
 input#category-1:checked + label {color:#ff7700}

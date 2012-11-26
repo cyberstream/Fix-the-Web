@@ -17,14 +17,14 @@
                     navigator.appName = 'Netscape'
                     navigator.appVersion = '5.0 (' +platform+ ')'
                     navigator.product = 'Gecko'
-                    navigator.userAgent = 'Mozilla/5.0 (' +platform+ '; rv:10.0.2) Gecko/20100101 Firefox/10.0.2'
+                    navigator.userAgent = 'Mozilla/5.0 (' +platform+ '; rv:10.0.2) Gecko/20121231 Firefox/18.0.0'
                     break;
                 case 'chrome' : 
                     navigator.appName = 'Netscape'
-                    navigator.appVersion = '5.0 (' +platform+ ') AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1068.1 Safari/536.3'
+                    navigator.appVersion = '5.0 (' +platform+ ') AppleWebKit/537.19 (KHTML, like Gecko) Chrome/25.0.1323.1 Safari/537.19'
                     navigator.product = 'Gecko'
                     navigator.vendor = 'Google Inc.'
-                    navigator.userAgent = 'Mozilla/5.0 (' +platform+ ') AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1068.1 Safari/536.3'
+                    navigator.userAgent = 'Mozilla/5.0 (' +platform+ ') AppleWebKit/537.19 (KHTML, like Gecko) Chrome/25.0.1323.1 Safari/537.19'
                     break;
             }
         }
