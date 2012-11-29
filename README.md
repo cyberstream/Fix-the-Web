@@ -5,7 +5,7 @@
 The goal of *Fix the Web* is to provide a solution to these problems by allowing users to report site problems they encounter, reply to others' bug reports, and, most importantly, apply patches to broken web pages.
 
 ##Applying patches and road-map
-Before you apply a patch to a web page, determine how it needs to be fixed. If it only needs a CSS patch, then add the patch to the **patches.json** file in the [CSS patches repository](http://github.com/cyberstream/Fix-the-Web-CSS-Patches). However, if the web needs a Javascript patch, then add the patch in the **patches.js** file in the *includes/* folder in this repository. Read more about site patching [here](http://my.opera.com/fix-the-web/blog/2012/03/01/how-to-patch-a-web-page).
+Before you apply a patch to a web page, determine how it needs to be fixed. If it only needs a CSS patch, then add the patch to the [CSS patches Wedata database](http://wedata.net/databases/Fix-the-Web/). However, if the web needs a Javascript patch, then add the patch in the **patches.js** file in the *includes/* folder in this repository. Read more about site patching [here](http://my.opera.com/fix-the-web/blog/2012/03/01/how-to-patch-a-web-page).
 
 ##Contribution
 **This project is open source, so your contributions will help it grow. Fork the project and contribute!**
