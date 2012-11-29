@@ -10,14 +10,10 @@
     <!--default values for preferences-->
     <preference name="patches" value="[]" />
     <preference name="last-patches-update" value="0" />
-    <preference name="reports-summary" value="[]" />
+    <preference name="reports-summary" value='{"by_domain":{},"by_page":{},"total_number":0}' />
     <preference name="update-interval" value="30" />
     <preference name="display-reports-by" value="domain" /> <!--either "domain" or "page"-->
     <preference name="browser-id" value="opera" />
-    
-    <!--PREFIXR disabled-->
-    <!--<preference name="prefixr" value="true" />
-    <preference name="prefixr-exclude" value="[]" />-->    
-    
+        
     <access origin="*" subdomains="true" />
 </widget>

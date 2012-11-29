@@ -259,30 +259,6 @@ footer a {
 
 #blog-header a {color: #111}
 
-label[for=prefixr-exclude] {
-    padding: 0 0 10px 0;
-    position: relative;
-    top: 25px;
-    width: 35%;
-    display: block;
-    float: left;
-}
-
-textarea#prefixr-exclude{
-    height: 100px;
-    overflow-y:auto;
-    width: 50%;
-    border: 1px solid #aaa;
-    border-radius: 3px;
-    padding: 5px;
-    font-family: sans-serif;
-    margin-left: 10px;
-    margin-top: 15px;
-}
-
-textarea#prefixr-exclude:hover {border:1px solid rgb(51, 153, 255);}
-textarea#prefixr-exclude:focus {box-shadow: inset 0 0 10px #aaa;}
-
 .sub_section {
     padding: 15px 10px;
     margin: 0;

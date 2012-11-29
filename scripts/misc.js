@@ -123,7 +123,6 @@ function updateReportSummary (callbackFunc) {
         // update the badge in the currently opened tab since the reports list was updated
         if ( typeof ToolbarIcon == 'object' && "init" in ToolbarIcon ) ToolbarIcon.init();       
     }, null, true, function(xhr, statusText, exceptionMessage) {
-    console.log([xhr, statusText, exceptionMessage])    
     
         // If there is a 404, then the connection is down, or the server is down.
         if (xhr.status === 404) 
@@ -166,7 +165,7 @@ function cssPatchesAreCurrent (callback) {
             callback (0, 0); // default return value
         }, 
         error: function(xhr, status, exception) {
-            callback (0);
+            callback (0, 0);
             console.log ('[FtW error] Could not determine if CSS patches are current');
         }
     });
@@ -248,12 +247,12 @@ if ( typeof sessionStorage.summaryList == 'undefined' ) updateSummaryList();
 
 // handle how often the CSS patches are updated
 if ( widget.preferences.getItem('update-interval') ) {
-    if (!widget.preferences.getItem('last-update')) {
-        widget.preferences.setItem('last-update', '0');
+    if (!widget.preferences.getItem('last-patches-update')) {
+        widget.preferences.setItem('last-patches-update', '0');
     }
 
     var update_interval = widget.preferences.getItem('update-interval'),
-          last_update = widget.preferences['last-update'];
+          last_update = widget.preferences['last-patches-update'];
 
     // 'update-interval' in widget.preferences will determine how often the CSS patches are updated
     // update-interval is in minutes, but setTimeout accepts milliseconds, so convert update-interval to the seconds unit

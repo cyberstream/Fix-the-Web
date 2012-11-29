@@ -92,10 +92,6 @@ function savePrefs (event) {
         widget.preferences.setItem(event.target.name, event.target.id.replace('display-reports-by-', ''));
     } else if (event.target.name == 'update-interval') {
         widget.preferences.setItem('update-interval', event.target.value);
-    } else if (event.target.name == 'prefixr-exclude') { // PREFIXR is disabled
-        var sites = $('#prefixr-exclude').val(); 
-        
-        widget.preferences.setItem('prefixr-exclude', JSON.stringify(sites.split(/\r?\n/)))            
     } else widget.preferences.setItem(event.target.name, event.target.value);
 }
 
@@ -106,14 +102,6 @@ function loadPrefs() {
         if (typeof widget.preferences[field.name] !== "undefined") {
             if (field.getAttribute('type') == 'radio') {
                 if (widget.preferences.getItem(field.name) == field.value) field.checked = 'checked';
-            } else if (field.id == 'prefixr-exclude') {
-                if ( widget.preferences.getItem('prefixr-exclude') ) {
-                    try {
-                        var excluded_sites = JSON.parse(widget.preferences.getItem('prefixr-exclude'));
-                        
-                        field.value = excluded_sites.join('\n');
-                    } catch(e) {}
-                } else widget.preferences.setItem('prefixr-exclude', '[]')  
             } else field.value = widget.preferences.getItem(field.name)
         }
 

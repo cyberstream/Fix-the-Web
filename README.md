@@ -15,8 +15,8 @@ Before you apply a patch to a web page, determine how it needs to be fixed. If i
 
 [Offical blog](http://my.opera.com/fix-the-web/blog/) - [Official forums](http://my.opera.com/fix-the-web/forums/)
 
-[CSS Patches repository](https://github.com/cyberstream/Fix-the-Web-CSS-Patches/)
+[CSS Patches - Wedata Database](http://wedata.net/databases/Fix-the-Web/)
 
-[Server-side repository](https://github.com/cyberstream/Fix-the-Web-Server-Side/) - **[Web Interface](http://www.operaturkiye.net/fix-the-web/)** - [Beta Web Interface](http://www.operaturkiye.net/beta/ftw/)
+[Server-side repository](https://github.com/cyberstream/Fix-the-Web-Server-Side/) - **[Main Web Interface](http://www.operaturkiye.net/fix-the-web/)** - [Beta Web Interface](http://www.operaturkiye.net/beta/ftw/)
 
-[How to Patch a Web Page](http://my.opera.com/fix-the-web/blog/2012/03/01/how-to-patch-a-web-page) - [How to Create CSS Patches](http://my.opera.com/fix-the-web/blog/2012/03/16/how-to-add-a-css-patch)
+The following links are outdated: [How to Patch a Web Page](http://my.opera.com/fix-the-web/blog/2012/03/01/how-to-patch-a-web-page) - [How to Create CSS Patches](http://my.opera.com/fix-the-web/blog/2012/03/16/how-to-add-a-css-patch)
