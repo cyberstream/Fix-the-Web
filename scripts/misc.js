@@ -141,6 +141,8 @@ function updateReportSummary (callbackFunc) {
  */
 
 function cssPatchesAreCurrent (callback) {
+    if ( typeof callback != 'function' ) callback = function() {};
+
     $.ajax ({
         url: 'http://wedata.net/databases/Fix-the-Web.json', 
         dataType: 'json',
@@ -178,6 +180,8 @@ function cssPatchesAreCurrent (callback) {
 
 function update (callback) {
     "use strict";
+    
+    if ( typeof callback != 'function' ) callback = function() {};
     
     cssPatchesAreCurrent(function(status, lastDbUpdate) {
         
