@@ -18,6 +18,7 @@ var ToolbarIcon = {
 	title: function(c) {
 		var count = parseInt(c);
 
+                                    // TODO: make this badge title translatable 
 		if (count > 0) {
 			return count === 1 ? 
 			    'A bug was reported on this ' + (widget.preferences['display-reports-by'] || 'website') : 
