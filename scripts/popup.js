@@ -4,10 +4,8 @@ if ( opera.extension.bgProcess.isLoggedIn() )
 else 
     $('body').attr('class', 'login') 
 
-window.addEventListener("DOMContentLoaded", function() {                
-    document.getElementById('open-comment-panel').innerText = 'View problems reported on this ' 
-            + (widget.preferences['display-reports-by'] && widget.preferences['display-reports-by'] == 'domain' ? 'site' : 'page')
-
+window.addEventListener("DOMContentLoaded", function() {
+    
     // get the current tab's URL       
     var tab = opera.extension.bgProcess.opera.extension.tabs.getFocused();
 

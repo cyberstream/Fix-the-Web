@@ -17,7 +17,7 @@ i18n = {
     badge_list_file_unchanged: 'Liste güncel!',
     badge_list_connect_error: 'Liste güncellenemiyor. İnternet bağlı olmayabilirsiniz ya da bağlantınız kopmuş olabilir.',
     badge_list_error: 'Liste güncellenirken bir hata oluştu.',            
-   enable: 'aktifleştir',
+    enable: 'aktifleştir',
     disable: 'pasifleştir',
     browser_id: 'Tarayıcı Kimliği',
     browser_id_info: 'Javascript özelliklerini seçilen tarayıcı olarak maskeleyecek. Buna rağmen, HTTP isteği ile gönderilen kullanıcı kimliği eklenti tarafından maskelenemiyor. Bunu yapmak için sayfada sağ tıklayın, Site Tercihlerini Düzenle...\'yi seçin ve Ağ > Tarayıcı tanımlaması',
