@@ -172,9 +172,38 @@ opera.extension.onmessage = function(event) {
 
     if (event.data === 'get_frame_content') {
         if (tab) {
-            sendRequest('GET', 'ajax_request_handler.php?mode=get_report_list&count=50&page=1&domain=' + encodeURIComponent(domain_name) + '&method=' + mode + '&page=1&url=' + encodeURIComponent(page_address), function(data) {
-                event.source.postMessage({frame_content: JSON.stringify(JSON.parse(data).list)});
-            }, null, true);
+            sendRequest('get', 'ajax_request_handler.php?mode=get_report_list&count=50&page=1&domain=' + encodeURIComponent(domain_name) + '&method=' + mode + '&url=' + encodeURIComponent(page_address), 
+                function(data) {
+                    var parsed_data = {};
+                    
+                  //  {frame_content: JSON.stringify(JSON.parse(data).list)}
+                    
+                    if ( data.length ) {
+                        try {
+                            parsed_data = JSON.parse(data);
+                        } catch (e) {
+                            // JSON parsing error handler
+                            parsed_data.error = i18n.error_loading_reports;                            
+                        }
+                    }
+                    
+                    // add special translated messages to display in the frame
+                    parsed_data.i18n = {
+                        view_all_languages: i18n.view_all_languages,
+                        no_reports: i18n.no_reports,
+                        expanded: i18n.expanded,
+                        collapsed: i18n.collapsed,
+                        expand_thread: i18n.expand_thread,
+                        collapse_thread: i18n.collapse_thread,
+                        page: i18n.page
+                    };
+                    
+                    event.source.postMessage ({frame_content: parsed_data});
+                },
+            null, true, function() {
+                // AJAX error handler
+                event.source.postMessage ({frame_content: {error: i18n.error_loading_reports}});
+            });
         }
     } else if (event.data === 'initialize badge') {
         ToolbarIcon.init();
