@@ -19,9 +19,9 @@ var ToolbarIcon = {
 
         // TODO: make this badge title fully translatable 
         if (count > 0) {
-            return count === 1 ?
-                    'A bug was reported on this ' + (widget.preferences['display-reports-by'] || 'website') :
-                    count + ' bugs were reported on this ' + (widget.preferences['display-reports-by'] || 'website');
+            return count === 1 ?                    
+                    i18n.bug_reported_on[widget.preferences['display-reports-by']] :
+                    count + ' ' + i18n.bugs_reported_on[widget.preferences['display-reports-by']];
         }
 
         return (typeof i18n != 'undefined' && "report_site_problem" in i18n ? i18n.report_site_problem : 'Report a problem on this website');

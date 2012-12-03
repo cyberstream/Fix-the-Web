@@ -125,5 +125,13 @@ i18n = {
     expanded: 'expanded',
     collapsed: 'collapsed',
     expand_thread: 'expand thread',
-    collapse_thread: 'collapse thread'
+    collapse_thread: 'collapse thread',
+    bug_reported_on: {
+        domain: 'A bug was reported on this website.',
+        page: 'A bug was reported on this web page.'
+    },
+    bugs_reported_on: {
+        domain: 'bugs were reported on this website.',
+        page: 'bugs were reported on this web page.'
+    }
 }
