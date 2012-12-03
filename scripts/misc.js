@@ -1,7 +1,8 @@
 /* Global widget and OAuth configuration */
 var CONFIG = {
-	defaultHost: 'http://www.operaturkiye.net/fix-the-web/', // the default domain to make AJAX requests to; *must have* the trailing slash "/"
-	twitter: {
+	//defaultHost: 'http://www.operaturkiye.net/fix-the-web/', // the default domain to make AJAX requests to; *must have* the trailing slash "/"
+	defaultHost: 'http://localhost/Fix-the-Web-Server-Side/',
+                  twitter: {
 		consumerKey: 'frKRutacGx6VUkMhwQeJ6Q',
 		consumerSecret: 'aUEFth57HGgRQC0pYjkCwrIZUpROLCVvPBZsM4dg',
 		requestTokenUrl: 'https://api.twitter.com/oauth/request_token',
@@ -240,14 +241,14 @@ function update (callback) {
 function updateSummaryList () {
     updateReportSummary (function(message) {
 
-        // update the session storage item with the current timestamp
+        // update the session storage item with the current timestamp if the update function ran successfully
         if ( message === 'updated' || message === 'current' ) 
-            sessionStorage.summaryList = (new Date()).valueOf();
+            widget.preferences.lastSummaryUpdate = (new Date()).valueOf();
     });
 }
 
 // update the badge summary each time the browser is opened or every 8 hours, whichever comes first
-if ( typeof sessionStorage.summaryList == 'undefined' ) updateSummaryList();
+if ( typeof widget.preferences.lastSummaryUpdate == 'undefined' ) updateSummaryList();
 
 // handle how often the CSS patches are updated
 if ( widget.preferences.getItem('update-interval') ) {
@@ -259,17 +260,17 @@ if ( widget.preferences.getItem('update-interval') ) {
           last_update = widget.preferences['last-patches-update'];
 
     // 'update-interval' in widget.preferences will determine how often the CSS patches are updated
-    // update-interval is in minutes, but setTimeout accepts milliseconds, so convert update-interval to the seconds unit
+    // update-interval is in minutes, but setInterval accepts milliseconds, so convert update-interval to the seconds unit
     setInterval ( function() {
         "use strict";
         
         // SECTION: Reports summary list update
-        var currentTime = (new Date()).valueOf();
+        var currentTime = (new Date()).valueOf(),
+              lastUpdateTime = parseInt(widget.preferences.lastSummaryUpdate);
         
-        if ( typeof sessionStorage.summaryList !== 'undefined' && currentTime > sessionStorage.summaryList ) {
-            
-            // if 8 hours or more has elapsed since the last badge list update, then update the list
-            if ( (currentTime - sessionStorage.summaryList) >= (1000 * 60 * 60 * 8) ) updateSummaryList();
+        // if 8 hours or more has elapsed since the last badge list update, then update the list 
+        if ( typeof lastUpdateTime != 'undefined' ) {
+            if ((currentTime - lastUpdateTime) >= (1000 * 60 * 60 * 8)) updateSummaryList();
         }
         
          // If the sessionStorage.summaryList is not a valid number, then update the report summary list.

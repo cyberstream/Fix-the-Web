@@ -8,16 +8,33 @@ opera.extension.onmessage = function(event) {
              unidentified: 'https://github.com/cyberstream/Fix-the-Web/raw/bf4442f300c869fde4659cf29256dcdd62980b54/images/unidentified.png' // "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAMAAwADAGp0HVAAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9wCHQYJDdplEZAAAAIMSURBVDjLrZM/TxtBEMV/c3JyBqHYcvDyTwF3pDENqVyELknPV6AzKJTwPfB3iCxRoVBYoXBE78KJkKidWAT5MArYR273JoXPh4EmRV6z0uzM7Jv3ZoUE/X7/AKjyb6jl8/ltAAEIguAAtIpKEhlDeRS4jym1wsvCtgBc/rpUBUQgshFnZ2ecnp7y80cX33/O6utVPrx7z4tcDk2bas8UzawAdLtdHffvdDrU63UqlQpLS0tcXFxQr9cxxrCzs4Pv+ymXhYUFyQBY65CE6WyxyNbWFoVCAU88SqUSjUaDVquVFjrr0CQ/AxA7y5iCiJDNZgnDkFiVky8nnJ+fs7i4yPT0NJGNsM6mzUYMnEUVhIciNhoNDg8PMcawv7/P1NQUw2CIsy7NywA4F6M6ZqCg0P72naOjI0qlEnt7exhjuLrqc/fnDlVN30k0sE+Mvr7uE4Yhm5ubFItFer0eYRiiqg/yBKDdbuukywA2ishknjE/P8dgMODm901SrCO/FcprZfFGqlqstVhncc7irKXZbLK7+5Hj48/c3g6IknvrXHLaxyMkU8loUcTzAMjl8mR9n+FwcE9PNNUscSF+tLbKnDGsv1lnZWWZmJg4dqiSjDHaxAkXbA2opmuuyvLyK8rlMjMzMwRBQBQ9EfoTkz+l+bV5gEpVJj+MByIesXOIyMg+AZTa242Nbf4H/gLTcAQh/UxdRgAAAABJRU5ErkJggg=="
          };
          
-    // preload icons
-    if (icons && icons.length) {
-        var preloadedIcons = [];
-        
-        for (i in icons) {
-            var img = new Image;
-            img.src = icons[i];
-            
-            preloadedIcons[i] = img;
-        }
+    // add CSS to the web page (from the cssPatches.js file)
+    function addCSS ( css ) {
+
+        // detect if the page is loaded; if it isn't, then make it run when the page is loaded
+        if ( document.addEventListener ) {
+
+            // If the head element doesn't exist, create it and insert it into the DOM tree
+            if ( !document.getElementsByTagName('head').length ) {
+                var new_head = document.createElement('head'),
+                    root = document.getElementsByTagName('html')[0],
+                    children = root.childNodes,
+                    firstChild = children.length ? children[0] : false;
+
+                if (firstChild) firstChild.parentNode.insertBefore(new_head, firstChild);
+                else root.appendChild(new_head);
+            }
+
+            // create the style tag and put the contents of the "css" parameter into the element        
+            var head = document.getElementsByTagName('head')[0],
+                style_tag = document.createElement('style');
+
+            style_tag.setAttribute('type', 'text/css');
+            style_tag.appendChild(document.createTextNode(css));
+
+            // append the style element to the head element
+            head.appendChild(style_tag);
+        } else addEventListener ('DOMContentLoaded', addCSS(css), false);
     }
     
     resizeFrame = function(e) {              
@@ -46,23 +63,45 @@ opera.extension.onmessage = function(event) {
                                             resize_frame.style.bottom = parseInt(ftw_frame.style.height) + bar_height_percentage + '%'; // place the resize bar right above the comment frame
                                         }
                                 }
-                                
-    // @param "JSON" array of JSON objects, e.g. [ {/* report #1*/}, {/* report #2 */}, ... ]
-    // @param "language" string, default is 'all'. The language filter for the reports.
+    
+    /** populates the comment frame with the data passed to it
+     * @param "JSON" array of JSON objects, e.g. [ { report #1}, { report #2 }, ... ]
+     * @param "language" string, default is 'all'. The language filter for the reports.
+     */
     
     // TODO show reports in threaded view, and fetch comments for the report when "[view thread]" is clicked.
     // TODO add a select menu to filter reports by languages
     populateCommentFrame = function(json, language) {
+        // prevent errors from being created if the i18n object is not defined
+        json.i18n = json.i18n || {};
+        
         var commentFrameHTML = '',
               commentFrame = document.getElementById('fix-the-web-comment-frame'),
-              language = language || 'all';
+              language = language || 'all',
+              // internationalization variables
+              no_reports = json.i18n.no_reports || 'No reports were found.',
+              view_all_languages = json.i18n.no_reports || 'Try viewing reports in all languages.',
+              expanded = json.i18n.expanded || 'expanded',
+              collapsed = json.i18n.collapsed || 'collapsed',
+              expand_thread = json.i18n.expand_thread || 'expand thread',
+              collapse_thread = json.i18n.collapse_thread || 'collapse thread',
+              page_translation = json.i18n.page || 'Page';
+      
+        // CSS styles that add the "expand thread" and "collapse thread" labels
+        addCSS('#fix-the-web-comment-frame .collapsed .change_state {content:\'' +expand_thread+ '\';} #fix-the-web-comment-frame .expanded .change_state {content:\'' +collapse_thread+ '\';}');
         
-        if (typeof json == 'object' && json.length) {
-            for (i = 0; i < json.length; i++) {
-                var current = json[i];
+        // If error message was found, display it in the frame and abort the function
+        if ( "error" in json && json.error.length ) {
+            commentFrame.innerHTML = json.error;
+            return;
+        }
+        
+        if ( typeof json == 'object' && "list" in json && json.list.length ) {
+            for (i = 0; i < json.list.length; i++) {
+                var current = json.list[i];
                 
                 if (language == 'all' || language.toLowerCase() == current.language.toLowerCase()) {
-                    var page_url = '<a href="' +current.page+ '" title="Page: ' +current.page+ '" target="_blank">' 
+                    var page_url = '<a href="' +current.page+ '" title="' +page_translation+ ': ' +current.page+ '" target="_blank">' 
                         +(current.page.length > 35 ? current.page.substr(0, 35) + '...' : current.page) + '</a>';
                     
                     if (current.OS.length) {
@@ -74,13 +113,14 @@ opera.extension.onmessage = function(event) {
                         else os_image = '<img class="os_icon" src="' +icons.unidentified+ '" alt="' +current.OS+ '" title="' +current.OS+ '" />'
                     }
                     
-                    commentFrameHTML += '<div class="thread collapsed"><div class="title">Posted by <span class="username">' +current.username+ '</span> on ' +current.date_time+ ' from page ' +page_url+ ' <span class="change_state"></span></div><div class="toggle"><div class="report_body">"' +current.report.replace(/\\/g, '') + '"</div> ' +(os_image || '')+ ' ' +current.Opera+ '.' +current.build+ ' <a href="data:text/plain;charset=utf-8,' +encodeURIComponent(current.misc)+ '" target="_blank">miscellaneous information</a></div></div>'
+                    commentFrameHTML += '<div class="thread collapsed"><div class="title"><span class="username">' +current.username+ '</span> @ <em>' +current.date_time+ '</em> from ' +page_url+ ' <span class="change_state"></span></div><div class="toggle"><div class="report_body">"' +current.report.replace(/\\/g, '') + '"</div> ' +(os_image || '')+ ' ' +current.Opera+ '.' +current.build+ ' <a href="data:text/plain;charset=utf-8,' +encodeURIComponent(current.misc)+ '" target="_blank">miscellaneous information</a></div></div>'
                 }
             }
         }
         
+        // Show HTML if it was generated; otherwise, display the appropriate error message.
         commentFrameHTML = commentFrameHTML || 
-            (language != 'all' ? 'No reports were found. Try viewing reports in all languages.' : 'No reports were found.')
+            (language != 'all' ? no_reports + ' ' + view_all_languages : no_reports);
         
         commentFrame.innerHTML = commentFrameHTML; // insert the HTML into the comment frame
         
@@ -92,24 +132,27 @@ opera.extension.onmessage = function(event) {
                       currentClassName = thread.className.match(/(collapsed|expanded)/i)[1],    
                 
                 toggleStates = {
-                    'collapsed' : 'expanded',
-                    'expanded' : 'collapsed'
-                }
+                    'collapsed' : expanded,
+                    'expanded' : collapsed
+                };
                 
-                thread.className = thread.className.replace(/(collapsed|expanded)/i, toggleStates[currentClassName])
-            }, false)
+                thread.className = thread.className.replace(/(collapsed|expanded)/i, toggleStates[currentClassName]);
+            }, false);
         }
     } // end populateCommentFrame() function
     
     // process incoming messages and trigger the specified command
-    if (event.data == 'reply') {
-        event.source.postMessage('initialize badge');
-    } else if (event.data.frame_content) {
-        window.ftw_content = JSON.parse(event.data.frame_content); // make the frame_content variable globally available
+    if ( event.data == 'reply' ) {
+       event.source.postMessage('initialize badge');
+    } 
+    
+    else if ( event.data.frame_content ) {
+                    
+        // send the data off to be inserted into the comment frame
+        populateCommentFrame (event.data.frame_content);
         
-        populateCommentFrame(window.ftw_content) // fill the comment frame with the comment frame data
-
-        window.addEventListener('resize', resetFrameBar, false); // readjust the positioning of the resize bar whenever the window is resized
+        // readjust the positioning of the resize bar whenever the window is resized
+        window.addEventListener('resize', resetFrameBar, false);
     } else if (event.data.load_comments_frame) {
         if (!document.getElementById('fix-the-web-comment-frame')) {
             var frame_element = document.createElement('div');
@@ -148,8 +191,7 @@ opera.extension.onmessage = function(event) {
             }, false);
             
             // create a styles element for the frame's styles            
-            var frame_style_element = document.createElement('style'),
-                  frame_styles = ''; //::selection {background: transparent !important;}'; // make selection invisible
+            var frame_styles = ''; //::selection {background: transparent !important;}'; // make selection invisible
 
             frame_styles += '#fix-the-web-comment-frame {text-align:left; overflow:auto; position: fixed; z-index:123456788 !important; box-shadow:0 0 90px #eee; font-family: "myriad pro", "arial", "lucida grande", "lucida sans unicode", "bitstream vera sans", "dejavu sans", "trebuchet ms", sans-serif; font-size: 16px; padding: 10px 1.5% 5px 1.5%; font-weight:bold; color:#333; background: -o-linear-gradient(bottom, rgba(255,255,255,1) 30%, rgba(255,255,255,.85)); left: 0;  -o-transition:bottom 0.5s ease-in-out, opacity 0.5s ease-in-out, width 0.5s ease-in-out, height 0.1s ease-in-out;}'
             + '.normal_state{height:40%; width:97%; opacity:1; bottom:0px} .fadeout_state {opacity:0; bottom:-20px;}' 
@@ -161,13 +203,9 @@ opera.extension.onmessage = function(event) {
             + '#fix-the-web-comment-frame .thread {margin: 0 0 5px 0; border-radius:6px; padding: 7px; background:#eaeaea;}'
             + '#fix-the-web-comment-frame a {color:#3399FF; text-decoration:none} #fix-the-web-comment-frame a:hover {text-decoration:underline}'
             + '#fix-the-web-comment-frame .collapsed .toggle {display:none} #fix-the-web-comment-frame .expanded .toggle {display:block}'
-            + '#fix-the-web-comment-frame .collapsed .change_state {content:\'expand thread\';} #fix-the-web-comment-frame .expanded .change_state {content:\'collapse thread\';}'
             + '#fix-the-web-comment-frame .change_state {padding: 0 5px; color:#3399FF; font-weight:100} #fix-the-web-comment-frame .change_state:hover {cursor:pointer; text-decoration:underline}'
-            + '#fix-the-web-comment-frame .os_icon {position:relative; top: 3px}'
-            
-            frame_style_element.setAttribute('type', 'text/css');
-            frame_style_element.appendChild(document.createTextNode(frame_styles));
-            
+            + '#fix-the-web-comment-frame .os_icon {position:relative; top: 3px}';
+                        
             // place the resize bar where it should go                
             var resize_frame_height = parseInt(resize_frame.style.height) || 15
                   bar_height_percentage = ((resize_frame_height / window.innerHeight).toFixed(3)) * 100 // round to the nearest tenth place
@@ -177,7 +215,8 @@ opera.extension.onmessage = function(event) {
             frame_element.innerHTML = '<img src="' +icons.loading+ '" alt="loading" title="Loading reports..." style="text-align:center" />';
             document.body.appendChild(frame_element);
             document.body.appendChild(resize_frame);
-            document.head.appendChild(frame_style_element);
+            
+            addCSS (frame_styles);
             
             frame_element.className = 'fadeout_state' 
             resize_frame.className = 'hidden'

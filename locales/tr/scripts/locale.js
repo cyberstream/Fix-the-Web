@@ -1,4 +1,4 @@
-/* 
+/*
  * @language Turkish
  * @translator celeborn1
  */
@@ -40,7 +40,7 @@ i18n = {
     main_repo: 'Temel eklenti dosyaları deposu',
     server_side_repo: 'Sunucu tarafı deposu',
     css_patches: 'CSS Yamaları',
-    css_patches_info: 'TRANSLATE If a website just needs CSS to be patched, then add the patch to the <em><strong>patches.json</strong></em> file in this repo. If the problematic website needs JS for the patch, place it in <em><strong>includes/</strong>patches.js</em> in the <a title="Fix the Web\'s Repository" href="http://github.com/cyberstream/Fix-the-Web">extension repo</a>',
+    css_patches_info: 'TRANSLATE If a website just needs CSS to be patched, then add the patch to the <a href="http://wedata.net/databases/Fix-the-Web">Fix the Web\'s CSS patches database</a>. If the problematic website needs JS for the patch, place it in <em><strong>includes/</strong>patches.js</em> in the <a title="Fix the Web\'s Repository" href="http://github.com/cyberstream/Fix-the-Web">extension repo</a>.',
     contributors: 'Katkıda bulunanlar',
     email: 'e-posta',
     thanks: 'Teşekkürler',
@@ -86,7 +86,6 @@ i18n = {
     next_page: 'Sonraki Sayfa',
     web_interface: 'Web Arayüzü',
     about_ftw: 'Fix the Web Hakkında',
-    no_reports: 'Bu sayfa için bildirilen bir hata yok!',
     minor_annoyance: 'önemsiz sorun',
     major_problem: 'önemli sorun',
     site_unusable: 'Site kullanılamaz durumda',
@@ -119,5 +118,12 @@ i18n = {
     plugins: 'yan uygulamalar',
     screen: 'ekran',
     resolution: 'Çözünürlük',
-    color_depth: 'Renk derinliği'
+    color_depth: 'Renk derinliği',
+    error_loading_reports: 'There was an error loading the reports. Likely either or your Internet connection or the server is down.',
+    view_all_languages: 'Try viewing reports in all languages.',
+    no_reports: 'Oops, no reports were found for this page!',
+    expanded: 'expanded',
+    collapsed: 'collapsed',
+    expand_thread: 'expand thread',
+    collapse_thread: 'collapse thread'
 }

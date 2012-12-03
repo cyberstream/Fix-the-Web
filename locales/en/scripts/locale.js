@@ -40,7 +40,7 @@ i18n = {
     main_repo: 'Main extension files repository',
     server_side_repo: 'Server-side repository',
     css_patches: 'CSS Patches',
-    css_patches_info: 'If a website just needs CSS to be patched, then add the patch to the <em><strong>patches.json</strong></em> file in this repo. If the problematic website needs JS for the patch, place it in <em><strong>includes/</strong>patches.js</em> in the <a title="Fix the Web\'s Repository" href="http://github.com/cyberstream/Fix-the-Web">extension repo</a>.',
+    css_patches_info: 'If a website just needs CSS to be patched, then add the patch to the <a href="http://wedata.net/databases/Fix-the-Web">Fix the Web\'s CSS patches database</a>. If the problematic website needs JS for the patch, place it in <em><strong>includes/</strong>patches.js</em> in the <a title="Fix the Web\'s Repository" href="http://github.com/cyberstream/Fix-the-Web">extension repo</a>.',
     contributors: 'Contributors',
     email: 'email',
     thanks: 'Thanks',
@@ -85,8 +85,7 @@ i18n = {
     previous_page: 'Previous Page',
     next_page: 'Next Page',
     web_interface: 'Web Interface',
-    about_ftw: 'About Fix the Web',
-    no_reports: 'Oops, there are no reports for this page!',
+    about_ftw: 'About Fix the Web',    
     minor_annoyance: 'Minor Annoyance',
     major_problem: 'Major Problem',
     site_unusable: 'Site Unusable',
@@ -119,5 +118,12 @@ i18n = {
     plugins: 'plugins',
     screen: 'screen',
     resolution: 'resolution',
-    color_depth: 'ColorDepth'    
+    color_depth: 'ColorDepth',
+    error_loading_reports: 'There was an error loading the reports. Likely either or your Internet connection or the server is down.',
+    view_all_languages: 'Try viewing reports in all languages.',
+    no_reports: 'Oops, no reports were found for this page!',
+    expanded: 'expanded',
+    collapsed: 'collapsed',
+    expand_thread: 'expand thread',
+    collapse_thread: 'collapse thread'
 }
