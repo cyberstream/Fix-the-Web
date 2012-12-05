@@ -40,7 +40,7 @@ i18n = {
     main_repo: 'Temel eklenti dosyaları deposu',
     server_side_repo: 'Sunucu tarafı deposu',
     css_patches: 'CSS Yamaları',
-    css_patches_info: 'TRANSLATE If a website just needs CSS to be patched, then add the patch to the <a href="http://wedata.net/databases/Fix-the-Web">Fix the Web\'s CSS patches database</a>. If the problematic website needs JS for the patch, place it in <em><strong>includes/</strong>patches.js</em> in the <a title="Fix the Web\'s Repository" href="http://github.com/cyberstream/Fix-the-Web">extension repo</a>.',
+    css_patches_info: 'Eğer web sayfasın sadece CSS yamasına ihtiyacı var ise, bu yama <a href="http://wedata.net/databases/Fix-the-Web">Fix the Feb CSS yamaları veritabanına</a> eklenir. Eğer JS yaması isteyen promlemli bir web sayfası ise,  bu yama <a title="Fix the Web\'s Repository" href="http://github.com/cyberstream/Fix-the-Web">eklenti deposu</a> içerisindeki <em><strong>includes/</strong>patches.js</em> içerisine yerleştirilir.',
     contributors: 'Katkıda bulunanlar',
     email: 'e-posta',
     thanks: 'Teşekkürler',
@@ -119,19 +119,19 @@ i18n = {
     screen: 'ekran',
     resolution: 'Çözünürlük',
     color_depth: 'Renk derinliği',
-    error_loading_reports: 'There was an error loading the reports. Likely either or your Internet connection or the server is down.',
-    view_all_languages: 'Try viewing reports in all languages.',
-    no_reports: 'Oops, no reports were found for this page!',
-    expanded: 'expanded',
-    collapsed: 'collapsed',
-    expand_thread: 'expand thread',
-    collapse_thread: 'collapse thread',
+   error_loading_reports: 'Raporlar yüklenirken bir sorun oluştu. İnternet bağlantısı ya da sunucu çökmesi benzeri bir sorun olabilir.',
+    view_all_languages: 'Tüm dillerdeki raporları görüntülemeyi deneyin.',
+    no_reports: 'Oops, bu sayfa içn herhangi bir rapor bulunamadı!',
+    expanded: 'genişletildi',
+    collapsed: 'daraltıldı',
+    expand_thread: 'başlığı genişlet',
+    collapse_thread: 'başlığı daralt',
     bug_reported_on: {
-        domain: 'A bug was reported on this website.',
-        page: 'A bug was reported on this web page.'
+        domain: 'Bu sayfa için bir hata raporlandı.',
+        page: 'Bu sayfa için bir hata raporlandı.'
     },
     bugs_reported_on: {
-        domain: 'bugs were reported on this website.',
-        page: 'bugs were reported on this web page.'
+        domain: 'Bu sayfa için birden fazla hata raporlandı.',
+        page: 'Bu sayfa için birden fazla hata raporlandı.'
     }
 }
