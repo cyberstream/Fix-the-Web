@@ -1,7 +1,11 @@
-/*global widget, UIItem*/
+/** 
+ * @global widget 
+ * @global UIItem 
+*/
+
 var ToolbarIcon = {
     initButton: function() {
-        ToolbarIcon.button = opera.contexts.toolbar.createItem({
+        var buttonObj = {
             disabled: false,
             title: widget.name,
             icon: 'images/icon-18.png',
@@ -11,8 +15,11 @@ var ToolbarIcon = {
                 height: 450
             },
             badge: {} // need to create an empty object now so it can be potentially modified later
-        });
+        };
+        
+        ToolbarIcon.button = opera.contexts.toolbar.createItem(buttonObj);
     },
+    
     // creates a title for the icon based on the number of error reports
     title: function(c) {
         var count = parseInt(c);
@@ -26,6 +33,8 @@ var ToolbarIcon = {
 
         return (typeof i18n != 'undefined' && "report_site_problem" in i18n ? i18n.report_site_problem : 'Report a problem on this website');
     },
+            
+    // add the button to the toolbar
     create: function(badgeProperties) {
         if (opera.hasOwnProperty('contexts')) {
             // Set the properties of the button
@@ -56,9 +65,9 @@ var ToolbarIcon = {
                     }
                 }
             }
-
         }
     },
+            
     // returns a count of error reports for the badge for the current tab's url or domain (depending on the preference)
     getBadgeCount: function() {
         var mode = widget.preferences['display-reports-by'] || 'domain',
@@ -88,24 +97,30 @@ var ToolbarIcon = {
 
         return 0; // if no value has been returned yet, then return 0
     },
+            
     // update the badge on the toolbar icon with the right reports count
     updateBadge: function() {
         var tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : '';
 
         if (tab) {
             ToolbarIcon.button.disabled = false;
-
-            var badge = {
-                display: 'block',
-                textContent: ' ' + (ToolbarIcon.getBadgeCount() || 0) + ' ', // get badge count and put padding around it
-                color: 'white',
-                backgroundColor: '#c12a2a'
-            };
-
-            // create the badge
-            ToolbarIcon.create(badge);
+            
+            // Don't create the badge unless the reports' summary has been updated
+            if ( widget.preferences['reports-summary'] != '{"by_domain":{},"by_page":{},"total_number":0}' ) {
+                var badgeCount = ToolbarIcon.getBadgeCount(),                
+                    badge = {
+                        display: 'block',
+                        textContent: badgeCount ? ' ' + badgeCount + ' ' : 0, // get badge count and add padding if there are error reports
+                        color: 'white',
+                        backgroundColor: badgeCount ? 'red' : '#c12a2a'
+                    };
+                
+                // create the badge
+                ToolbarIcon.create(badge);
+            }
         }
     },
+            
     // select the right state for the button
     init: function() {
         if (typeof ToolbarIcon.button === 'undefined') {
