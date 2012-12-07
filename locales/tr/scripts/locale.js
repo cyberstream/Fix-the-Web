@@ -40,7 +40,7 @@ i18n = {
     main_repo: 'Temel eklenti dosyaları deposu',
     server_side_repo: 'Sunucu tarafı deposu',
     css_patches: 'CSS Yamaları',
-    css_patches_info: 'Eğer web sayfasın sadece CSS yamasına ihtiyacı var ise, bu yama <a href="http://wedata.net/databases/Fix-the-Web">Fix the Feb CSS yamaları veritabanına</a> eklenir. Eğer JS yaması isteyen promlemli bir web sayfası ise,  bu yama <a title="Fix the Web\'s Repository" href="http://github.com/cyberstream/Fix-the-Web">eklenti deposu</a> içerisindeki <em><strong>includes/</strong>patches.js</em> içerisine yerleştirilir.',
+    css_patches_info: 'Eğer web sayfası sadece CSS yamasına ihtiyacı var ise, bu yama <a href="http://wedata.net/databases/Fix-the-Web">Fix the Feb CSS yamaları veritabanına</a> eklenir. Eğer JS yaması isteyen problemli bir web sayfası ise,  bu yama <a title="Fix the Web\'s Repository" href="http://github.com/cyberstream/Fix-the-Web">eklenti deposu</a> içerisindeki <em><strong>includes/</strong>patches.js</em> içerisine yerleştirilir.',
     contributors: 'Katkıda bulunanlar',
     email: 'e-posta',
     thanks: 'Teşekkürler',
