@@ -112,7 +112,7 @@ var ToolbarIcon = {
                         display: 'block',
                         textContent: badgeCount ? ' ' + badgeCount + ' ' : 0, // get badge count and add padding if there are error reports
                         color: 'white',
-                        backgroundColor: badgeCount ? 'red' : '#c12a2a'
+                        backgroundColor: badgeCount ? '#c12a2a' : '#555'
                     };
                 
                 // create the badge
