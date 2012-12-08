@@ -133,5 +133,6 @@ i18n = {
     bugs_reported_on: {
         domain: 'Bu sayfa için birden fazla hata raporlandı.',
         page: 'Bu sayfa için birden fazla hata raporlandı.'
-    }
+    },
+    toolbar_icon: 'Araç çubuğu simgesi'
 }

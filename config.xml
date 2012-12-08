@@ -11,6 +11,7 @@
     <preference name="last-patches-update" value="0" />
     <preference name="reports-summary" value='{"by_domain":{},"by_page":{},"total_number":0}' />
     <preference name="update-interval" value="30" />
+    <preference name="toolbar-icon" value="enable" />
     <preference name="display-reports-by" value="domain" /> <!--either "domain" or "page"-->
     <preference name="browser-id" value="opera" />
         

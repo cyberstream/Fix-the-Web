@@ -123,8 +123,19 @@ var ToolbarIcon = {
             
     // select the right state for the button
     init: function() {
+        // If the button is not explicitly allowed in preferences, then check if it is created. If so, remove it. Otherwise, just abort the function.
+        if ( widget.preferences['toolbar-icon'] != 'enable' ) {
+            if ( opera.contexts.toolbar.length ) {
+                opera.contexts.toolbar.removeItem(opera.contexts.toolbar[0]);
+                if ( "button" in ToolbarIcon) delete ToolbarIcon.button;
+            }
+            
+            return;
+        }
+        
         if (typeof ToolbarIcon.button === 'undefined') {
             ToolbarIcon.initButton();
+            ToolbarIcon.create();
         }
 
         var tab = opera.extension.tabs.getFocused();

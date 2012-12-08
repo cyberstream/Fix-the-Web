@@ -133,5 +133,6 @@ i18n = {
     bugs_reported_on: {
         domain: 'bugs were reported on this website.',
         page: 'bugs were reported on this web page.'
-    }
+    },
+    toolbar_icon: 'Toolbar icon'
 }

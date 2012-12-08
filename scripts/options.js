@@ -88,11 +88,13 @@ var sliderOptions = {
 
 // Set the preference values for each field
 function savePrefs (event) {
-    if (event.target.name == 'display-reports-by') {
-        widget.preferences.setItem(event.target.name, event.target.id.replace('display-reports-by-', ''));
-    } else if (event.target.name == 'update-interval') {
-        widget.preferences.setItem('update-interval', event.target.value);
-    } else widget.preferences.setItem(event.target.name, event.target.value);
+    var eventTarget = event.target;
+    
+    if ( eventTarget.type == 'radio' ) {
+        widget.preferences.setItem(eventTarget.name, eventTarget.value);
+    } else if ( eventTarget.name == 'update-interval' ) {
+        widget.preferences.setItem('update-interval', eventTarget.value);
+    } else widget.preferences.setItem(eventTarget.name, eventTarget.value);
 }
 
 // Get the preference values from the widget object
