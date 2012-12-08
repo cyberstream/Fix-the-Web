@@ -1,0 +1,3 @@
+﻿/* Add CSS rules to this file that should only be applied in English mode */
+
+.pagination #page-number:before {content:'Страница ';}
