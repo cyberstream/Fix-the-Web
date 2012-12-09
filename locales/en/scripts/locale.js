@@ -46,6 +46,7 @@ i18n = {
     thanks: 'Thanks',
     anton_diaz_info: 'Added CSS fixes from his <strong><a href="https://addons.opera.com/addons/extensions/details/twitter-fix">Twitter Fix</a></strong> extension',
     celeborn_info: 'Turkish translation',
+    mixaill_info: 'Russian translation',
     recent_reports: 'Recent Reports List',
     posted_today: 'posted today',
     posted_yesterday: 'posted yesterday',
