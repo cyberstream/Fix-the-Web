@@ -2,6 +2,7 @@
 <widget xmlns="http://www.w3.org/ns/widgets" version="1.0-B4" defaultlocale="en">
     <name short="Fix the Web">Fix the Web</name>
     <description xml:lang="en">Report broken, incompatible, or browser-sniffing websites and create and apply site fixes</description>
+    <description xml:lang="ru">Расширение для того, чтобы сообщать о поломанных или несовместимых сайтах и исправлять их.</description>
     <description xml:lang="tr">Hatalı kodlama teknikleri nedeniyle görünümünde veya işlevlerinde sorunlar oluşan web sayfalarını bildirmek ve düzeltmek için bir araç</description>
     <author href="http://my.opera.com/cyberstream/about" email="dev@cyberstream.us">cyberstream</author>
     <icon src="images/icon-64.png" />

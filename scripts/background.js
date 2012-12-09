@@ -158,12 +158,10 @@ if (opera.extension.tabs) {
 }
 
 opera.extension.onconnect = function() {
-    var page_address = getPageAddress();
-
     ToolbarIcon.init();
 };
 
-window.onload = ToolbarIcon.create;
+window.onload = ToolbarIcon.init;
 
 function getOS() {
     sendRequest('GET', 'ajax_request_handler.php?mode=get_OS', function(data) {

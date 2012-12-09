@@ -232,7 +232,7 @@ footer a {
 #recent-posts li {
     font-weight: bold;
     opacity: 0;
-    -o-transition: opacity 1s ease-in-out;
+    transition: opacity 1s ease-in-out;
     position: absolute;
     z-index: -1;
     padding: 4px 6px;
@@ -325,7 +325,7 @@ label[for=as-chrome], input:checked + label[for=as-chrome] {color: green}
     color:#999; 
     text-shadow:1px 1px 1px #fff;
     opacity: 0; 
-    -o-transition: opacity 600ms ease-in-out;
+    transition: opacity 600ms ease-in-out;
 }
 
 .report {
@@ -484,7 +484,7 @@ div.pagination a.disabled:hover {
     color: #333;
 }        
 
-.pagination { -o-transition: opacity 600ms ease-in-out; }        
+.pagination { transition: opacity 600ms ease-in-out; }        
 .hidden { opacity: 0; }
 
 .pagination #page-number { 
@@ -665,7 +665,7 @@ label[for^=category] {
     cursor: pointer;
     text-shadow: 0 1px 1px #fff;            
     border:1px solid #bbb;
-    -o-transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out;
 }
 
 label[for^=category]:hover {
@@ -695,6 +695,14 @@ input#category-3:checked + label {color:#3344fa}
     border:1px solid red;
 }
 
+div#report-form-overlay {
+    background: rgba(255,255,255,0.75) url('/images/loading-circle.png') 50% 25% no-repeat;
+    position: absolute;
+    width: 99.5%;
+    height: 90%;
+    overflow: hidden;
+}
+
 #popup h1 {
     margin:0; 
     padding-left:5px; 
@@ -713,8 +721,8 @@ body.loading {
     padding-top: 85px;
 }
 
-#popup form, #login-notice { display: none; }        
-body.logged_in#popup form { display: block; }
+#popup form, #login-notice, body#popup h1 { display: none; }        
+body.logged_in#popup form, body.logged_in#popup h1 { display: block; }
 body.login#popup #login-notice { display:block; }
 
 #login-notice a {

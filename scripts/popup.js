@@ -2,17 +2,18 @@
 if ( opera.extension.bgProcess.isLoggedIn() )
     $('body').attr('class', 'logged_in')
 else 
-    $('body').attr('class', 'login') 
+    $('body').attr('class', 'login')
 
 window.addEventListener("DOMContentLoaded", function() {
     
     // get the current tab's URL       
     var tab = opera.extension.bgProcess.opera.extension.tabs.getFocused();
 
+    // If the tab is found, then auto-fill the URL input field with the current page's URL.
     if (tab) document.getElementById('page-address').value = tab.url;
 
     // when "Vew problems reported on this site" is clicked, open the comments panel
-    document.getElementById('open-comment-panel').addEventListener("click", function() {
+    $('#open-comment-panel').click(function() {
         opera.extension.bgProcess.opera.extension.tabs.getFocused().postMessage({
             load_comments_frame : true
         }); // trigger the comments frame's creation
@@ -20,7 +21,7 @@ window.addEventListener("DOMContentLoaded", function() {
         window.close(); // closes the popup window - doesn't work in developer mode
 
         return false; // keep link from following the default action
-    }, false);
+    });
 
     // function show_message() shows an error or success message above the form            
     function show_message (text, message_mode) { // message_mode: 'error' or 'success'
@@ -64,30 +65,35 @@ window.addEventListener("DOMContentLoaded", function() {
             // see the "Fix the Web Server Side" repo on Github (http://github.com/cyberstream/Fix-the-Web-Server-Side) for that file
             // validate and process the form request in ajax_request_handler.php
 
-            $('#report-site-form').fadeTo(600, 0.4);
+            $('<div id="report-form-overlay"></div>').insertBefore('#report-site-form');
 
             try {
                 opera.extension.bgProcess.getUserName(function(data) {
-                    var parsedResponse = data && data.text && data.text != '' && JSON.parse(data.text) ? JSON.parse(data.text) : {}
-                    
-                    params.username = parsedResponse.screen_name;
-                    
-                    $('#report-site-form').stop().fadeTo(600, 1); // fade form back to full opacity
-                    
-                    if ( !params.username || !params.username.length ) 
-                        show_message ( i18n.report_connect_error, 'error' ); // error retrieving username
-                    else { 
+                    if ( !data ) show_message ( i18n.report_connect_error, 'error' ); // error retrieving username
+                    else {
+                        var parsedResponse = data && data.text && data.text != '' && JSON.parse(data.text) ? JSON.parse(data.text) : {}
+
+                        params.username = parsedResponse.screen_name;
+
+                        $('#report-form-overlay').fadeOut(600, function() {
+                            $(this).remove();
+                        }); // fade form back to full opacity
                         
-                        // send off the bug report!
-                        opera.extension.bgProcess.sendRequest('get', 'ajax_request_handler.php', function(message) {
-                            if ( message == 'true' ) {
-                                show_message (i18n.report_submitted_message, 'success');
-                                opera.extension.bgProcess.updateReportSummary();
-                            }
-                            
-                            else if (message.length > 0) show_message (message, 'error');
-                            else show_message (i18n.report_submission_error, 'error');
-                        }, params, true);
+                        if ( !params.username || !params.username.length ) 
+                            show_message ( i18n.report_connect_error, 'error' ); // error retrieving username
+                        else { 
+
+                            // send off the bug report!
+                            opera.extension.bgProcess.sendRequest('get', 'ajax_request_handler.php', function(message) {
+                                if ( message == 'true' ) {
+                                    show_message (i18n.report_submitted_message, 'success');
+                                    opera.extension.bgProcess.updateReportSummary();
+                                }
+
+                                else if (message.length > 0) show_message (message, 'error');
+                                else show_message (i18n.report_submission_error, 'error');
+                            }, params, true);
+                        }                    
                     }
                 });
             } catch (e) {
