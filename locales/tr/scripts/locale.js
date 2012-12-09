@@ -122,7 +122,7 @@ i18n = {
     color_depth: 'Renk derinliği',
    error_loading_reports: 'Raporlar yüklenirken bir sorun oluştu. İnternet bağlantısı ya da sunucu çökmesi benzeri bir sorun olabilir.',
     view_all_languages: 'Tüm dillerdeki raporları görüntülemeyi deneyin.',
-    no_reports: 'Oops, bu sayfa içn herhangi bir rapor bulunamadı!',
+    no_reports: 'Oops, bu sayfa için herhangi bir rapor bulunamadı!',
     expanded: 'genişletildi',
     collapsed: 'daraltıldı',
     expand_thread: 'başlığı genişlet',
