@@ -2,8 +2,8 @@
 var CONFIG = {
     
     // the default domain to make AJAX requests to; *must have* the trailing slash "/"
-    //defaultHost: 'http://www.operaturkiye.net/fix-the-web/', 
-    defaultHost: 'http://localhost/Fix-the-Web-Server-Side/',
+    defaultHost: 'http://www.operaturkiye.net/fix-the-web/', 
+    //defaultHost: 'http://localhost/Fix-the-Web-Server-Side/',
             
     // set to "true" if you are offline so that the getUserName() function can return a username as if it were connected to Twitter
     offline: false, 
