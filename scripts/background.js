@@ -71,11 +71,13 @@ var ToolbarIcon = {
     // returns a count of error reports for the badge for the current tab's url or domain (depending on the preference)
     getBadgeCount: function() {
         var mode = widget.preferences['display-reports-by'] || 'domain',
-                tab_info = {
-            page: getPageAddress(),
-            domain: getDomainName()
-        },
+              tab_info = {
+                    page: getPageAddress(),
+                    domain: getDomainName()
+                },
                 mode_id = tab_info[mode];
+
+        if ( mode == 'disabled' ) return 0;
 
         // Attempt to parse the summary object
         try {
@@ -100,10 +102,17 @@ var ToolbarIcon = {
             
     // update the badge on the toolbar icon with the right reports count
     updateBadge: function() {
-        var tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : '';
+        var tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : '', 
+              mode = widget.preferences['display-reports-by'] || 'domain';
 
         if (tab) {
             ToolbarIcon.button.disabled = false;
+            
+            // Destroy the badge if it is disabled
+            if ( mode == 'disabled' ) {
+                ToolbarIcon.create({ textContent: '' });                
+                return;
+            }
             
             // Don't create the badge unless the reports' summary has been updated
             if ( widget.preferences['reports-summary'] != '{"by_domain":{},"by_page":{},"total_number":0}' ) {
@@ -189,7 +198,8 @@ opera.extension.onconnect = function(e) {
 
 // Handle incoming messages
 opera.extension.onmessage = function(event) {
-    var mode = widget.preferences['display-reports-by'] || 'domain',
+    var mode = (widget.preferences['display-reports-by'] && (widget.preferences['display-reports-by']).match(/(domain|page)/ig) ? 
+                        widget.preferences['display-reports-by'] : 'domain') || 'domain',
             page_address = getPageAddress(),
             tab = opera.extension.tabs ? opera.extension.tabs.getFocused() : '',
             domain_name = getDomainName();
