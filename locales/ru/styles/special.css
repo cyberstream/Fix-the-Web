@@ -1,0 +1,9 @@
+﻿/* Language-specific CSS rules */
+
+ul#order-by { width: 106px; }
+ul#controls > li:first-child { width: 100px; }
+
+ul#change-count { width: 156px; }
+ul#controls > li { width: 150px; }
+
+.pagination #page-number:before {content:'Страница ';}
