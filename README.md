@@ -1,4 +1,4 @@
-## THIS PROJECT HAS BEEN DISCONTINUED
+# THIS PROJECT HAS BEEN DISCONTINUED
 
 **Update (March 2, 2022)**: As a group of developers who met through the Opera Browser community, we originally started this project with plans to patch malformed web pages that were improperly rendered when using Opera Presto. Before this project was completed, Opera migrated its rendering engine to Chromium, eliminating most of these rendering issues. 
 
